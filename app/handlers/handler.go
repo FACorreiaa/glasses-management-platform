@@ -6,10 +6,9 @@ import (
 
 	"context"
 
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
-	"github.com/FACorreiaa/Aviation-tracker/app/services"
-	svg2 "github.com/FACorreiaa/Aviation-tracker/app/static/svg"
-	"github.com/FACorreiaa/Aviation-tracker/app/view/components"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/services"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/a-h/templ"
 	"github.com/go-playground/form/v4"
 	"github.com/go-playground/locales/en"
@@ -59,8 +58,7 @@ func HandleError(err error, message string) {
 	}
 }
 
-func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title string,
-	data templ.Component) templ.Component {
+func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title string, data templ.Component) templ.Component {
 	var user *models.UserSession
 	userCtx := r.Context().Value(models.CtxKeyAuthUser)
 	if userCtx != nil {
@@ -75,14 +73,29 @@ func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title str
 	var nav []models.NavItem
 
 	if user == nil {
+		// Not logged in users
 		nav = []models.NavItem{
-			{Path: "/", Label: "Home", Icon: svg2.HomeIcon()},
-			{Path: "/login", Label: "Sign in", Icon: svg2.HomeIcon()},
-			{Path: "/register", Label: "Sign up", Icon: svg2.HomeIcon()},
+			{Path: "/", Label: "Home"},
+			{Path: "/login", Label: "Sign in"},
+			{Path: "/register", Label: "Sign up"},
+		}
+	} else if user.Role == "admin" {
+		// Admin users
+		nav = []models.NavItem{
+			{Path: "/", Label: "Home"},
+			{Path: "/glasses", Label: "Glasses Inventory"},
+			{Path: "/shipping", Label: "Shipping Orders"},
+			{Path: "/users", Label: "Users"},
+			{Path: "/settings", Label: "Settings"},
+			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}
 	} else {
+		// Regular employees
 		nav = []models.NavItem{
-			{Path: "/", Label: "Home", Icon: svg2.HomeIcon()},
+			{Path: "/", Label: "Home"},
+			{Path: "/glasses", Label: "Glasses Inventory"},
+			{Path: "/shipping", Label: "Shipping Orders"},
+			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}
 	}
 
@@ -94,11 +107,10 @@ func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title str
 		Content:   data,
 	}
 
-	return components.LayoutPage(l)
+	return pages.LayoutPage(l)
 }
 
 func (h *Handler) Homepage(w http.ResponseWriter, r *http.Request) error {
-	home := components.HomePage()
-	ctx := context.WithValue(context.Background(), themeContextKey, "dark")
-	return h.CreateLayout(w, r, "Home Page", home).Render(ctx, w)
+	home := pages.HomePage()
+	return h.CreateLayout(w, r, "Home Page", home).Render(context.Background(), w)
 }

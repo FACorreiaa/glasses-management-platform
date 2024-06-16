@@ -11,7 +11,7 @@ import "io"
 import "bytes"
 
 import (
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
 func SettingsPage(settings models.SettingsPage) templ.Component {

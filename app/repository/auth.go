@@ -11,7 +11,7 @@ import (
 
 	"crypto/rand"
 
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgerrcode"
@@ -87,6 +87,7 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 			email,
 			password_hash,
 			bio,
+			role,
 			image,
 			created_at,
 			updated_at
@@ -168,6 +169,7 @@ func (m *MiddlewareRepository) UserFromSessionToken(ctx context.Context, token T
 			email,
 			password_hash,
 			bio,
+			role,
 			image,
 			created_at,
 			updated_at
@@ -220,6 +222,7 @@ func (a *AccountRepository) RegisterNewAccount(ctx context.Context, form models.
 				email,
 				password_hash,
 				bio,
+				role,
 				image,
 				created_at,
 				updated_at

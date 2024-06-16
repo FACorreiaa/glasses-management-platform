@@ -12,7 +12,7 @@ import "bytes"
 
 import (
 	"fmt"
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
 func toggleDropdown(id string) templ.ComponentScript {

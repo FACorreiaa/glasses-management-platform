@@ -44,7 +44,7 @@ include .env
 
 $(eval export $(grep -v '^#' .env | xargs -0))
 
-GO_MODULE := github.com/FACorreiaa/Aviation-tracker
+GO_MODULE := github.com/FACorreiaa/glasses-management-platform
 VERSION  ?= $(shell git describe --tags --abbrev=0)
 LDFLAGS   := -X "$(GO_MODULE)/config.Version=$(VERSION)"
 #DB_DSN    := "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"

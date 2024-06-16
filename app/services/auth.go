@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
-	"github.com/FACorreiaa/Aviation-tracker/app/repository"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 )
 
 func (h *Service) RegisterNewAccount(ctx context.Context, form models.RegisterForm) (*repository.Token, error) {

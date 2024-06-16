@@ -5,8 +5,8 @@ import (
 
 	"context"
 
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
-	"github.com/FACorreiaa/Aviation-tracker/app/view/user"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/user"
 )
 
 func (h *Handler) SettingsPage(w http.ResponseWriter, r *http.Request) error {

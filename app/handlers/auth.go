@@ -7,9 +7,9 @@ import (
 
 	"context"
 
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
-	"github.com/FACorreiaa/Aviation-tracker/app/repository"
-	"github.com/FACorreiaa/Aviation-tracker/app/view/user"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/repository"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/user"
 	"github.com/go-playground/form/v4"
 	"github.com/go-playground/validator/v10"
 )

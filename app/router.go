@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/FACorreiaa/Aviation-tracker/app/handlers"
-	"github.com/FACorreiaa/Aviation-tracker/app/repository"
-	"github.com/FACorreiaa/Aviation-tracker/app/services"
+	"github.com/FACorreiaa/glasses-management-platform/app/handlers"
+	"github.com/FACorreiaa/glasses-management-platform/app/repository"
+	"github.com/FACorreiaa/glasses-management-platform/app/services"
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
@@ -93,6 +93,9 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 
 	auth.HandleFunc("/logout", handler(h.Logout)).Methods(http.MethodPost)
 	auth.HandleFunc("/settings", handler(h.SettingsPage)).Methods(http.MethodGet)
+
+	// Glasses
+	auth.HandleFunc("/glasses", handler(h.GlassesPage)).Methods(http.MethodGet)
 	return r
 }
 

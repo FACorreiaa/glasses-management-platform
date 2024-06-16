@@ -3,7 +3,7 @@ package services
 import (
 	"log"
 
-	"github.com/FACorreiaa/Aviation-tracker/app/repository"
+	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 )
 
 type Service struct {

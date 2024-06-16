@@ -1,11 +1,10 @@
 package repository
 
 import (
+	"context"
 	"net/http"
 
-	"context"
-
-	"github.com/FACorreiaa/Aviation-tracker/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -69,3 +68,22 @@ func (m *MiddlewareRepository) RedirectIfAuth(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+//func (m *MiddlewareRepository) RequireAdmin(next http.Handler) http.Handler {
+//	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+//		user := r.Context().Value(models.CtxKeyAuthUser)
+//		if user == nil {
+//			http.Redirect(w, r, "/login?return_to="+r.URL.Path, http.StatusSeeOther)
+//			return
+//		}
+//
+//		// Assuming user is of type models.User which has a Role field
+//		authUser, ok := user.(*models.UserSession)
+//		if !ok || authUser.Role != "admin" {
+//			http.Error(w, "Forbidden", http.StatusForbidden)
+//			return
+//		}
+//
+//		next.ServeHTTP(w, r)
+//	})
+//}

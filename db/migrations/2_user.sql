@@ -28,3 +28,6 @@ create table "user_token"
 
 create index on "user_token" (user_id);
 create unique index on "user_token" (token, context);
+
+insert into "user" (username, email, password_hash, role)
+values ('admin', 'admin@email.com', '$2a$10$k4uyoO3uawBjcfF5.Ccdc.XC8QKsyKUS7Bt3te./DJmhRQiKTjNNm', 'admin');

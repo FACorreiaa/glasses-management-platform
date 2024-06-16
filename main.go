@@ -9,11 +9,12 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/FACorreiaa/Aviation-tracker/app"
-	"github.com/FACorreiaa/Aviation-tracker/config"
-	"github.com/FACorreiaa/Aviation-tracker/db"
+	"github.com/FACorreiaa/glasses-management-platform/app"
+	"github.com/FACorreiaa/glasses-management-platform/config"
+	"github.com/FACorreiaa/glasses-management-platform/db"
 	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func init() {
@@ -28,10 +29,16 @@ func handleError(err error, message string) {
 	}
 }
 
-func run(ctx context.Context) error {
-	//go:generate npx tailwindcss build -c tailwind.config.js -o ./controller/static/css/style.css -
-	//go:generate ./tailwindcss -i controller/static/css/main.css -o controller/static/css/output.css --minify
+func hasPassword(password string) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Hashed Password: %s\n", hash)
+}
 
+func run(ctx context.Context) error {
+	hasPassword(os.Getenv("ADMIN_PASSWORD"))
 	cfg, err := config.NewConfig()
 
 	if err != nil {
