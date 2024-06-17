@@ -76,7 +76,8 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 
 func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	orderBy, sortBy string) ([]models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, reference, updated_at, created_at
+	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength,
+       				reference, COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	ORDER BY
 			    CASE

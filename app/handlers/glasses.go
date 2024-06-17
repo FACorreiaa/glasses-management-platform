@@ -32,18 +32,15 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 
 func (h *Handler) getGlasses(_ http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
 	pageSize := 20
-	println(pageSize)
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
-	//brand := r.FormValue("brand")
 
 	if err != nil {
 		page = 1
 	}
 
 	g, err := h.service.GetGlasses(context.Background(), page, pageSize, orderBy, sortBy)
-	fmt.Printf("Glasses: %v\n", g)
 
 	if err != nil {
 		return 0, nil, err
