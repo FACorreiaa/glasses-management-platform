@@ -69,7 +69,6 @@ type TabItem struct {
 
 type SidebarItem struct {
 	Path       string
-	Icon       templ.Component
 	Label      string
 	ActivePath string
 	SubItems   []SidebarItem
@@ -100,4 +99,33 @@ type RegisterPage struct {
 
 type Columns struct {
 	Title string
+}
+
+type Glasses struct {
+	GlassesID uuid.UUID `json:"glasses_id"`
+	Reference string    `json:"reference"`
+	Brand     string    `json:"brand"`
+	Color     string    `json:"color"`
+	LeftEye   float64   `json:"left_eye_strength"`
+	RightEye  float64   `json:"right_eye_strength"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type ColumnItems struct {
+	Title     string
+	Icon      templ.Component
+	SortParam string
+}
+
+type GlassesTable struct {
+	Column      []ColumnItems
+	Glasses     []Glasses
+	PrevPage    int
+	NextPage    int
+	Page        int
+	LastPage    int
+	FilterBrand string
+	OrderParam  string
+	SortParam   string
 }

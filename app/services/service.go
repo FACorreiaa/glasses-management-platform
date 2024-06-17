@@ -8,6 +8,7 @@ import (
 
 type Service struct {
 	accountRepo *repository.AccountRepository
+	glassesRepo *repository.GlassesRepository
 }
 
 func HandleError(err error, message string) {
@@ -17,11 +18,11 @@ func HandleError(err error, message string) {
 }
 
 func NewService(
-
-	accountRepo *repository.AccountRepository) *Service {
+	accountRepo *repository.AccountRepository,
+	glassesRepo *repository.GlassesRepository) *Service {
 
 	return &Service{
-
 		accountRepo: accountRepo,
+		glassesRepo: glassesRepo,
 	}
 }

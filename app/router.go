@@ -26,7 +26,7 @@ func setupBusinessComponents(pool *pgxpool.Pool, redisClient *redis.Client, vali
 	// Business components
 
 	authRepo := repository.NewAccountRepository(pool, redisClient, validate, sessions.NewCookieStore(sessionSecret))
-
+	glassesRepo := repository.NewGlassesRepository(pool)
 	// Middleware
 	middleware := &repository.MiddlewareRepository{
 		Pgpool:      pool,
@@ -36,7 +36,7 @@ func setupBusinessComponents(pool *pgxpool.Pool, redisClient *redis.Client, vali
 	}
 
 	// Service
-	service := services.NewService(authRepo)
+	service := services.NewService(authRepo, glassesRepo)
 
 	// Handler
 	handler := handlers.NewHandler(service, sessions.NewCookieStore(sessionSecret), pool, redisClient)
