@@ -52,6 +52,10 @@ templ GlassesTable(a models.GlassesTable) {
 							<td>{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
               <td>{glasses.CreatedAt.String()}</td>
               <td>{glasses.UpdatedAt.String()}</td>
+              <td class="flex-column text-left">
+                <p>Edit</p>
+                <p>Delete</p>
+              </td>
 						</tr>
 					}
 				</tbody>

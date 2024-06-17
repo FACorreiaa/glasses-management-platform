@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -74,7 +73,6 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 	}
 
 	page, g, _ := h.getGlasses(w, r)
-	fmt.Printf("Glasses: %v\n Page: %v", g, page)
 
 	nextPage := page + 1
 	prevPage := page - 1
@@ -83,7 +81,6 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 	}
 
 	lastPage, err := h.service.GetSum()
-	fmt.Printf("Last Page: %v\n", lastPage)
 	if err != nil {
 		HandleError(err, "Error fetching tax")
 		return nil, err
