@@ -14,9 +14,7 @@ import (
 func (h *Handler) renderSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
 		{Path: "/", Label: "Home"},
-		{Path: "/glasses/portal", Label: "Insert"},
-		{Path: "/glasses/portal", Label: "Delete"},
-		{Path: "/glasses/portal", Label: "Update"},
+		{Path: "/glasses/register", Label: "Insert"},
 		{
 			Label: "Inventory",
 			SubItems: []models.SidebarItem{
@@ -109,4 +107,9 @@ func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
 	}
 	home := glasses.GlassesLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
+}
+
+func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) error {
+	register := glasses.GlassesRegisterPage(models.GlassesForm{})
+	return h.CreateLayout(w, r, "Insert glasses", register).Render(context.Background(), w)
 }

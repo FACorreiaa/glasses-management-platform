@@ -129,3 +129,9 @@ type GlassesTable struct {
 	OrderParam  string
 	SortParam   string
 }
+
+type GlassesForm struct {
+	Updated bool
+	Errors  []string
+	Glasses Glasses
+}

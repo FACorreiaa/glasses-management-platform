@@ -1,23 +1,11 @@
 package glasses
 
 import (
-	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
-templ GlassesLayoutPage(title, description string, sidebar []models.SidebarItem, component templ.Component) {
-	<div>
-		@components.BannerComponent(title, description)
-		<div class="flex items-center justify-center flex-grow">
-			<div class="container flex flex-col pt-10 mx-auto mr:px-6 lg:flex-row">
-				<div class="w-2/12">
-					@components.SidebarComponent(sidebar)
-				</div>
-				<div class="w-11/12 overflow-x-auto">
-					@component
-				</div>
-				<div>
-				<section class="w-full bg-white">
+templ GlassesRegisterPage(settings models.GlassesForm) {
+<section class="w-full bg-white">
 
     <div class="mx-auto max-w-7xl">
         <div class="flex flex-col lg:flex-row">
@@ -49,8 +37,4 @@ templ GlassesLayoutPage(title, description string, sidebar []models.SidebarItem,
     </div>
 
 </section>
-</div>
-			</div>
-		</div>
-	</div>
 }

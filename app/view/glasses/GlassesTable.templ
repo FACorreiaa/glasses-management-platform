@@ -8,16 +8,16 @@ import (
 )
 
 templ GlassesTable(a models.GlassesTable) {
-	<div class="flex flex-col items-left shadow-xl overflow-hidden">
+	<div class="flex flex-col items-left shadow-xl overflow-hidden ">
 		@components.InputGroupContainer() {
 			<div class="mr-2">
 				@components.InputComponent("Filter brand", "/glasses", "brand", "#searchResults")
 			</div>
 		}
-		<div class="overflow-x-auto">
-			<table class="table table-xs" id="searchResults">
+		<div class="overflow-x-auto bg-white dark:bg-slate-800 ">
+			<table class="table table-xs bg-primary-300" id="searchResults">
 				<!-- head -->
-				<thead class="bg-base-300">
+				<thead class="bg-base-300 dark:bg-base-800">
 					for _, col := range a.Column {
 						<th class="font-extrabold text-sm p-2">
 							<div class="flex justify-start align-middle" hx-boost>
@@ -25,7 +25,7 @@ templ GlassesTable(a models.GlassesTable) {
 								<form class="join" hx-boost="true" method="get">
 									<a
 										class="pl-4"
-										href={ templ.URL(fmt.Sprintf("/airlines/airline?page=%d&orderBy=%s&sortBy=%s", a.Page, col.Title, col.SortParam)) }
+										href={ templ.URL(fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.Page, col.Title, col.SortParam)) }
 									>
 										@col.Icon
 									</a>
@@ -41,7 +41,7 @@ templ GlassesTable(a models.GlassesTable) {
 							<td hx-boost="true">
 								<a
 									hx-trigger="load delay:50ms"
-									href={ templ.URL(fmt.Sprintf("/airlines/airline/%s", glasses.GlassesID)) }
+									href={ templ.URL(fmt.Sprintf("/glasses/%s", glasses.GlassesID)) }
 								>
 									{ glasses.Brand }
 								</a>
@@ -50,12 +50,16 @@ templ GlassesTable(a models.GlassesTable) {
 							<td>{ glasses.Reference }</td>
 							<td>{ fmt.Sprintf("%0.2f", glasses.LeftEye) }</td>
 							<td>{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
-              <td>{glasses.CreatedAt.String()}</td>
-              <td>{glasses.UpdatedAt.String()}</td>
-              <td class="flex-column text-left">
-                <p>Edit</p>
-                <p>Delete</p>
-              </td>
+							<td>{ glasses.CreatedAt.String() }</td>
+							<td>{ glasses.UpdatedAt.String() }</td>
+							<td class="flex-column text-left">
+								<a
+									href={ templ.URL(fmt.Sprintf("/glasses/%s", glasses.GlassesID)) }
+								>
+									Edit
+								</a>
+								<p>Delete</p>
+							</td>
 						</tr>
 					}
 				</tbody>
