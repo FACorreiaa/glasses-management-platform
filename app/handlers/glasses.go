@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -15,6 +16,13 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
 		{Path: "/", Label: "Home"},
 		{Path: "/glasses/register", Label: "Insert"},
+		{
+			Label: "Type",
+			SubItems: []models.SidebarItem{
+				{Path: "/glasses/type/adult", Label: "Adult"},
+				{Path: "/glasses/type/children", Label: "Children"},
+			},
+		},
 		{
 			Label: "Inventory",
 			SubItems: []models.SidebarItem{
@@ -65,6 +73,7 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Action", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
@@ -74,7 +83,7 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 
 	nextPage := page + 1
 	prevPage := page - 1
-	if prevPage < 1 {
+	if prevPage <= 1 {
 		prevPage = 1
 	}
 
@@ -110,6 +119,67 @@ func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) error {
-	register := glasses.GlassesRegisterPage(models.GlassesForm{})
-	return h.CreateLayout(w, r, "Insert glasses", register).Render(context.Background(), w)
+	form := glasses.GlassesRegisterForm(models.GlassesForm{})
+	sidebar := h.renderSidebar()
+	insertPagePage := glasses.GlassesLayoutPage("Insert glasses", "form to insert new glasses", sidebar, form)
+	return h.CreateLayout(w, r, "Insert glasses", insertPagePage).Render(context.Background(), w)
+}
+
+//func (h *Handler) GlassesPost(w http.ResponseWriter, r *http.Request) error {
+//	values := r.Form
+//	leftVal, err := strconv.ParseFloat(values.Get("left_eye_strength"), 32)
+//	if err != nil {
+//		HandleError(err, "parse left eye strength")
+//	}
+//
+//	rightVal, err := strconv.ParseFloat(values.Get("right_eye_strength"), 32)
+//	if err != nil {
+//		HandleError(err, "parse right eye strength")
+//	}
+//	g := models.Glasses{
+//		Brand:     values.Get("brand"),
+//		Color:     values.Get("color"),
+//		Reference: values.Get("reference"),
+//		LeftEye:   leftVal,
+//		RightEye:  rightVal,
+//		Type:      values.Get("type"),
+//	}
+//	err = h.service.InsertGlasses(context.Background(), g)
+//	if err != nil {
+//		HandleError(err, "Inserting glasses")
+//	}
+//	return h.GlassesPage(w, r)
+//}
+
+func (h *Handler) GlassesPost(w http.ResponseWriter, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
+		return err
+	}
+
+	leftVal, err := strconv.ParseFloat(r.FormValue("left_eye_strength"), 64)
+	if err != nil {
+		return fmt.Errorf("invalid left eye strength: %v", err)
+	}
+
+	rightVal, err := strconv.ParseFloat(r.FormValue("right_eye_strength"), 64)
+	if err != nil {
+		return fmt.Errorf("invalid right eye strength: %v", err)
+	}
+
+	g := models.Glasses{
+		Reference: r.FormValue("reference"),
+		Brand:     r.FormValue("brand"),
+		Color:     r.FormValue("color"),
+		LeftEye:   leftVal,
+		RightEye:  rightVal,
+		Type:      r.FormValue("type"),
+	}
+
+	err = h.service.InsertGlasses(context.Background(), g)
+	if err != nil {
+		return fmt.Errorf("error inserting glasses: %v", err)
+	}
+
+	http.Redirect(w, r, "/glasses", http.StatusSeeOther)
+	return nil
 }

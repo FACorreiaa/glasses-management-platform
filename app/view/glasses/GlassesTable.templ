@@ -47,9 +47,10 @@ templ GlassesTable(a models.GlassesTable) {
 								</a>
 							</td>
 							<td>{ glasses.Color }</td>
-							<td>{ glasses.Reference }</td>
+							<td>{ glasses.Type }</td>
 							<td>{ fmt.Sprintf("%0.2f", glasses.LeftEye) }</td>
 							<td>{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
+							<td>{ glasses.Reference }</td>
 							<td>{ glasses.CreatedAt.String() }</td>
 							<td>{ glasses.UpdatedAt.String() }</td>
 							<td class="flex-column text-left">

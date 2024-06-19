@@ -38,7 +38,7 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 		var a models.Glasses
 		err := rows.Scan(
 			&a.GlassesID, &a.Color, &a.Brand, &a.RightEye,
-			&a.LeftEye, &a.Reference, &a.UpdatedAt, &a.CreatedAt,
+			&a.LeftEye, &a.Reference, &a.Type, &a.UpdatedAt, &a.CreatedAt,
 		)
 
 		if err != nil {
@@ -76,7 +76,7 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 
 func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	orderBy, sortBy string) ([]models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength,
+	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
        				reference, COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	ORDER BY
@@ -92,12 +92,15 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 }
 
 func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID int) (*models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, reference, updated_at, created_at FROM glasses WHERE glasses_id = $1`
+	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
+       				reference, updated_at, created_at
+				FROM glasses
+				WHERE glasses_id = $1`
 	var a models.Glasses
 
 	err := r.pgpool.QueryRow(ctx, query, glassesID).Scan(
 		&a.GlassesID, &a.Color, &a.Brand, &a.RightEye,
-		&a.LeftEye, &a.Reference, &a.UpdatedAt, &a.CreatedAt,
+		&a.LeftEye, &a.Reference, &a.Type, &a.UpdatedAt, &a.CreatedAt,
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -118,20 +121,21 @@ func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID int) er
 func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.Glasses) error {
 	query := `
 		UPDATE glasses
-		SET color = $1, brand = $2, right_eye_strength = $3, left_eye_strength = $4, reference = $5, updated_at = NOW()
-		WHERE glasses_id = $6
+		SET color = $1, brand = $2, right_eye_strength = $3, left_eye_strength = $4, reference = $5, type =$6,
+		    updated_at = NOW()
+		WHERE glasses_id = $7
 	`
-	_, err := r.pgpool.Exec(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.GlassesID)
+	_, err := r.pgpool.Exec(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type, g.GlassesID)
 	return err
 }
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.Glasses) error {
 	query := `
-		INSERT INTO glasses (color, brand, right_eye_strength, left_eye_strength, reference, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+		INSERT INTO glasses (color, brand, right_eye_strength, left_eye_strength, reference, type, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
 		RETURNING glasses_id
 	`
-	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference).Scan(&g.GlassesID)
+	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type).Scan(&g.GlassesID)
 	return err
 }
 

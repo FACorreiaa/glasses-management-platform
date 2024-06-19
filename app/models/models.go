@@ -108,6 +108,7 @@ type Glasses struct {
 	Color     string    `json:"color"`
 	LeftEye   float64   `json:"left_eye_strength"`
 	RightEye  float64   `json:"right_eye_strength"`
+	Type      string    `json:"type"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -130,8 +131,20 @@ type GlassesTable struct {
 	SortParam   string
 }
 
+//type GlassesForm struct {
+//	Updated bool
+//	Errors  []string
+//	Glasses Glasses
+//	Values  map[string]string
+//}
+
 type GlassesForm struct {
-	Updated bool
-	Errors  []string
-	Glasses Glasses
+	Reference string  `json:"reference" schema:"reference"`
+	Brand     string  `json:"brand" schema:"brand"`
+	Color     string  `json:"color" schema:"color"`
+	LeftEye   float64 `json:"left_eye_strength" schema:"left_eye_strength"`
+	RightEye  float64 `json:"right_eye_strength" schema:"right_eye_strength"`
+	Type      string  `json:"type" schema:"type"`
+	Values    map[string]string
+	Errors    map[string]string
 }
