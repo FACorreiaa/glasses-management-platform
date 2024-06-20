@@ -10,6 +10,8 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/a-h/templ"
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 func (h *Handler) renderSidebar() []models.SidebarItem {
@@ -126,7 +128,7 @@ func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) er
 	return h.CreateLayout(w, r, "Insert glasses", insertPagePage).Render(context.Background(), w)
 }
 
-func (h *Handler) GlassesPost(w http.ResponseWriter, r *http.Request) error {
+func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
 		HandleError(err, "parsing form")
 		return err
@@ -172,5 +174,26 @@ func (h *Handler) GlassesPost(w http.ResponseWriter, r *http.Request) error {
 		w.Header().Set("HX-Redirect", "/glasses")
 	}
 
+	return nil
+}
+
+func (h *Handler) DeleteGlasses(w http.ResponseWriter, r *http.Request) error {
+	vars := mux.Vars(r)
+	glassesIDStr := vars["glasses_id"]
+	glassesID, err := uuid.Parse(glassesIDStr)
+	if err != nil {
+		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
+		return err
+	}
+
+	// Delete the glasses
+	err = h.service.DeleteGlasses(context.Background(), glassesID)
+	if err != nil {
+		http.Error(w, "Failed to delete glasses", http.StatusInternalServerError)
+		return err
+	}
+
+	// Return a success response
+	w.WriteHeader(http.StatusNoContent)
 	return nil
 }

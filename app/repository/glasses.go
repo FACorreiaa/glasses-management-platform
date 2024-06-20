@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -112,7 +113,7 @@ func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID int) (
 	return &a, nil
 }
 
-func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID int) error {
+func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID uuid.UUID) error {
 	query := `DELETE FROM glasses WHERE glasses_id = $1`
 	_, err := r.pgpool.Exec(ctx, query, glassesID)
 	return err

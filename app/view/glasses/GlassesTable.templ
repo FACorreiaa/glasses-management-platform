@@ -35,7 +35,7 @@ templ GlassesTable(a models.GlassesTable) {
 					}
 				</thead>
 				<!-- rows -->
-				<tbody>
+				<tbody hx-boost="true" hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s">
 					for _, glasses := range a.Glasses {
 						<tr class="hover">
 							<td hx-boost="true">
@@ -53,13 +53,19 @@ templ GlassesTable(a models.GlassesTable) {
 							<td>{ glasses.Reference }</td>
 							<td>{ glasses.CreatedAt.String() }</td>
 							<td>{ glasses.UpdatedAt.String() }</td>
-							<td class="flex-column text-left">
-								<a
-									href={ templ.URL(fmt.Sprintf("/glasses/%s", glasses.GlassesID)) }
+							<td class="flex-column text-left p-4">
+								<button
+									class=" mb-2 inline-flex items-center justify-center px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 rounded-md bg-neutral-950 hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
 								>
-									Edit
-								</a>
-								<p>Delete</p>
+									Update
+								</button>
+									<button
+										hx-delete={ fmt.Sprintf("/glasses/%s", glasses.GlassesID) }
+										type="submit"
+										class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 rounded-md bg-neutral-950 hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
+									>
+										Delete
+									</button>
 							</td>
 						</tr>
 					}

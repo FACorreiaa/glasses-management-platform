@@ -5,6 +5,7 @@ import (
 	"math"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/google/uuid"
 )
 
 func (s *Service) GetGlasses(ctx context.Context, page, pageSize int,
@@ -16,7 +17,7 @@ func (s *Service) GetGlassesByID(ctx context.Context, glassesID int) (*models.Gl
 	return s.glassesRepo.GetGlassesByID(ctx, glassesID)
 }
 
-func (s *Service) DeleteGlasses(ctx context.Context, glassesID int) error {
+func (s *Service) DeleteGlasses(ctx context.Context, glassesID uuid.UUID) error {
 	return s.glassesRepo.DeleteGlasses(ctx, glassesID)
 }
 

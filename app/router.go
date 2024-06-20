@@ -97,8 +97,8 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	// Glasses
 	auth.HandleFunc("/glasses", handler(h.GlassesPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/glasses/register", handler(h.GlassesRegisterPage)).Methods(http.MethodGet)
-	auth.HandleFunc("/glasses/register", handler(h.GlassesPost)).Methods(http.MethodPost)
-
+	auth.HandleFunc("/glasses/register", handler(h.InsertGlasses)).Methods(http.MethodPost)
+	auth.HandleFunc("/glasses/{glasses_id}", handler(h.DeleteGlasses)).Methods(http.MethodDelete)
 	return r
 }
 
