@@ -20,8 +20,14 @@ templ LayoutPage(l models.LayoutTempl) {
 			<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet"/>
 			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
 			<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
+			<script>
+        document.addEventListener('alpine:init', () => {
+        const theme = localStorage.getItem('theme') || 'lemonade';
+        document.documentElement.setAttribute('data-theme', theme);
+        });
+      </script>
 		</head>
-		<body hx-boost="true" x-data="{theme: 'light'}" :class="theme" lang="en">
+		<body hx-boost="true" x-data="{theme: 'lemonade'}" :class="theme" lang="en">
 			<div class="flex flex-col h-screen font-lato" id="contents">
 				@components.NavbarComponent(l.Nav, l.User, l.ActiveNav)
 				<div class="h-full overflow-auto">
