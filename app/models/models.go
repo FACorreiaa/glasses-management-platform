@@ -43,17 +43,6 @@ type RegisterForm struct {
 	PasswordConfirm string `form:"password_confirm" validate:"required,eqfield=Password"`
 }
 
-type FlightStatus string
-
-// const (
-//	Scheduled FlightStatus = "scheduled"
-//	Active    FlightStatus = "active"
-//	Landed    FlightStatus = "landed"
-//	Canceled FlightStatus = "canceled"
-//	Incident  FlightStatus = "incident"
-//	Diverted  FlightStatus = "diverted"
-// )
-
 type NavItem struct {
 	Path     string
 	Icon     templ.Component

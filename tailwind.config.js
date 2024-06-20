@@ -48,14 +48,13 @@ module.exports = {
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)"
+        sm: "calc(var(--radius) - 4px)",
+        '4xl': '2rem',
+
       },
       spacing: {
         '8xl': '96rem',
         '9xl': '128rem',
-      },
-      borderRadius: {
-        '4xl': '2rem',
       },
     },
     colors: {
@@ -84,6 +83,9 @@ module.exports = {
       'pastel',
       'cupcake',
       'night',
+      'lemonade',
+      'bumblebee',
+      'business',
       {
         'catppuccin-latte': {
           primary: '#1e66f5',

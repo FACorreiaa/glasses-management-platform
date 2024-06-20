@@ -15,6 +15,7 @@ import (
 func (h *Handler) renderSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
 		{Path: "/", Label: "Home"},
+		{Path: "/glasses", Label: "Glasses stock"},
 		{Path: "/glasses/register", Label: "Insert"},
 		{
 			Label: "Type",
@@ -125,34 +126,9 @@ func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) er
 	return h.CreateLayout(w, r, "Insert glasses", insertPagePage).Render(context.Background(), w)
 }
 
-//func (h *Handler) GlassesPost(w http.ResponseWriter, r *http.Request) error {
-//	values := r.Form
-//	leftVal, err := strconv.ParseFloat(values.Get("left_eye_strength"), 32)
-//	if err != nil {
-//		HandleError(err, "parse left eye strength")
-//	}
-//
-//	rightVal, err := strconv.ParseFloat(values.Get("right_eye_strength"), 32)
-//	if err != nil {
-//		HandleError(err, "parse right eye strength")
-//	}
-//	g := models.Glasses{
-//		Brand:     values.Get("brand"),
-//		Color:     values.Get("color"),
-//		Reference: values.Get("reference"),
-//		LeftEye:   leftVal,
-//		RightEye:  rightVal,
-//		Type:      values.Get("type"),
-//	}
-//	err = h.service.InsertGlasses(context.Background(), g)
-//	if err != nil {
-//		HandleError(err, "Inserting glasses")
-//	}
-//	return h.GlassesPage(w, r)
-//}
-
 func (h *Handler) GlassesPost(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
+		HandleError(err, "parsing form")
 		return err
 	}
 
@@ -180,6 +156,21 @@ func (h *Handler) GlassesPost(w http.ResponseWriter, r *http.Request) error {
 		return fmt.Errorf("error inserting glasses: %v", err)
 	}
 
-	http.Redirect(w, r, "/glasses", http.StatusSeeOther)
+	actionType := r.FormValue("action")
+
+	if actionType == "insert_more" {
+		w.Header().Set("HX-Trigger", "glassesAdded")
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(w, `
+			<div class="flex items-center">
+                <div class="success success-message">Glasses successfully added! You can add another.</div>
+                <svg class="w-[18px] h-[18px] ml-2" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM16.7744 9.63269C17.1238 9.20501 17.0604 8.57503 16.6327 8.22559C16.2051 7.87615 15.5751 7.93957 15.2256 8.36725L10.6321 13.9892L8.65936 12.2524C8.24484 11.8874 7.61295 11.9276 7.248 12.3421C6.88304 12.7566 6.92322 13.3885 7.33774 13.7535L9.31046 15.4903C10.1612 16.2393 11.4637 16.1324 12.1808 15.2547L16.7744 9.63269Z" fill="currentColor"></path>
+                </svg>
+			</div>`)
+	} else if actionType == "insert_and_redirect" {
+		w.Header().Set("HX-Redirect", "/glasses")
+	}
+
 	return nil
 }
