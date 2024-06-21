@@ -92,7 +92,7 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	return r.fetchGlasses(ctx, query, orderBy, sortBy, offset, pageSize)
 }
 
-func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID int) (*models.Glasses, error) {
+func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
        				reference, updated_at, created_at
 				FROM glasses

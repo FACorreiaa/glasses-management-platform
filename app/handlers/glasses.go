@@ -8,6 +8,7 @@ import (
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
@@ -83,6 +84,11 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 	}
 
 	page, g, _ := h.getGlasses(w, r)
+
+	if len(g) == 0 {
+		message := components.EmptyPageComponent()
+		return message, nil
+	}
 
 	nextPage := page + 1
 	prevPage := page - 1
@@ -163,7 +169,7 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	if actionType == "insert_more" {
 		w.Header().Set("HX-Trigger", "glassesAdded")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, `
+		_, _ = fmt.Fprintf(w, `
 			<div class="flex items-center">
                 <div class="success success-message">Glasses successfully added! You can add another.</div>
                 <svg class="w-[18px] h-[18px] ml-2" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
@@ -194,6 +200,82 @@ func (h *Handler) DeleteGlasses(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Return a success response
-	w.WriteHeader(http.StatusNoContent)
+	w.Header().Set("HX-Redirect", "/glasses")
+
 	return nil
+}
+
+func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) error {
+	vars := mux.Vars(r)
+	glassesIDStr := vars["glasses_id"]
+	glassesID, err := uuid.Parse(glassesIDStr)
+	if err != nil {
+		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
+		return err
+	}
+
+	g, err := h.service.GetGlassesByID(context.Background(), glassesID)
+	if err != nil {
+		http.Error(w, "Failed to retrieve glasses", http.StatusInternalServerError)
+		return err
+	}
+
+	le := strconv.FormatFloat(g.LeftEye, 'f', 2, 64)
+	re := strconv.FormatFloat(g.RightEye, 'f', 2, 64)
+	form := models.GlassesForm{
+		Values: map[string]string{
+			"Reference": g.Reference,
+			"Brand":     g.Brand,
+			"LeftEye":   le,
+			"RightEye":  re,
+			"Color":     g.Color,
+			"Type":      g.Type,
+		},
+	}
+
+	f := glasses.GlassesUpdateForm(form, glassesIDStr)
+	sidebar := h.renderSidebar()
+	updatePage := glasses.GlassesLayoutPage("Update Glasses", "form to update glasses", sidebar, f)
+	return h.CreateLayout(w, r, "Update Glasses", updatePage).Render(context.Background(), w)
+}
+
+func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
+	vars := mux.Vars(r)
+	glassesIDStr := vars["glasses_id"]
+	glassesID, err := uuid.Parse(glassesIDStr)
+	if err != nil {
+		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
+		return err
+	}
+
+	err = r.ParseForm()
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		return err
+	}
+
+	g := models.Glasses{
+		GlassesID: glassesID,
+		Reference: r.FormValue("reference"),
+		Brand:     r.FormValue("brand"),
+		LeftEye:   parseFloat(r.FormValue("left_eye_strength")),
+		RightEye:  parseFloat(r.FormValue("right_eye_strength")),
+		Color:     r.FormValue("color"),
+		Type:      r.FormValue("type"),
+	}
+
+	err = h.service.UpdateGlasses(context.Background(), g)
+	if err != nil {
+		http.Error(w, "Failed to update glasses", http.StatusInternalServerError)
+		return err
+	}
+
+	w.Header().Set("HX-Redirect", "/glasses")
+
+	return nil
+}
+
+func parseFloat(value string) float64 {
+	f, _ := strconv.ParseFloat(value, 64)
+	return f
 }

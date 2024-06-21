@@ -13,7 +13,7 @@ func (s *Service) GetGlasses(ctx context.Context, page, pageSize int,
 	return s.glassesRepo.GetGlasses(ctx, page, pageSize, orderBy, sortBy)
 }
 
-func (s *Service) GetGlassesByID(ctx context.Context, glassesID int) (*models.Glasses, error) {
+func (s *Service) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {
 	return s.glassesRepo.GetGlassesByID(ctx, glassesID)
 }
 
