@@ -12,6 +12,8 @@ create table glasses
              'children'
       )
     ),
+  is_in_stock        bool                 default true,
+  features           text,
   created_at         timestamptz not null default now(),
   updated_at         timestamptz
 );

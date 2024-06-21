@@ -78,9 +78,10 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Action", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 	}
 
 	page, g, _ := h.getGlasses(w, r)
@@ -157,6 +158,7 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		LeftEye:   leftVal,
 		RightEye:  rightVal,
 		Type:      r.FormValue("type"),
+		Feature:   r.FormValue("features"),
 	}
 
 	err = h.service.InsertGlasses(context.Background(), g)
@@ -230,6 +232,7 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 			"RightEye":  re,
 			"Color":     g.Color,
 			"Type":      g.Type,
+			"Features":  g.Feature,
 		},
 	}
 

@@ -7,14 +7,14 @@ import (
 	"strconv"
 )
 
-templ GlassesTable(a models.GlassesTable) {
+templ GlassesStockTable(a models.GlassesTable) {
 	<div class="flex flex-col items-left shadow-xl overflow-hidden ">
 		@components.InputGroupContainer() {
 			<div class="mr-2">
 				@components.InputComponent("Filter brand", "/glasses", "brand", "#searchResults")
 			</div>
 		}
-		<div class="overflow-x-auto bg-white dark:bg-slate-800">
+		<div class="overflow-x-auto bg-white dark:bg-slate-800 ">
 			<table class="table table-xs bg-primary-300" id="searchResults">
 				<!-- head -->
 				<thead class="bg-base-300 dark:bg-base-800">
@@ -22,7 +22,7 @@ templ GlassesTable(a models.GlassesTable) {
 						<th class="font-extrabold text-sm p-2">
 							<div class="flex justify-start align-middle" hx-boost>
 								{ col.Title }
-								<form>
+								<form class="join" hx-boost="true" method="get">
 									<a
 										class="pl-4"
 										href={ templ.URL(fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.Page, col.Title, col.SortParam)) }
@@ -35,7 +35,11 @@ templ GlassesTable(a models.GlassesTable) {
 					}
 				</thead>
 				<!-- rows -->
-				<tbody>
+				<tbody
+					hx-confirm="Are you sure?"
+					hx-target="closest tr"
+					hx-swap="outerHTML swap:1s"
+				>
 					for _, glasses := range a.Glasses {
 						<tr class="hover">
 							<td hx-boost="true">
@@ -52,43 +56,20 @@ templ GlassesTable(a models.GlassesTable) {
 							<td>{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
 							<td>{ glasses.Reference }</td>
 							<td>{ fmt.Sprintf("%v", glasses.IsInStock) }</td>
-							<td>{ glasses.Feature } </td>
+							<td>{ glasses.Feature }</td>
 							<td>{ glasses.CreatedAt.String() }</td>
 							<td>{ glasses.UpdatedAt.String() }</td>
-							<td class="flex space-x-2">
-								if glasses.IsInStock {
-									<a
-										href={ templ.SafeURL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)) }
-										class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
-									>
-										<span>Edit</span>
-										<ion-icon name="create-outline"></ion-icon>
-									</a>
-								}
-								<button
-									hx-delete={ fmt.Sprintf("/glasses/%s", glasses.GlassesID) }
-									type="button"
-									name="action"
-									hx-confirm="Are you sure?"
-									hx-target="closest tr"
-									hx-swap="outerHTML swap:1s"
-									class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
-								>
-									<span>Delete</span>
-									<ion-icon name="trash-outline"></ion-icon>
-								</button>
-							</td>
 						</tr>
 					}
 				</tbody>
 			</table>
 		</div>
 		<!-- paginator -->
-		@components.PaginatorComponent("/glasses",
-			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.PrevPage, a.OrderParam, a.SortParam),
+		@components.PaginatorComponent("/glasses/inventory",
+			fmt.Sprintf("/glasses/inventory?page=%d&orderBy=%s&sortBy=%s", a.PrevPage, a.OrderParam, a.SortParam),
 			strconv.Itoa(a.Page),
-			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.NextPage, a.OrderParam, a.SortParam),
-			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.LastPage, a.OrderParam, a.SortParam),
+			fmt.Sprintf("/glasses/inventory?page=%d&orderBy=%s&sortBy=%s", a.NextPage, a.OrderParam, a.SortParam),
+			fmt.Sprintf("/glasses/inventory?page=%d&orderBy=%s&sortBy=%s", a.LastPage, a.OrderParam, a.SortParam),
 			strconv.Itoa(a.LastPage),
 			a.OrderParam,
 			a.SortParam)

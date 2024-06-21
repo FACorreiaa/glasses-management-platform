@@ -8,18 +8,8 @@ import (
 templ GlassesUpdateForm(form models.GlassesForm, id string) {
 	<section class="w-full bg-white">
 		<div class="mx-auto max-w-7xl">
+			<h2 class="px-4 mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update</h2>
 			<div class="flex flex-col lg:flex-row">
-				<div class="relative bg-cover lg:w-6/12 xl:w-7/12 bg-gradient-to-r from-white via-white to-gray-100">
-					<div class="relative flex flex-col items-center justify-center h-full my-20 lg:px-16 lg:my-0">
-						<div class="flex flex-col items-start space-y-8 tracking-tight lg:max-w-3xl">
-							<div class="relative">
-								<h2 class="text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update Glasses</h2>
-								<h2 class="text-2xl font-bold text-gray-900 xl:text-6xl">Features to help you work smarter</h2>
-							</div>
-							<p class="text-2xl text-gray-700">We've created a simple formula to follow in order to gain more out of your business and your application.</p>
-						</div>
-					</div>
-				</div>
 				<form method="put" hx-target="#success-message">
 					<input type="hidden" name="_method" value="PUT"/>
 					<div class="flex flex-row mb-10">
@@ -66,7 +56,8 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								name="left_eye_strength"
 								autocomplete="left-eye"
 								id="left-eye"
-								min="0"
+								min="-99"
+								max="99"
 								step="0.1"
 								required
 								value={ form.Values["LeftEye"] }
@@ -83,7 +74,8 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								name="right_eye_strength"
 								autocomplete="right-eye"
 								id="right-eye"
-								min="0"
+								min="-99"
+								max="99"
 								step="0.1"
 								required
 								value={ form.Values["RightEye"] }
@@ -120,6 +112,18 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								<option value="children">Children</option>
 							</select>
 						</div>
+					</div>
+					<div class="relative px-4 w-full mb-4">
+						<label class="font-medium text-slate-900">Features</label>
+						<textarea
+							type="text"
+							value={ form.Values["Feature"] }
+							name="features"
+							value="features"
+							placeholder="Glasses features"
+							class="mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
+						></textarea>
+						<div class="absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0"></div>
 					</div>
 					<div class="flex flex-row">
 						<div class="w-50 md:w-1/2 px-4 mb-8">

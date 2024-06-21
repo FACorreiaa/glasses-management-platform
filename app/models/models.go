@@ -98,6 +98,8 @@ type Glasses struct {
 	LeftEye   float64   `json:"left_eye_strength"`
 	RightEye  float64   `json:"right_eye_strength"`
 	Type      string    `json:"type"`
+	IsInStock bool      `json:"is_in_stock"`
+	Feature   string    `json:"features"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -127,6 +129,8 @@ type GlassesForm struct {
 	LeftEye   float64 `json:"left_eye_strength" schema:"left_eye_strength"`
 	RightEye  float64 `json:"right_eye_strength" schema:"right_eye_strength"`
 	Type      string  `json:"type" schema:"type"`
+	IsInStock bool    `json:"is_in_stock" schema:"is_in_stock"`
+	Feature   string  `json:"features" schema:"features"`
 	Updated   bool
 	Values    map[string]string
 	Errors    map[string]string
