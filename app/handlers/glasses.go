@@ -365,7 +365,7 @@ func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ
 		OrderParam:  orderBy,
 		SortParam:   sortAux,
 	}
-	taxTable := glasses.GlassesTable(data)
+	taxTable := glasses.GlassesByFilter(data)
 
 	return taxTable, nil
 }
@@ -444,7 +444,7 @@ func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, h
 		OrderParam: orderBy,
 		SortParam:  sortBy,
 	}
-	glassesTable := glasses.GlassesTable(data)
+	glassesTable := glasses.GlassesByFilter(data)
 
 	return glassesTable, nil
 }
