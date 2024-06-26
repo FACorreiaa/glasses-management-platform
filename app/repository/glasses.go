@@ -130,3 +130,21 @@ func (r *GlassesRepository) GetSum(ctx context.Context) (int, error) {
 	}
 	return count, nil
 }
+
+func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
+	page, pageSize int, orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
+	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
+       				reference, is_in_stock, features,  COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+			 	FROM glasses g
+			 	where type = $5
+			 	ORDER BY
+			    CASE
+			        WHEN $1 = 'Brand' AND $2 = 'ASC' THEN g.brand
+			        WHEN $1 = 'Brand' AND $2 = 'DESC' THEN g.brand
+			    END,
+			    g.created_at
+			    OFFSET $3 LIMIT $4`
+	offset := (page - 1) * pageSize
+
+	return r.fetchGlasses(ctx, query, orderBy, sortBy, offset, pageSize, glassesType)
+}

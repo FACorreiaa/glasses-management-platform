@@ -29,6 +29,11 @@ func (s *Service) InsertGlasses(ctx context.Context, g models.Glasses) error {
 	return s.glassesRepo.InsertGlasses(ctx, g)
 }
 
+func (s *Service) GetGlassesByType(ctx context.Context, page, pageSize int,
+	orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
+	return s.glassesRepo.GetGlassesByType(ctx, page, pageSize, orderBy, sortBy, glassesType)
+}
+
 func (s *Service) GetSum() (int, error) {
 	total, err := s.glassesRepo.GetSum(context.Background())
 	pageSize := 20

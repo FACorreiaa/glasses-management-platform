@@ -282,3 +282,97 @@ func parseFloat(value string) float64 {
 	f, _ := strconv.ParseFloat(value, 64)
 	return f
 }
+
+// Filtered Side bar views
+
+func (h *Handler) getGlassesByType(w http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
+	pageSize := 20
+	orderBy := r.FormValue("orderBy")
+	sortBy := r.FormValue("sortBy")
+	vars := mux.Vars(r)
+	filter := vars["type"]
+	println(filter)
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+
+	if err != nil {
+		page = 1
+	}
+
+	g, err := h.service.GetGlassesByType(context.Background(), page, pageSize, orderBy, sortBy, filter)
+
+	if err != nil {
+		return 0, nil, err
+	}
+
+	return page, g, nil
+}
+
+func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ.Component, error) {
+	var page int
+	var sortAux string
+	orderBy := r.FormValue("orderBy")
+	sortBy := r.FormValue("sortBy")
+	brand := r.FormValue("brand")
+
+	if sortBy == ASC {
+		sortAux = DESC
+	} else {
+		sortAux = ASC
+	}
+
+	columnNames := []models.ColumnItems{
+		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+	}
+
+	page, g, _ := h.getGlassesByType(w, r)
+
+	if len(g) == 0 {
+		message := components.EmptyPageComponent()
+		return message, nil
+	}
+
+	nextPage := page + 1
+	prevPage := page - 1
+	if prevPage <= 1 {
+		prevPage = 1
+	}
+
+	lastPage, err := h.service.GetSum()
+	if err != nil {
+		HandleError(err, "Error fetching tax")
+		return nil, err
+	}
+	data := models.GlassesTable{
+		Column:      columnNames,
+		Glasses:     g,
+		PrevPage:    prevPage,
+		NextPage:    nextPage,
+		Page:        page,
+		LastPage:    lastPage,
+		FilterBrand: brand,
+		OrderParam:  orderBy,
+		SortParam:   sortAux,
+	}
+	taxTable := glasses.GlassesTable(data)
+
+	return taxTable, nil
+}
+
+func (h *Handler) GlassesTypePage(w http.ResponseWriter, r *http.Request) error {
+	sidebar := h.renderSidebar()
+	renderTable, err := h.renderTypeTable(w, r)
+	if err != nil {
+		HandleError(err, " rendering glasses table")
+	}
+	home := glasses.GlassesLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
+	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
+}
