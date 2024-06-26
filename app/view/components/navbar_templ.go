@@ -40,7 +40,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-8\" alt=\"Glasses Management\"> <span class=\"self-center text-2xl font-semibold whitespace-nowrap dark:text-white\">GoGlasses</span></a><div :class=\"{&#39;flex&#39;: showMenu, &#39;hidden md:flex&#39;: !showMenu }\" class=\"absolute z-50 flex-col items-center justify-center w-full h-auto px-2 text-center text-gray-400 -translate-x-1/2 border-0 border-gray-700 rounded-full md:border md:w-auto md:h-10 left-1/2 md:flex-row md:items-center\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-8\" alt=\"Glasses Management\"> <span class=\"self-center text-2xl font-semibold whitespace-nowrap dark:text-white\">GoGlasses</span></a><div :class=\"{&#39;flex&#39;: showMenu, &#39;hidden md:flex&#39;: !showMenu }\" class=\"absolute z-50 flex-col items-center justify-center w-full h-auto px-2 text-center text-gray-400 -translate-x-1/2 md:w-auto md:h-10 left-1/2 md:flex-row md:items-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

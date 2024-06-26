@@ -17,7 +17,7 @@ import (
 	"strconv"
 )
 
-func GlassesStockTable(a models.GlassesTable) templ.Component {
+func GlassesByFilter(a models.GlassesTable) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -44,7 +44,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.InputComponent("Filter brand", "/glasses", "brand", "#searchResults").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.InputSearch("Filter brand", "/glasses", "brand", "#searchResults").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -73,7 +73,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(col.Title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 24, Col: 19}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 24, Col: 19}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -122,7 +122,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Brand)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 50, Col: 24}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 50, Col: 24}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -135,7 +135,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Color)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 53, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 53, Col: 26}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -148,7 +148,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Type)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 54, Col: 25}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 54, Col: 25}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -161,7 +161,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.2f", glasses.LeftEye))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 55, Col: 50}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 55, Col: 50}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -174,7 +174,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.2f", glasses.RightEye))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 56, Col: 51}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 56, Col: 51}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
@@ -187,7 +187,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var11 string
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Reference)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 57, Col: 30}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 57, Col: 30}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
@@ -200,7 +200,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var12 string
 			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%v", glasses.IsInStock))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 58, Col: 49}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 58, Col: 49}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 			if templ_7745c5c3_Err != nil {
@@ -213,7 +213,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Feature)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 59, Col: 28}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 59, Col: 28}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -226,7 +226,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.CreatedAt.String())
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 60, Col: 39}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 60, Col: 39}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
@@ -239,7 +239,7 @@ func GlassesStockTable(a models.GlassesTable) templ.Component {
 			var templ_7745c5c3_Var15 string
 			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.UpdatedAt.String())
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesStockTable.templ`, Line: 61, Col: 39}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesByFilter.templ`, Line: 61, Col: 39}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {

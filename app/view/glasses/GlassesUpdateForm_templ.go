@@ -111,9 +111,9 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/glasses/%s/update", id))
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/glasses/%s/update", id))))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesUpdateForm.templ`, Line: 131, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesUpdateForm.templ`, Line: 131, Col: 73}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

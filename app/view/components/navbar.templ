@@ -13,7 +13,7 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 						<img src={ "/static/icons/glasses.png" } class="h-8" alt="Glasses Management"/>
 						<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">GoGlasses</span>
 					</a>
-					<div :class="{'flex': showMenu, 'hidden md:flex': !showMenu }" class="absolute z-50 flex-col items-center justify-center w-full h-auto px-2 text-center text-gray-400 -translate-x-1/2 border-0 border-gray-700 rounded-full md:border md:w-auto md:h-10 left-1/2 md:flex-row md:items-center">
+					<div :class="{'flex': showMenu, 'hidden md:flex': !showMenu }" class="absolute z-50 flex-col items-center justify-center w-full h-auto px-2 text-center text-gray-400 -translate-x-1/2 md:w-auto md:h-10 left-1/2 md:flex-row md:items-center">
 						for _, item := range nav {
 							if item.IsLogout {
 								<form method="post" action="/logout">

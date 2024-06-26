@@ -128,7 +128,7 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 					<div class="flex flex-row">
 						<div class="w-50 md:w-1/2 px-4 mb-8">
 							<button
-								hx-put={ fmt.Sprintf("/glasses/%s/update", id) }
+								hx-put={ string(templ.URL(fmt.Sprintf("/glasses/%s/update", id))) }
 								type="submit"
 								name="action"
 								class="btn btn-primary w-full max-w-xs"

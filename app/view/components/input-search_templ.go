@@ -12,7 +12,7 @@ import "bytes"
 
 import "fmt"
 
-func InputComponent(placeholder, route, search, target string) templ.Component {
+func InputSearch(placeholder, route, search, target string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -32,7 +32,7 @@ func InputComponent(placeholder, route, search, target string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(route)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-text.templ`, Line: 9, Col: 16}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search.templ`, Line: 9, Col: 16}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -45,7 +45,7 @@ func InputComponent(placeholder, route, search, target string) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("input changed delay:500ms, %s", search))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-text.templ`, Line: 10, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search.templ`, Line: 10, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -58,7 +58,7 @@ func InputComponent(placeholder, route, search, target string) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("[name='%s']", search))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-text.templ`, Line: 11, Col: 49}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search.templ`, Line: 11, Col: 49}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -71,7 +71,7 @@ func InputComponent(placeholder, route, search, target string) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(target)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-text.templ`, Line: 13, Col: 20}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search.templ`, Line: 13, Col: 20}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -84,7 +84,7 @@ func InputComponent(placeholder, route, search, target string) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(search)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-text.templ`, Line: 22, Col: 21}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search.templ`, Line: 21, Col: 21}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -97,7 +97,7 @@ func InputComponent(placeholder, route, search, target string) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(placeholder)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-text.templ`, Line: 24, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search.templ`, Line: 23, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -110,7 +110,7 @@ func InputComponent(placeholder, route, search, target string) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(search)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-text.templ`, Line: 26, Col: 18}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search.templ`, Line: 25, Col: 18}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

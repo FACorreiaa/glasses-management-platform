@@ -5,19 +5,17 @@ import (
 )
 
 templ GlassesRegisterForm(form models.GlassesForm) {
-	<section class="w-full bg-white">
-		<div class="mx-auto max-w-7xl">
-			<h2 class="px-4 mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-4">Insert glasses</h2>
+	<section class="w-full bg-white py-8">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<h2 class="mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl">Insert Glasses</h2>
 			<div class="flex flex-col lg:flex-row">
-				<form method="post" hx-target="#success-message">
-					<div class="flex flex-row mb-4">
-						<div class="w-50 md:w-1/2 px-4 mb-4">
-							<label class="font-medium text-slate-900">Reference</label>
+				<form method="post" hx-target="#success-message" class="w-full space-y-4">
+					<div class="flex flex-wrap -mx-4">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="block font-medium text-gray-900 mb-1" for="reference">Reference</label>
 							<input
 								type="text"
-								class="block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-								data-primary="blue-600"
-								data-rounded="rounded-lg"
+								class="block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Insert reference"
 								name="reference"
 								autocomplete="reference"
@@ -26,13 +24,11 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 								value={ form.Values["Reference"] }
 							/>
 						</div>
-						<div class="w-50 md:w-1/2 px-4 mb-4">
-							<label class="font-medium text-slate-900">Brand</label>
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="block font-medium text-gray-900 mb-1" for="brand">Brand</label>
 							<input
 								type="text"
-								class="block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-								data-primary="blue-600"
-								data-rounded="rounded-lg"
+								class="block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Insert brand"
 								name="brand"
 								autocomplete="brand"
@@ -42,14 +38,12 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 							/>
 						</div>
 					</div>
-					<div class="flex flex-row mb-4">
-						<div class="w-50 md:w-1/2 px-4 mb-4">
-							<label class="font-medium text-slate-900">Left eye strength</label>
+					<div class="flex flex-wrap -mx-4">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="block font-medium text-gray-900 mb-1" for="left-eye">Left Eye Strength</label>
 							<input
 								type="number"
-								class="block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-								data-primary="blue-600"
-								data-rounded="rounded-lg"
+								class="block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Insert graduation"
 								name="left_eye_strength"
 								autocomplete="left-eye"
@@ -61,13 +55,11 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 								value={ form.Values["LeftEye"] }
 							/>
 						</div>
-						<div class="w-50 md:w-1/2 px-4 mb-4">
-							<label class="font-medium text-slate-900">Right eye strength</label>
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="block font-medium text-gray-900 mb-1" for="right-eye">Right Eye Strength</label>
 							<input
 								type="number"
-								class="block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-								data-primary="blue-600"
-								data-rounded="rounded-lg"
+								class="block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Insert graduation"
 								name="right_eye_strength"
 								autocomplete="right-eye"
@@ -80,14 +72,12 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 							/>
 						</div>
 					</div>
-					<div class="flex flex-row mb-4">
-						<div class="w-50 md:w-1/2 px-4 mb-4">
-							<label class="font-medium text-slate-900">Color</label>
+					<div class="flex flex-wrap -mx-4">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="block font-medium text-gray-900 mb-1" for="color">Color</label>
 							<input
 								type="text"
-								class="block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-								data-primary="blue-600"
-								data-rounded="rounded-lg"
+								class="block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Insert color"
 								name="color"
 								autocomplete="color"
@@ -96,12 +86,10 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 								value={ form.Values["Color"] }
 							/>
 						</div>
-						<div class="w-50 md:w-1/2 px-4 mb-4">
-							<label class="font-medium text-slate-900">Type</label>
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="block font-medium text-gray-900 mb-1" for="type">Type</label>
 							<select
-								class="select block w-full max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-								data-primary="blue-600"
-								data-rounded="rounded-lg"
+								class="block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 								name="type"
 								id="type"
 								required
@@ -113,62 +101,61 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 							</select>
 						</div>
 					</div>
-					<div class="relative px-4 w-full mb-4">
-						<label class="font-medium text-slate-900">Features</label>
+					<div class="relative w-full mb-4">
+						<label class="block font-medium text-gray-900 mb-1" for="features">Features</label>
 						<textarea
-							type="text"
-							value={ form.Values["Feature"] }
+							class="block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 							name="features"
-							value="features"
 							placeholder="Glasses features"
-							class="mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
+							id="features"
+							required
+							value={ form.Values["Feature"] }
 						></textarea>
-						<div class="absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0"></div>
 					</div>
-					<div class="flex flex-row">
-						<div class="w-50 md:w-1/2 px-4">
+					<div class="flex flex-wrap -mx-4">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<button
 								type="submit"
-								class="btn btn-primary w-full max-w-xs"
+								class="btn w-full px-4 py-3 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
 								name="action"
 								value="insert_more"
 							>Insert and Add Another</button>
 						</div>
-						<div class="w-50 md:w-1/2 px-4 mb-4">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<button
 								type="submit"
+								class="btn w-full px-4 py-3 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
 								name="action"
-								class="btn btn-primary w-full max-w-xs"
 								value="insert_and_redirect"
 							>Insert and Go to List</button>
 						</div>
 					</div>
-					<div id="success-message" class="mt-4 text-success"></div>
+					<div id="success-message" class="mt-4 text-green-500"></div>
 				</form>
 			</div>
 		</div>
 	</section>
 	<script>
-    document.addEventListener("submit", function(event) {
-        const form = event.target;
-        if (form.getAttribute('method') === 'post') {
-            const successMessage = document.getElementById("success-message");
+		document.addEventListener("submit", function(event) {
+			const form = event.target;
+			if (form.getAttribute('method') === 'post') {
+				const successMessage = document.getElementById("success-message");
 
-            // Display the success message
-            if (successMessage) {
-                successMessage.textContent = "Item inserted successfully!";
-                successMessage.style.display = "block";
+				// Display the success message
+				if (successMessage) {
+					successMessage.textContent = "Item inserted successfully!";
+					successMessage.style.display = "block";
 
-                // Hide the success message after 3 seconds
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                }, 3000);
-            }
+					// Hide the success message after 3 seconds
+					setTimeout(() => {
+						successMessage.style.display = "none";
+					}, 3000);
 
-            // Trigger custom event to handle additional logic if necessary
-            const glassesAddedEvent = new Event("glassesAdded");
-            document.dispatchEvent(glassesAddedEvent);
-        }
-    });
-</script>
+					// Trigger custom event to handle additional logic if necessary
+					const glassesAddedEvent = new Event("glassesAdded");
+					document.dispatchEvent(glassesAddedEvent);
+				}
+			}
+		});
+	</script>
 }

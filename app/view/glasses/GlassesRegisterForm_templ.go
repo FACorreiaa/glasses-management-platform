@@ -27,98 +27,98 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white\"><div class=\"mx-auto max-w-7xl\"><h2 class=\"px-4 mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-4\">Insert glasses</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\" hx-target=\"#success-message\"><div class=\"flex flex-row mb-4\"><div class=\"w-50 md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Reference</label> <input type=\"text\" class=\"block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert reference\" name=\"reference\" autocomplete=\"reference\" id=\"reference\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white py-8\"><div class=\"mx-auto max-w-7xl px-4 sm:px-6 lg:px-8\"><h2 class=\"mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl\">Insert Glasses</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\" hx-target=\"#success-message\" class=\"w-full space-y-4\"><div class=\"flex flex-wrap -mx-4\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"reference\">Reference</label> <input type=\"text\" class=\"block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\" placeholder=\"Insert reference\" name=\"reference\" autocomplete=\"reference\" id=\"reference\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Reference"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 26, Col: 40}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 24, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-50 md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Brand</label> <input type=\"text\" class=\"block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert brand\" name=\"brand\" autocomplete=\"brand\" id=\"brand\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"brand\">Brand</label> <input type=\"text\" class=\"block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\" placeholder=\"Insert brand\" name=\"brand\" autocomplete=\"brand\" id=\"brand\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Brand"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 41, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 37, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex flex-row mb-4\"><div class=\"w-50 md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Left eye strength</label> <input type=\"number\" class=\"block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"left_eye_strength\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex flex-wrap -mx-4\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"left-eye\">Left Eye Strength</label> <input type=\"number\" class=\"block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\" placeholder=\"Insert graduation\" name=\"left_eye_strength\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["LeftEye"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 61, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 55, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-50 md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Right eye strength</label> <input type=\"number\" class=\"block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"right_eye_strength\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"right-eye\">Right Eye Strength</label> <input type=\"number\" class=\"block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\" placeholder=\"Insert graduation\" name=\"right_eye_strength\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["RightEye"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 79, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 71, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex flex-row mb-4\"><div class=\"w-50 md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Color</label> <input type=\"text\" class=\"block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert color\" name=\"color\" autocomplete=\"color\" id=\"color\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex flex-wrap -mx-4\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"color\">Color</label> <input type=\"text\" class=\"block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\" placeholder=\"Insert color\" name=\"color\" autocomplete=\"color\" id=\"color\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Color"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 96, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 86, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-50 md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Type</label> <select class=\"select block w-full max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" name=\"type\" id=\"type\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"type\">Type</label> <select class=\"block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\" name=\"type\" id=\"type\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Type"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 108, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 96, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><option disabled selected>Select type</option> <option value=\"adult\">Adult</option> <option value=\"children\">Children</option></select></div></div><div class=\"relative px-4 w-full mb-4\"><label class=\"font-medium text-slate-900\">Features</label> <textarea type=\"text\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><option disabled selected>Select type</option> <option value=\"adult\">Adult</option> <option value=\"children\">Children</option></select></div></div><div class=\"relative w-full mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"features\">Features</label> <textarea class=\"block w-full px-4 py-3 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500\" name=\"features\" placeholder=\"Glasses features\" id=\"features\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Feature"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 120, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 112, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"features\" value=\"features\" placeholder=\"Glasses features\" class=\"mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50\"></textarea><div class=\"absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0\"></div></div><div class=\"flex flex-row\"><div class=\"w-50 md:w-1/2 px-4\"><button type=\"submit\" class=\"btn btn-primary w-full max-w-xs\" name=\"action\" value=\"insert_more\">Insert and Add Another</button></div><div class=\"w-50 md:w-1/2 px-4 mb-4\"><button type=\"submit\" name=\"action\" class=\"btn btn-primary w-full max-w-xs\" value=\"insert_and_redirect\">Insert and Go to List</button></div></div><div id=\"success-message\" class=\"mt-4 text-success\"></div></form></div></div></section><script>\n    document.addEventListener(\"submit\", function(event) {\n        const form = event.target;\n        if (form.getAttribute('method') === 'post') {\n            const successMessage = document.getElementById(\"success-message\");\n\n            // Display the success message\n            if (successMessage) {\n                successMessage.textContent = \"Item inserted successfully!\";\n                successMessage.style.display = \"block\";\n\n                // Hide the success message after 3 seconds\n                setTimeout(() => {\n                    successMessage.style.display = \"none\";\n                }, 3000);\n            }\n\n            // Trigger custom event to handle additional logic if necessary\n            const glassesAddedEvent = new Event(\"glassesAdded\");\n            document.dispatchEvent(glassesAddedEvent);\n        }\n    });\n</script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></textarea></div><div class=\"flex flex-wrap -mx-4\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><button type=\"submit\" class=\"btn w-full px-4 py-3 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50\" name=\"action\" value=\"insert_more\">Insert and Add Another</button></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><button type=\"submit\" class=\"btn w-full px-4 py-3 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50\" name=\"action\" value=\"insert_and_redirect\">Insert and Go to List</button></div></div><div id=\"success-message\" class=\"mt-4 text-green-500\"></div></form></div></div></section><script>\n\t\tdocument.addEventListener(\"submit\", function(event) {\n\t\t\tconst form = event.target;\n\t\t\tif (form.getAttribute('method') === 'post') {\n\t\t\t\tconst successMessage = document.getElementById(\"success-message\");\n\n\t\t\t\t// Display the success message\n\t\t\t\tif (successMessage) {\n\t\t\t\t\tsuccessMessage.textContent = \"Item inserted successfully!\";\n\t\t\t\t\tsuccessMessage.style.display = \"block\";\n\n\t\t\t\t\t// Hide the success message after 3 seconds\n\t\t\t\t\tsetTimeout(() => {\n\t\t\t\t\t\tsuccessMessage.style.display = \"none\";\n\t\t\t\t\t}, 3000);\n\n\t\t\t\t\t// Trigger custom event to handle additional logic if necessary\n\t\t\t\t\tconst glassesAddedEvent = new Event(\"glassesAdded\");\n\t\t\t\t\tdocument.dispatchEvent(glassesAddedEvent);\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
