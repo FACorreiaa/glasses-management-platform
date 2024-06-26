@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
@@ -40,7 +41,7 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 }
 
 func (h *Handler) getGlasses(_ http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
-	pageSize := 20
+	pageSize := 10
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
@@ -286,7 +287,7 @@ func parseFloat(value string) float64 {
 // Filtered Side bar views
 
 func (h *Handler) getGlassesByType(w http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
-	pageSize := 20
+	pageSize := 10
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
 	vars := mux.Vars(r)
@@ -301,6 +302,7 @@ func (h *Handler) getGlassesByType(w http.ResponseWriter, r *http.Request) (int,
 	g, err := h.service.GetGlassesByType(context.Background(), page, pageSize, orderBy, sortBy, filter)
 
 	if err != nil {
+		httperror.ErrNotFound.WriteError(w)
 		return 0, nil, err
 	}
 
@@ -313,7 +315,8 @@ func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
 	brand := r.FormValue("brand")
-
+	vars := mux.Vars(r)
+	filter := vars["type"]
 	if sortBy == ASC {
 		sortAux = DESC
 	} else {
@@ -346,7 +349,7 @@ func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ
 		prevPage = 1
 	}
 
-	lastPage, err := h.service.GetSum()
+	lastPage, err := h.service.GetSumByType(filter)
 	if err != nil {
 		HandleError(err, "Error fetching tax")
 		return nil, err
@@ -375,4 +378,92 @@ func (h *Handler) GlassesTypePage(w http.ResponseWriter, r *http.Request) error 
 	}
 	home := glasses.GlassesLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
+}
+
+// Filter by stock
+
+func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, hasStock bool) (templ.Component, error) {
+	pageSize := 10
+	orderBy := r.FormValue("orderBy")
+	sortBy := r.FormValue("sortBy")
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	var sortAux string
+
+	if sortBy == ASC {
+		sortAux = DESC
+	} else {
+		sortAux = ASC
+	}
+	if err != nil {
+		page = 1
+	}
+
+	g, err := h.service.GetGlassesByStock(context.Background(), page, pageSize, orderBy, sortBy, hasStock)
+	if err != nil {
+		httperror.ErrNotFound.WriteError(w)
+		return nil, err
+	}
+
+	columnNames := []models.ColumnItems{
+		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+	}
+
+	if len(g) == 0 {
+		message := components.EmptyPageComponent()
+		return message, nil
+	}
+
+	nextPage := page + 1
+	prevPage := page - 1
+	if prevPage <= 1 {
+		prevPage = 1
+	}
+
+	lastPage, err := h.service.GetSumByStock(hasStock)
+	if err != nil {
+		HandleError(err, "Error fetching glasses count")
+		return nil, err
+	}
+
+	data := models.GlassesTable{
+		Column:     columnNames,
+		Glasses:    g,
+		PrevPage:   prevPage,
+		NextPage:   nextPage,
+		Page:       page,
+		LastPage:   lastPage,
+		OrderParam: orderBy,
+		SortParam:  sortBy,
+	}
+	glassesTable := glasses.GlassesTable(data)
+
+	return glassesTable, nil
+}
+
+func (h *Handler) GlassesStockPage(w http.ResponseWriter, r *http.Request) error {
+	sidebar := h.renderSidebar()
+	var hasStock bool
+	vars := mux.Vars(r)
+	stock := vars["stock"]
+	if stock == "current" {
+		hasStock = true
+	} else {
+		hasStock = false
+	}
+	renderTable, err := h.renderInventoryTable(w, r, hasStock)
+	if err != nil {
+		HandleError(err, "rendering glasses table")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	home := glasses.GlassesLayoutPage("Glasses Inventory Management", "Glasses Inventory Management", sidebar, renderTable)
+	return h.CreateLayout(w, r, "Glasses Inventory Management", home).Render(context.Background(), w)
 }

@@ -148,3 +148,45 @@ func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 
 	return r.fetchGlasses(ctx, query, orderBy, sortBy, offset, pageSize, glassesType)
 }
+
+func (r *GlassesRepository) GetGlassesByStock(ctx context.Context,
+	page, pageSize int, orderBy, sortBy string, isInStock bool) ([]models.Glasses, error) {
+	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
+                     reference, is_in_stock, features,  COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+                 FROM glasses g
+                 WHERE is_in_stock = $5
+                 ORDER BY
+                 CASE
+                     WHEN $1 = 'Brand' AND $2 = 'ASC' THEN g.brand
+                     WHEN $1 = 'Brand' AND $2 = 'DESC' THEN g.brand
+                 END,
+                 g.created_at
+                 OFFSET $3 LIMIT $4`
+	offset := (page - 1) * pageSize
+
+	return r.fetchGlasses(ctx, query, orderBy, sortBy, offset, pageSize, isInStock)
+}
+
+func (r *GlassesRepository) GetSumByType(ctx context.Context, glassesType string) (int, error) {
+	var count int
+	row := r.pgpool.QueryRow(ctx, `
+			SELECT Count(DISTINCT g.glasses_id)
+			FROM glasses g
+			WHERE g.type = $1`, glassesType)
+	if err := row.Scan(&count); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func (r *GlassesRepository) GetSumByStock(ctx context.Context, isInStock bool) (int, error) {
+	var count int
+	row := r.pgpool.QueryRow(ctx, `
+			SELECT Count(DISTINCT g.glasses_id)
+			FROM glasses g
+			WHERE g.is_in_stock = $1`, isInStock)
+	if err := row.Scan(&count); err != nil {
+		return 0, err
+	}
+	return count, nil
+}

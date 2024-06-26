@@ -29,14 +29,41 @@ func (s *Service) InsertGlasses(ctx context.Context, g models.Glasses) error {
 	return s.glassesRepo.InsertGlasses(ctx, g)
 }
 
+// CALCULATE GET SUM
 func (s *Service) GetGlassesByType(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
 	return s.glassesRepo.GetGlassesByType(ctx, page, pageSize, orderBy, sortBy, glassesType)
 }
 
+// CALCULATE GET SUM
+func (s *Service) GetGlassesByStock(ctx context.Context,
+	page, pageSize int, orderBy, sortBy string, isInStock bool) ([]models.Glasses, error) {
+	return s.glassesRepo.GetGlassesByStock(ctx, page, pageSize, orderBy, sortBy, isInStock)
+}
+
 func (s *Service) GetSum() (int, error) {
 	total, err := s.glassesRepo.GetSum(context.Background())
-	pageSize := 20
+	pageSize := 10
+	lastPage := int(math.Ceil(float64(total) / float64(pageSize)))
+	if err != nil {
+		return 0, err
+	}
+	return lastPage, nil
+}
+
+func (s *Service) GetSumByType(glassesType string) (int, error) {
+	total, err := s.glassesRepo.GetSumByType(context.Background(), glassesType)
+	pageSize := 10
+	lastPage := int(math.Ceil(float64(total) / float64(pageSize)))
+	if err != nil {
+		return 0, err
+	}
+	return lastPage, nil
+}
+
+func (s *Service) GetSumByStock(isInStock bool) (int, error) {
+	total, err := s.glassesRepo.GetSumByStock(context.Background(), isInStock)
+	pageSize := 10
 	lastPage := int(math.Ceil(float64(total) / float64(pageSize)))
 	if err != nil {
 		return 0, err
