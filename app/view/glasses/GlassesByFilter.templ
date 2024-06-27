@@ -11,7 +11,10 @@ templ GlassesByFilter(a models.GlassesTable) {
 	<div class="flex flex-col items-left shadow-xl overflow-hidden">
 		@components.InputGroupContainer() {
 			<div class="mr-2">
-				@components.InputSearch("Filter brand", "/glasses", "brand", "#searchResults")
+				@components.InputSearch("Filter reference", "/glasses", "reference", "#searchResults")
+			</div>
+			<div class="mr-2">
+				@components.InputComboComponent("Filter left eye", "Filter right eye", "/glasses", "left_eye_strength", "#searchResults", "right_eye_strength")
 			</div>
 		}
 		<div class="flex flex-col">

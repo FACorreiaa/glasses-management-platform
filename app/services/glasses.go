@@ -9,8 +9,8 @@ import (
 )
 
 func (s *Service) GetGlasses(ctx context.Context, page, pageSize int,
-	orderBy, sortBy string) ([]models.Glasses, error) {
-	return s.glassesRepo.GetGlasses(ctx, page, pageSize, orderBy, sortBy)
+	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+	return s.glassesRepo.GetGlasses(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
 }
 
 func (s *Service) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {

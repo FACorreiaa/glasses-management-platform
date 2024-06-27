@@ -11,14 +11,17 @@ templ GlassesTable(a models.GlassesTable) {
 	<div class="flex flex-col items-left shadow-xl overflow-hidden">
 		@components.InputGroupContainer() {
 			<div class="mr-2">
-				@components.InputSearch("Filter brand", "/glasses", "brand", "#searchResults")
+				@components.InputSearch("Filter reference", "/glasses", "reference", "#searchResults")
+			</div>
+			<div class="mr-2">
+				@components.InputComboComponent("Filter left eye", "Filter right eye", "/glasses", "left_eye_strength", "#searchResults", "right_eye_strength")
 			</div>
 		}
 		<div class="flex flex-col">
 			<div class="overflow-x-auto">
 				<div class="inline-block min-w-full">
 					<div class="overflow-hidden border-b border-neutral-200 shadow sm:rounded-lg">
-						<table class="min-w-full divide-y divide-neutral-200">
+						<table class="table table-xs min-w-full divide-y divide-neutral-200">
 							<!-- head -->
 							<thead class="bg-neutral-100 dark:bg-neutral-800">
 								<tr>

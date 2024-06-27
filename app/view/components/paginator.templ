@@ -12,46 +12,50 @@ templ PaginatorComponent(firstPage, prevPage, currentPage, goToNextPage, goToLas
 						First
 					</a>
 				} else {
-					<a class="btn btn-sm btn-outline btn-primary"
-						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", firstPage, orderBy, sortBy)) }>
+					<a
+						class="btn btn-sm btn-outline btn-primary"
+						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", firstPage, orderBy, sortBy)) }
+					>
 						First
 					</a>
 				}
-
 				<!-- Previous Page Button -->
 				if currentPage == "1" {
 					<a class="btn btn-sm btn-outline btn-primary btn-disabled" aria-disabled="true">
 						<ion-icon name="chevron-back-outline"></ion-icon>
 					</a>
 				} else {
-					<a class="btn btn-sm btn-outline btn-primary"
-						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", prevPage, orderBy, sortBy)) }>
+					<a
+						class="btn btn-sm btn-outline btn-primary"
+						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", prevPage, orderBy, sortBy)) }
+					>
 						<ion-icon name="chevron-back-outline"></ion-icon>
 					</a>
 				}
-
 				<span class="btn btn-sm btn-disabled">{ currentPage } / { lastPage }</span>
-
 				<!-- Next Page Button -->
 				if currentPage == lastPage {
 					<a class="btn btn-sm btn-outline btn-primary btn-disabled" aria-disabled="true">
 						<ion-icon name="chevron-forward-outline"></ion-icon>
 					</a>
 				} else {
-					<a class="btn btn-sm btn-outline btn-primary"
-						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", goToNextPage, orderBy, sortBy)) }>
+					<a
+						class="btn btn-sm btn-outline btn-primary"
+						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", goToNextPage, orderBy, sortBy)) }
+					>
 						<ion-icon name="chevron-forward-outline"></ion-icon>
 					</a>
 				}
-
 				<!-- Last Page Button -->
 				if currentPage == lastPage {
 					<a class="btn btn-sm btn-outline btn-primary btn-disabled" aria-disabled="true">
 						Last
 					</a>
 				} else {
-					<a class="btn btn-sm btn-outline btn-primary"
-						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", goToLastPage, orderBy, sortBy)) }>
+					<a
+						class="btn btn-sm btn-outline btn-primary"
+						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", goToLastPage, orderBy, sortBy)) }
+					>
 						Last
 					</a>
 				}

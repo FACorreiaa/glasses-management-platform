@@ -20,7 +20,7 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
 		{Path: "/", Label: "Home"},
 		{Path: "/glasses", Label: "Glasses stock"},
-		{Path: "/glasses/register", Label: "Insert"},
+		{Path: "/glasses/register", Label: "Insert glasses"},
 		{
 			Label: "Type",
 			SubItems: []models.SidebarItem{
@@ -40,19 +40,56 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 	return sidebar
 }
 
-func (h *Handler) getGlasses(_ http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
+func (h *Handler) getGlasses(w http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
 	pageSize := 10
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
-
-	if err != nil {
+	if err != nil || page < 1 {
 		page = 1
 	}
 
-	g, err := h.service.GetGlasses(context.Background(), page, pageSize, orderBy, sortBy)
+	reference := r.FormValue("reference")
 
+	leftEyeStr := r.FormValue("left_eye_strength")
+	rightEyeStr := r.FormValue("right_eye_strength")
+
+	var leftEye, rightEye *float64
+
+	if leftEyeStr != "" {
+		parsedLeftEye, err := strconv.ParseFloat(leftEyeStr, 64)
+		if err != nil {
+			HandleError(err, "parse left eye")
+			return 0, nil, err
+		}
+		leftEye = &parsedLeftEye
+	}
+
+	if rightEyeStr != "" {
+		parsedRightEye, err := strconv.ParseFloat(rightEyeStr, 64)
+		if err != nil {
+			HandleError(err, "parse right eye")
+			return 0, nil, err
+		}
+		rightEye = &parsedRightEye
+	}
+
+	// Debug print statements to check values
+	if leftEye != nil {
+		fmt.Printf("leftEye: %f\n", *leftEye)
+	} else {
+		fmt.Println("leftEye is nil")
+	}
+
+	if rightEye != nil {
+		fmt.Printf("rightEye: %f\n", *rightEye)
+	} else {
+		fmt.Println("rightEye is nil")
+	}
+
+	g, err := h.service.GetGlasses(context.Background(), page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
 	if err != nil {
+		httperror.ErrNotFound.WriteError(w)
 		return 0, nil, err
 	}
 
