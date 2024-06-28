@@ -32,7 +32,7 @@ func InputComboComponent(firstPlaceholder, secondPlaceholder, route, firstSearch
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(firstPlaceholder)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 14, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 14, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -45,7 +45,7 @@ func InputComboComponent(firstPlaceholder, secondPlaceholder, route, firstSearch
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(firstSearch)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 16, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 16, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -58,7 +58,7 @@ func InputComboComponent(firstPlaceholder, secondPlaceholder, route, firstSearch
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(secondPlaceholder)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 27, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 27, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -71,7 +71,7 @@ func InputComboComponent(firstPlaceholder, secondPlaceholder, route, firstSearch
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(secondSearch)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 29, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 29, Col: 24}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -84,7 +84,7 @@ func InputComboComponent(firstPlaceholder, secondPlaceholder, route, firstSearch
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(route)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 38, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 38, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -97,7 +97,7 @@ func InputComboComponent(firstPlaceholder, secondPlaceholder, route, firstSearch
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("[name='%s'],[name='%s']", firstSearch, secondSearch))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 40, Col: 90}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 40, Col: 81}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -110,7 +110,7 @@ func InputComboComponent(firstPlaceholder, secondPlaceholder, route, firstSearch
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(target)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 42, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/input-search-combo.templ`, Line: 42, Col: 21}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

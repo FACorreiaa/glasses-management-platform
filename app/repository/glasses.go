@@ -2,7 +2,7 @@ package repository
 
 import (
 	"errors"
-	"log"
+	"log/slog"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/google/uuid"
@@ -18,12 +18,6 @@ type GlassesRepository struct {
 
 func NewGlassesRepository(db *pgxpool.Pool) *GlassesRepository {
 	return &GlassesRepository{pgpool: db}
-}
-
-func handleError(err error, message string) {
-	if err != nil {
-		log.Printf("%s: %v", message, err)
-	}
 }
 
 func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args ...interface{}) ([]models.Glasses, error) {
@@ -44,15 +38,18 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 		)
 
 		if err != nil {
-			return nil, err
+			slog.Error("Error scanning glasses", "err", err)
+			return nil, errors.New("internal server error")
 		}
 		al = append(al, a)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		slog.Error("Error fetching glasses", "err", err)
+		return nil, errors.New("internal server error")
 	}
 
+	slog.Info("Glasses fetched", "glasses", al)
 	return al, nil
 }
 
@@ -76,7 +73,7 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 				END ` + sortBy + `
 			    OFFSET $2 LIMIT $3`
 	offset := (page - 1) * pageSize
-
+	slog.Info("Glasses fetched", "offset", offset)
 	return r.fetchGlasses(ctx, query, orderBy, offset, pageSize, reference, leftEye, rightEye)
 }
 
@@ -94,17 +91,25 @@ func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.U
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, nil
+			slog.Error("No rows", "err", err)
+			return nil, errors.New("internal server error")
 		}
-		return nil, err
+		slog.Error("Error scanning glasses", "err", err)
+		return nil, errors.New("internal server error")
 	}
 
+	slog.Info("Glasses fetched", "glasses", a)
 	return &a, nil
 }
 
 func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID uuid.UUID) error {
 	query := `DELETE FROM glasses WHERE glasses_id = $1`
 	_, err := r.pgpool.Exec(ctx, query, glassesID)
+	if err != nil {
+		slog.Error("Error deleting glasses", "err", err)
+		return errors.New("internal server error")
+	}
+	slog.Info("Deleted glasses", "glasses_id", glassesID)
 	return err
 }
 
@@ -116,6 +121,11 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.Glasses)
 		WHERE glasses_id = $8
 	`
 	_, err := r.pgpool.Exec(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type, g.Feature, g.GlassesID)
+	if err != nil {
+		slog.Error("Error updating glasses", "err", err)
+		return errors.New("internal server error")
+	}
+	slog.Info("Updated glasses", "glasses_id", g.GlassesID)
 	return err
 }
 
@@ -126,6 +136,11 @@ func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.Glasses)
 		RETURNING glasses_id
 	`
 	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type, g.Feature).Scan(&g.GlassesID)
+	if err != nil {
+		slog.Error("Error inserting glasses", "err", err)
+		return errors.New("internal server error")
+	}
+	slog.Info("Inserted glasses", "glasses_id", g.GlassesID)
 	return err
 }
 
@@ -135,6 +150,7 @@ func (r *GlassesRepository) GetSum(ctx context.Context) (int, error) {
 	if err := row.Scan(&count); err != nil {
 		return 0, err
 	}
+	slog.Info("Glasses count", "count", count)
 	return count, nil
 }
 
@@ -153,6 +169,7 @@ func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 			    OFFSET $3 LIMIT $4`
 	offset := (page - 1) * pageSize
 
+	slog.Info("Fetching glasses", "page", page, "pageSize", pageSize, "offset", offset)
 	return r.fetchGlasses(ctx, query, orderBy, sortBy, offset, pageSize, glassesType)
 }
 
@@ -171,6 +188,7 @@ func (r *GlassesRepository) GetGlassesByStock(ctx context.Context,
                  OFFSET $3 LIMIT $4`
 	offset := (page - 1) * pageSize
 
+	slog.Info("Fetching glasses", "page", page, "pageSize", pageSize, "offset", offset)
 	return r.fetchGlasses(ctx, query, orderBy, sortBy, offset, pageSize, isInStock)
 }
 
@@ -183,6 +201,7 @@ func (r *GlassesRepository) GetSumByType(ctx context.Context, glassesType string
 	if err := row.Scan(&count); err != nil {
 		return 0, err
 	}
+	slog.Info("Glasses count", "count", count)
 	return count, nil
 }
 
@@ -195,5 +214,6 @@ func (r *GlassesRepository) GetSumByStock(ctx context.Context, isInStock bool) (
 	if err := row.Scan(&count); err != nil {
 		return 0, err
 	}
+	slog.Info("Glasses count", "count", count)
 	return count, nil
 }

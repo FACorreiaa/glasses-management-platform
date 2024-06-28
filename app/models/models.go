@@ -122,6 +122,17 @@ type GlassesTable struct {
 	SortParam   string
 }
 
+type UsersTable struct {
+	Column     []ColumnItems
+	Users      []UserSession
+	PrevPage   int
+	NextPage   int
+	Page       int
+	LastPage   int
+	OrderParam string
+	SortParam  string
+}
+
 type GlassesForm struct {
 	Reference string  `json:"reference" schema:"reference"`
 	Brand     string  `json:"brand" schema:"brand"`
@@ -134,4 +145,17 @@ type GlassesForm struct {
 	Updated   bool
 	Values    map[string]string
 	Errors    map[string]string
+}
+
+type UpdateUserForm struct {
+	UserID   uuid.UUID `json:"user_id" schema:"user_id"`
+	Username string    `json:"username" schema:"username"`
+	Email    string    `json:"email" schema:"email"`
+	Bio      string    `json:"bio" schema:"bio"`
+	Image    string    `json:"image" schema:"image"`
+	Password string    `json:"password" schema:"password"`
+	Role     string    `json:"role" schema:"role"`
+	Updated  bool
+	Values   map[string]string
+	Errors   map[string]string
 }

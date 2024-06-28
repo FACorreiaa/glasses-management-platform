@@ -69,7 +69,7 @@ func GlassesByFilter(a models.GlassesTable) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col\"><div class=\"overflow-x-auto\"><div class=\"inline-block min-w-full\"><div class=\"overflow-hidden border-b border-neutral-200 shadow sm:rounded-lg\"><table class=\"min-w-full divide-y divide-neutral-200\"><!-- head --><thead class=\"bg-neutral-100 dark:bg-neutral-800\"><tr>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col\"><div class=\"overflow-x-auto\"><div class=\"inline-block min-w-full\"><div class=\"overflow-hidden border-b border-neutral-200 shadow sm:rounded-lg\"><table class=\"table table-xs min-w-full divide-y divide-neutral-200\"><!-- head --><thead class=\"bg-neutral-100 dark:bg-neutral-800\"><tr>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
