@@ -2,18 +2,14 @@ package admin
 
 import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
-	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
-templ UserLayoutPage(title, description string, sidebar []models.SidebarItem, component templ.Component) {
+templ UserLayoutPage(title, description string, component templ.Component) {
 	<div>
 		@components.BannerComponent(title, description)
 		<div class="flex items-center justify-center flex-grow">
-			<div class="container flex flex-col pt-10 mx-auto mr:px-6 lg:flex-row">
-				<div class="w-2/12">
-					@components.SidebarComponent(sidebar)
-				</div>
-				<div class="w-10/12 overflow-x-auto">
+			<div class="container flex flex-col pt-10 mx-auto mr:px-6 lg:flex-row justify-center">
+				<div class="w-12/12 overflow-x-auto">
 					@component
 				</div>
 			</div>

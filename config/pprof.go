@@ -20,7 +20,7 @@ func InitPprof(addr, port string) error {
 	go func() {
 		log.Printf("Running pprof on %s\n", pprofAddr)
 		if err := server.ListenAndServe(); err != nil {
-			log.Printf("Error running pprof server: %v\n", err)
+			log.Printf(" running pprof server: %v\n", err)
 		}
 	}()
 	return nil

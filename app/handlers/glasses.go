@@ -137,7 +137,7 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 
 	lastPage, err := h.service.GetSum()
 	if err != nil {
-		HandleError(err, "Error fetching tax")
+		HandleError(err, " fetching tax")
 		return nil, err
 	}
 	data := models.GlassesTable{
@@ -160,7 +160,7 @@ func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
 	sidebar := h.renderSidebar()
 	renderTable, err := h.renderGlassesTable(w, r)
 	if err != nil {
-		HandleError(err, " rendering glasses table")
+		HandleError(err, "rendering glasses table")
 	}
 	home := glasses.GlassesLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
@@ -388,7 +388,7 @@ func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ
 
 	lastPage, err := h.service.GetSumByType(filter)
 	if err != nil {
-		HandleError(err, "Error fetching tax")
+		HandleError(err, " fetching tax")
 		return nil, err
 	}
 	data := models.GlassesTable{
@@ -467,7 +467,7 @@ func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, h
 
 	lastPage, err := h.service.GetSumByStock(hasStock)
 	if err != nil {
-		HandleError(err, "Error fetching glasses count")
+		HandleError(err, " fetching glasses count")
 		return nil, err
 	}
 

@@ -7,25 +7,25 @@ import (
 	"strconv"
 )
 
-templ TestComponent() {
-  <div>oi</div>
-}
-
-
-
 templ UsersTable(user models.UsersTable) {
 	<div class="flex flex-col items-left shadow-xl overflow-hidden">
 		@components.InputGroupContainer() {
 			<div class="mr-2">
-				@components.InputSearch("Filter reference", "/glasses", "reference", "#searchResults")
-			</div>
-			<div class="mr-2">
-				@components.InputComboComponent("Filter left eye", "Filter right eye", "/glasses", "left_eye_strength", "#searchResults", "right_eye_strength")
+				@components.InputSearch("Filter email", "/collaborators", "email", "#searchResults")
 			</div>
 		}
 		<div class="flex flex-col">
 			<div class="overflow-x-auto">
 				<div class="inline-block min-w-full">
+					<div class="mb-8">
+						<a
+							href={ templ.SafeURL(fmt.Sprintf("/collaborators/register")) }
+							class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
+						>
+							<span>Insert user</span>
+							<ion-icon name="create-outline"></ion-icon>
+						</a>
+					</div>
 					<div class="overflow-hidden border-b border-neutral-200 shadow sm:rounded-lg">
 						<table class="table table-xs min-w-full divide-y divide-neutral-200">
 							<!-- head -->
@@ -38,7 +38,7 @@ templ UsersTable(user models.UsersTable) {
 												<form class="ml-2" method="get">
 													<a
 														class="text-neutral-400 hover:text-neutral-900"
-														href={ templ.URL(fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", user.Page, col.Title, col.SortParam)) }
+														href={ templ.URL(fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.Page, col.Title, col.SortParam)) }
 													>
 														@col.Icon
 													</a>
@@ -56,29 +56,37 @@ templ UsersTable(user models.UsersTable) {
 											<a
 												class="text-sm text-neutral-900"
 												hx-trigger="load delay:50ms"
-												href={ templ.URL(fmt.Sprintf("/glasses/%s/edit", us.ID)) }
+												href={ templ.URL(fmt.Sprintf("/collaborators/%s/edit", us.ID)) }
 											>
 												{ us.Username }
 											</a>
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.Username }</td>
-
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.Email }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.Role }</td>
+										if us.CreatedAt != nil {
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.CreatedAt.Format("02-01-2006") }</td>
+										} else {
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">"N/A"</td>
+										}
+										if us.UpdatedAt != nil {
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.UpdatedAt.Format("02-01-2006") }</td>
+										} else {
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">"N/A"</td>
+										}
 										<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												<a
-													href={ templ.SafeURL(fmt.Sprintf("/glasses/%s/edit", us.ID)) }
-													class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
-												>
-													<span>Edit</span>
-													<ion-icon name="create-outline"></ion-icon>
-												</a>
-
+											<a
+												href={ templ.SafeURL(fmt.Sprintf("/collaborators/%s/edit", us.ID)) }
+												class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
+											>
+												<span>Edit</span>
+												<ion-icon name="create-outline"></ion-icon>
+											</a>
 											<button
-												hx-delete={ fmt.Sprintf("/glasses/%s", us.ID) }
+												hx-delete={ fmt.Sprintf("/collaborators/%s", us.ID) }
 												type="button"
-												hx-confirm="Are you sure?"
 												hx-target="closest tr"
 												hx-swap="outerHTML swap:1s"
-												class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
+												class="fade-me-out.htmx-swapping btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
 											>
 												<span>Delete</span>
 												<ion-icon name="trash-outline"></ion-icon>
@@ -92,11 +100,11 @@ templ UsersTable(user models.UsersTable) {
 				</div>
 			</div>
 		</div>
-		@components.PaginatorComponent("/glasses",
-			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", user.PrevPage, user.OrderParam, user.SortParam),
+		@components.PaginatorComponent("/collaborators",
+			fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.PrevPage, user.OrderParam, user.SortParam),
 			strconv.Itoa(user.Page),
-			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", user.NextPage, user.OrderParam, user.SortParam),
-			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", user.LastPage, user.OrderParam, user.SortParam),
+			fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.NextPage, user.OrderParam, user.SortParam),
+			fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.LastPage, user.OrderParam, user.SortParam),
 			strconv.Itoa(user.LastPage),
 			user.OrderParam,
 			user.SortParam)

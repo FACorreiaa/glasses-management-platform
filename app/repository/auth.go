@@ -99,7 +99,7 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 			return nil, errors.New("invalid email or password")
 		}
 
-		slog.Error("Error querying user", "err", err)
+		slog.Error(" querying user", "err", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -109,7 +109,7 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 
 	tokenBytes := make([]byte, RandSize)
 	if _, err = rand.Read(tokenBytes); err != nil {
-		slog.Error("Error generating token", "err", err)
+		slog.Error(" generating token", "err", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -126,7 +126,7 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 	//	token,
 	//	"auth",
 	// ); err != nil {
-	//	slog.Error("Error inserting token", "err", err)
+	//	slog.Error(" inserting token", "err", err)
 	//	return nil, errors.New("internal server error")
 	//}
 
@@ -134,7 +134,7 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 	// key := RedisPrefix + string(token)
 	err = a.redisClient.Set(ctx, token, (user.ID).String(), MaxAge).Err()
 	if err != nil {
-		log.Println("Error inserting token into Redis:", err)
+		log.Println(" inserting token into Redis:", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -153,7 +153,7 @@ func (m *MiddlewareRepository) UserFromSessionToken(ctx context.Context, token T
 			return nil, errors.New("auth session expired")
 		}
 
-		log.Println("Error querying user ID with token from Redis:", err)
+		log.Println(" querying user ID with token from Redis:", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -176,7 +176,7 @@ func (m *MiddlewareRepository) UserFromSessionToken(ctx context.Context, token T
 		userID,
 	)
 	if err != nil {
-		log.Println("Error querying user from PostgreSQL:", err)
+		log.Println(" querying user from PostgreSQL:", err)
 		return nil, errors.New("internal server error")
 	}
 

@@ -103,7 +103,7 @@ func run(ctx context.Context) error {
 
 	err = config.InitPprof(pprofAddr, pprofPort)
 	if err != nil {
-		fmt.Printf("Error initializing pprof config: %s", err)
+		fmt.Printf(" initializing pprof config: %s", err)
 		panic(err)
 	}
 
@@ -114,7 +114,7 @@ func run(ctx context.Context) error {
 	defer cancel()
 
 	if err = srv.Shutdown(ctxShutdown); err != nil {
-		handleError(err, "Error shutting down server")
+		handleError(err, " shutting down server")
 	}
 
 	slog.Info("Shutting down")

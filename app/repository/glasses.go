@@ -38,14 +38,14 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 		)
 
 		if err != nil {
-			slog.Error("Error scanning glasses", "err", err)
+			slog.Error(" scanning glasses", "err", err)
 			return nil, errors.New("internal server error")
 		}
 		al = append(al, a)
 	}
 
 	if err := rows.Err(); err != nil {
-		slog.Error("Error fetching glasses", "err", err)
+		slog.Error(" fetching glasses", "err", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -94,7 +94,7 @@ func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.U
 			slog.Error("No rows", "err", err)
 			return nil, errors.New("internal server error")
 		}
-		slog.Error("Error scanning glasses", "err", err)
+		slog.Error(" scanning glasses", "err", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -106,7 +106,7 @@ func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID uuid.UU
 	query := `DELETE FROM glasses WHERE glasses_id = $1`
 	_, err := r.pgpool.Exec(ctx, query, glassesID)
 	if err != nil {
-		slog.Error("Error deleting glasses", "err", err)
+		slog.Error(" deleting glasses", "err", err)
 		return errors.New("internal server error")
 	}
 	slog.Info("Deleted glasses", "glasses_id", glassesID)
@@ -122,7 +122,7 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.Glasses)
 	`
 	_, err := r.pgpool.Exec(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type, g.Feature, g.GlassesID)
 	if err != nil {
-		slog.Error("Error updating glasses", "err", err)
+		slog.Error(" updating glasses", "err", err)
 		return errors.New("internal server error")
 	}
 	slog.Info("Updated glasses", "glasses_id", g.GlassesID)
@@ -137,7 +137,7 @@ func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.Glasses)
 	`
 	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type, g.Feature).Scan(&g.GlassesID)
 	if err != nil {
-		slog.Error("Error inserting glasses", "err", err)
+		slog.Error(" inserting glasses", "err", err)
 		return errors.New("internal server error")
 	}
 	slog.Info("Inserted glasses", "glasses_id", g.GlassesID)

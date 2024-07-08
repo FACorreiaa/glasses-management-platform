@@ -9,6 +9,7 @@ import (
 type Service struct {
 	accountRepo *repository.AccountRepository
 	glassesRepo *repository.GlassesRepository
+	adminRepo   *repository.AdminRepository
 }
 
 func HandleError(err error, message string) {
@@ -19,10 +20,12 @@ func HandleError(err error, message string) {
 
 func NewService(
 	accountRepo *repository.AccountRepository,
-	glassesRepo *repository.GlassesRepository) *Service {
+	glassesRepo *repository.GlassesRepository,
+	adminRepo *repository.AdminRepository) *Service {
 
 	return &Service{
 		accountRepo: accountRepo,
 		glassesRepo: glassesRepo,
+		adminRepo:   adminRepo,
 	}
 }

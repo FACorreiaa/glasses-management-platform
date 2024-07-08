@@ -72,15 +72,14 @@ func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title str
 
 	var nav []models.NavItem
 
-	if user == nil {
-		// Not logged in users
+	switch {
+	case user == nil:
 		nav = []models.NavItem{
 			{Path: "/", Label: "Home"},
 			{Path: "/login", Label: "Sign in"},
-			{Path: "/register", Label: "Sign up"},
+			// {Path: "/register", Label: "Sign up"},
 		}
-	} else if user.Role == "admin" {
-		// Admin users
+	case user.Role == "admin":
 		nav = []models.NavItem{
 			{Path: "/", Label: "Home"},
 			{Path: "/glasses", Label: "Glasses Inventory"},
@@ -89,8 +88,7 @@ func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title str
 			{Path: "/settings", Label: "Settings"},
 			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}
-	} else {
-		// Regular employees
+	default:
 		nav = []models.NavItem{
 			{Path: "/", Label: "Home"},
 			{Path: "/glasses", Label: "Glasses Inventory"},

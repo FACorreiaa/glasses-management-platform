@@ -10,14 +10,38 @@ import (
 	"context"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"github.com/gorilla/sessions"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (a *AccountRepository) fetchUsers(ctx context.Context, query string, args ...interface{}) ([]models.UserSession, error) {
+type AdminRepository struct {
+	pgpool      *pgxpool.Pool
+	redisClient *redis.Client
+	validator   *validator.Validate
+	sessions    *sessions.CookieStore
+}
+
+func NewAdminRepository(db *pgxpool.Pool,
+	redisClient *redis.Client,
+	validator *validator.Validate,
+	sessions *sessions.CookieStore,
+) *AdminRepository {
+	return &AdminRepository{
+		pgpool:      db,
+		redisClient: redisClient,
+		validator:   validator,
+		sessions:    sessions,
+	}
+}
+
+func (a *AdminRepository) fetchUsers(ctx context.Context, query string, args ...interface{}) ([]models.UserSession, error) {
 	var us []models.UserSession
 
 	rows, err := a.pgpool.Query(ctx, query, args...)
@@ -32,14 +56,13 @@ func (a *AccountRepository) fetchUsers(ctx context.Context, query string, args .
 			&u.ID,
 			&u.Username,
 			&u.Email,
-			&u.PasswordHash,
 			&u.Role,
 			&u.UpdatedAt,
 			&u.CreatedAt,
 		)
 
 		if err != nil {
-			slog.Error("Error scanning users", "err", err)
+			slog.Error(" scanning users", "err", err)
 			return nil, errors.New("internal server error")
 		}
 		us = append(us, u)
@@ -54,23 +77,24 @@ func (a *AccountRepository) fetchUsers(ctx context.Context, query string, args .
 	return us, nil
 }
 
-func (a *AccountRepository) GetUsers(ctx context.Context, page, pageSize int, orderBy, sortBy, email string) ([]models.UserSession, error) {
+func (a *AdminRepository) GetUsers(ctx context.Context, page, pageSize int, orderBy, sortBy, email string) ([]models.UserSession, error) {
 	query := `
 		SELECT
 			user_id,
 			username,
 			email,
-			password_hash,
 			role,
 			updated_at,
 			created_at
 		FROM
 			"user" u
-		WHERE u.role == 'employee'
+		WHERE u.role = 'employee'
 		AND Trim(Upper(u.email)) ILIKE trim(upper('%' || $4 || '%'))
 		ORDER BY
 		CASE
 					WHEN $1 = 'Username' THEN u.username
+					WHEN $1 = 'Email' THEN u.email
+					WHEN $1 = 'Role' THEN u.role
 					ELSE u.email
 				END ` + sortBy + `
 			    OFFSET $2 LIMIT $3`
@@ -79,28 +103,27 @@ func (a *AccountRepository) GetUsers(ctx context.Context, page, pageSize int, or
 	return a.fetchUsers(ctx, query, orderBy, offset, pageSize, email)
 }
 
-func (r *GlassesRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) (*models.UserSession, error) {
+func (a *AdminRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) (*models.UserSession, error) {
 	query := `SELECT
 					user_id,
 					username,
 					email,
-					password_hash,
 					role,
 					updated_at,
 					created_at
 				FROM
 					"user" u
-				WHERE u.role == 'employee' AND user_id = $1`
+				WHERE u.role = 'employee' AND user_id = $1`
 	var u models.UserSession
 
-	err := r.pgpool.QueryRow(ctx, query, userID).Scan(
-		&u.ID, &u.Username, &u.Email, &u.UpdatedAt, &u.CreatedAt,
+	err := a.pgpool.QueryRow(ctx, query, userID).Scan(
+		&u.ID, &u.Username, &u.Email, &u.Role, &u.UpdatedAt, &u.CreatedAt,
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, nil
 		}
-		slog.Error("Error getting user", "err", err)
+		slog.Error(" getting user", "err", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -108,61 +131,65 @@ func (r *GlassesRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) 
 	return &u, nil
 }
 
-func (a *AccountRepository) DeleteUser(ctx context.Context, userID uuid.UUID) error {
-	query := `DELETE FROM "user" u WHERE u.role == 'employee' AND u.user_id = $1`
+func (a *AdminRepository) DeleteUser(ctx context.Context, userID uuid.UUID) error {
+	query := `DELETE FROM "user" u WHERE u.role = 'employee' AND u.user_id = $1`
 	_, err := a.pgpool.Exec(ctx, query, userID)
 	slog.Info("Deleted user", "user_id", userID)
 	return err
 }
 
-func (a *AccountRepository) UpdateUser(ctx context.Context, form models.UpdateUserForm) error {
-	// Validate the input form
-	if err := a.validator.Struct(form); err != nil {
-		slog.Warn("Validation error")
-		return err
+func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUserForm) error {
+	// Check if the username already exists
+	var existingUserID uuid.UUID
+	err := a.pgpool.QueryRow(ctx, `SELECT user_id FROM "user" WHERE username = $1`, form.Username).Scan(&existingUserID)
+	if err != nil && !errors.Is(pgx.ErrNoRows, err) {
+		slog.Error("checking existing username", "err", err)
+		return errors.New("internal server error")
+	}
+	if existingUserID != form.UserID && existingUserID != uuid.Nil {
+		return errors.New("username already exists")
 	}
 
-	var passwordHash []byte
-	var err error
 	// Hash the new password if provided
+	var passwordHash []byte
+	var setPasswordHash bool
 	if form.Password != "" {
-		passwordHash, err = bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost)
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost)
 		if err != nil {
-			slog.Error("Error hashing password", "err", err)
+			slog.Error("hashing password", "err", err)
 			return errors.New("internal server error")
 		}
+		passwordHash = hashedPassword
+		setPasswordHash = true
 	}
 
-	// Start the database transaction
-	err = pgx.BeginFunc(ctx, a.pgpool, func(tx pgx.Tx) error {
-		// Construct the query and arguments
-		query := `
-			UPDATE "user"
-			SET username = $1, email = $2, bio = $3, image = $4, role = $5, updated_at = NOW()
-		`
-		args := []interface{}{form.Username, form.Email, form.Bio, form.Image, form.Role, form.UserID}
+	// Construct the base query
+	query := `
+        UPDATE "user"
+        SET username = $1, email = $2, role = $3, updated_at = NOW()
+        WHERE user_id = $4
+    `
 
-		// If the password was provided, update it too
-		if form.Password != "" {
-			query += `, password_hash = $6`
-			args = append(args, passwordHash)
-		}
+	// Prepare arguments
+	args := []interface{}{form.Username, form.Email, form.Role, form.UserID}
 
-		// Add the WHERE clause
-		query += ` WHERE user_id = $7`
-		args = append(args, form.UserID)
+	// Conditionally append password_hash to the query and args
+	if setPasswordHash {
+		query = `
+            UPDATE "user"
+            SET username = $1, email = $2, role = $3, updated_at = NOW(), password_hash = $5
+            WHERE user_id = $4
+        `
+		args = append(args, passwordHash)
+	}
 
-		// Execute the update query
-		_, err := tx.Exec(ctx, query, args...)
-		if err != nil {
-			return errors.New("error updating user")
-		}
+	// Log the query and arguments for debugging
+	slog.Info("Executing query", "query", query, "args", args)
 
-		return nil
-	})
-
+	// Execute the update query
+	_, err = a.pgpool.Exec(ctx, query, args...)
 	if err != nil {
-		slog.Error("Error updating user", "err", err)
+		slog.Error("updating user", "err", err)
 		return errors.New("internal server error")
 	}
 
@@ -170,7 +197,7 @@ func (a *AccountRepository) UpdateUser(ctx context.Context, form models.UpdateUs
 	return nil
 }
 
-func (a *AccountRepository) RegisterNewAccount(ctx context.Context, form models.RegisterForm) (*Token, error) {
+func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterForm) (*Token, error) {
 	if err := a.validator.Struct(form); err != nil {
 		slog.Warn("Validation error")
 		return nil, err
@@ -178,7 +205,7 @@ func (a *AccountRepository) RegisterNewAccount(ctx context.Context, form models.
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost)
 	if err != nil {
-		slog.Error("Error hashing password", "err", err)
+		slog.Error(" hashing password", "err", err)
 		return nil, errors.New("internal server error")
 	}
 
@@ -189,8 +216,8 @@ func (a *AccountRepository) RegisterNewAccount(ctx context.Context, form models.
 		row, _ := tx.Query(
 			ctx,
 			`
-			insert into "user" (username, email, password_hash)
-				values ($1, $2, $3)
+			insert into "user" (username, email, password_hash, created_at, updated_at)
+				values ($1, $2, $3, $4, $4)
 			returning
 				user_id,
 				username,
@@ -205,6 +232,7 @@ func (a *AccountRepository) RegisterNewAccount(ctx context.Context, form models.
 			form.Username,
 			form.Email,
 			passwordHash,
+			time.Now(),
 		)
 		user, err = pgx.CollectOneRow(row, pgx.RowToStructByPos[models.UserSession])
 		if err != nil {
@@ -230,10 +258,20 @@ func (a *AccountRepository) RegisterNewAccount(ctx context.Context, form models.
 			return nil, errors.New("username or email already taken")
 		}
 
-		slog.Error("Error creating account", "err", err)
+		slog.Error(" creating account", "err", err)
 		return nil, errors.New("internal server error")
 	}
 
 	slog.Info("Created account", "user_id", user.ID)
 	return &token, nil
+}
+
+func (a *AdminRepository) GetSum(ctx context.Context) (int, error) {
+	var count int
+	row := a.pgpool.QueryRow(ctx, `SELECT Count(DISTINCT u.user_id) FROM "user" u`)
+	if err := row.Scan(&count); err != nil {
+		return 0, err
+	}
+	slog.Info("Glasses count", "count", count)
+	return count, nil
 }
