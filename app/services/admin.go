@@ -30,7 +30,7 @@ func (s *Service) InsertUser(ctx context.Context, form models.RegisterForm) (*re
 }
 
 func (s *Service) GetUsersSum() (int, error) {
-	total, err := s.adminRepo.GetSum(context.Background())
+	total, err := s.adminRepo.GetUsersSum(context.Background())
 	pageSize := 10
 	lastPage := int(math.Ceil(float64(total) / float64(pageSize)))
 	if err != nil {

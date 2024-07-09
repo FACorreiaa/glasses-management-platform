@@ -23,9 +23,7 @@ type UserSession struct {
 	Username     string
 	Email        string
 	PasswordHash []byte
-	Bio          string
 	Role         string
-	Image        *string
 	CreatedAt    *time.Time
 	UpdatedAt    *time.Time
 }
@@ -148,14 +146,13 @@ type GlassesForm struct {
 }
 
 type UpdateUserForm struct {
-	UserID   uuid.UUID `json:"user_id" schema:"user_id"`
-	Username string    `json:"username" schema:"username"`
-	Email    string    `json:"email" schema:"email"`
-	Bio      string    `json:"bio" schema:"bio"`
-	Image    string    `json:"image" schema:"image"`
-	Password string    `json:"password" schema:"password"`
-	Role     string    `json:"role" schema:"role"`
-	Updated  bool
-	Values   map[string]string
-	Errors   map[string]string
+	UserID          uuid.UUID `json:"user_id"`
+	Username        string    `form:"username"`
+	Email           string    `form:"email"`
+	Role            string    `form:"role"`
+	Password        string    `form:"password"`
+	PasswordConfirm string    `form:"password_confirm"`
+	Updated         bool
+	Values          map[string]string
+	Errors          map[string]string
 }

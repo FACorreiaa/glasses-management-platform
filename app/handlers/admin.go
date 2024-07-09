@@ -9,21 +9,10 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/admin"
-	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
-
-func (h *Handler) renderAdminSidebar() []models.SidebarItem {
-	sidebar := []models.SidebarItem{
-		{Path: "/", Label: "Home"},
-		{Path: "/collaborators", Label: "List Collaborators"},
-		{Path: "/collaborators/register", Label: "Insert collaborators"},
-		{Path: "/log-out", Label: "Log out"},
-	}
-	return sidebar
-}
 
 func (h *Handler) getCollaborators(w http.ResponseWriter, r *http.Request) (int, []models.UserSession, error) {
 	pageSize := 10
@@ -68,7 +57,7 @@ func (h *Handler) renderCollaboratorsTable(w http.ResponseWriter, r *http.Reques
 	page, u, _ := h.getCollaborators(w, r)
 
 	if len(u) == 0 {
-		message := components.EmptyPageComponent()
+		message := admin.UserEmptyPage()
 		return message, nil
 	}
 
@@ -78,7 +67,7 @@ func (h *Handler) renderCollaboratorsTable(w http.ResponseWriter, r *http.Reques
 		prevPage = 1
 	}
 
-	lastPage, err := h.service.GetSum()
+	lastPage, err := h.service.GetUsersSum()
 	if err != nil {
 		HandleError(err, " fetching tax")
 		return nil, err
@@ -192,7 +181,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 	userIDStr := vars["user_id"]
 	userID, err := uuid.Parse(userIDStr)
 	if err != nil {
-		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return err
 	}
 
@@ -202,21 +191,27 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
+	println(r.FormValue("Email"))
+
 	g := models.UpdateUserForm{
-		UserID:   userID,
-		Email:    r.FormValue("Email"),
-		Username: r.FormValue("Username"),
-		Password: r.FormValue("Password"),
-		Role:     r.FormValue("Role"),
+		UserID:          userID,
+		Email:           r.FormValue("email"),
+		Username:        r.FormValue("username"),
+		Role:            r.FormValue("role"),
+		Password:        r.FormValue("password"),
+		PasswordConfirm: r.FormValue("password_confirm"),
 	}
 
 	err = h.service.UpdateUser(context.Background(), g)
 	if err != nil {
-		http.Error(w, "Failed to update user", http.StatusInternalServerError)
+		if err.Error() == "username already exists" || err.Error() == "email already exists" {
+			http.Error(w, err.Error(), http.StatusConflict)
+		} else {
+			http.Error(w, "Failed to update user", http.StatusInternalServerError)
+		}
 		return err
 	}
 
 	w.Header().Set("HX-Redirect", "/collaborators")
-
 	return nil
 }

@@ -40,9 +40,6 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 							<div class="flex flex-col items-center justify-end w-full h-full pt-2 md:w-full md:flex-row md:py-0">
 								if user != nil {
 									<a href={ templ.SafeURL("/profile/" + user.Username) } class="font-bold w-full py-5 mr-0 text-center text-gray-200 md:py-3 md:w-auto hover:text-white md:pl-0 md:mr-3 lg:mr-5">
-										if user.Image != nil {
-											<img src={ templ.EscapeString(*user.Image) } class="user-pic"/>
-										}
 										{ user.Username }
 									</a>
 								}

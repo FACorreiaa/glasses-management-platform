@@ -139,16 +139,34 @@ func (a *AdminRepository) DeleteUser(ctx context.Context, userID uuid.UUID) erro
 }
 
 func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUserForm) error {
-	// Check if the username already exists
-	var existingUserID uuid.UUID
-	err := a.pgpool.QueryRow(ctx, `SELECT user_id FROM "user" WHERE username = $1`, form.Username).Scan(&existingUserID)
-	if err != nil && !errors.Is(pgx.ErrNoRows, err) {
+	// var existingUserID uuid.UUID
+
+	// Check if the username already exists for a different user
+	err := a.pgpool.QueryRow(ctx, `SELECT user_id
+										FROM "user"
+										WHERE username = $1
+										AND user_id != $2`, form.Username, form.UserID).Scan(&form.UserID)
+	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
 		slog.Error("checking existing username", "err", err)
 		return errors.New("internal server error")
 	}
-	if existingUserID != form.UserID && existingUserID != uuid.Nil {
-		return errors.New("username already exists")
+	//if existingUserID != uuid.Nil {
+	//	slog.Info("Username already exists", "existingUserID", existingUserID, "form.UserID", form.UserID)
+	//	return errors.New("username already exists")
+	//}
+
+	// Check if the email already exists for a different user
+	err = a.pgpool.QueryRow(ctx, `SELECT user_id FROM "user"
+               							WHERE email = $1
+               							AND user_id != $2`, form.Email, form.UserID).Scan(&form.UserID)
+	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+		slog.Error("checking existing email", "err", err)
+		return errors.New("internal server error")
 	}
+	//if existingUserID != uuid.Nil {
+	//	slog.Info("Email already exists", "existingUserID", existingUserID, "form.UserID", form.UserID)
+	//	return errors.New("email already exists")
+	//}
 
 	// Hash the new password if provided
 	var passwordHash []byte
@@ -223,9 +241,7 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 				username,
 				email,
 				password_hash,
-				bio,
 				role,
-				image,
 				created_at,
 				updated_at
 			`,
@@ -266,12 +282,12 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 	return &token, nil
 }
 
-func (a *AdminRepository) GetSum(ctx context.Context) (int, error) {
+func (a *AdminRepository) GetUsersSum(ctx context.Context) (int, error) {
 	var count int
 	row := a.pgpool.QueryRow(ctx, `SELECT Count(DISTINCT u.user_id) FROM "user" u`)
 	if err := row.Scan(&count); err != nil {
 		return 0, err
 	}
-	slog.Info("Glasses count", "count", count)
+	slog.Info("User count", "count", count)
 	return count, nil
 }

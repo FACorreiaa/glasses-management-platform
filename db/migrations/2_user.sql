@@ -5,8 +5,6 @@ create table "user"
   email         citext unique not null,
   password_hash text          not null,
   role          text          not null default 'employee',
-  bio           text          not null default '',
-  image         text,
   created_at    timestamptz   not null default now(),
   updated_at    timestamptz
 );
