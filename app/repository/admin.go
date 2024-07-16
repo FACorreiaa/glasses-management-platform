@@ -87,7 +87,7 @@ func (a *AdminRepository) GetUsers(ctx context.Context, page, pageSize int, orde
 			updated_at,
 			created_at
 		FROM
-			"user" u
+			collaborator u
 		WHERE u.role = 'employee'
 		AND Trim(Upper(u.email)) ILIKE trim(upper('%' || $4 || '%'))
 		ORDER BY
@@ -112,7 +112,7 @@ func (a *AdminRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) (*
 					updated_at,
 					created_at
 				FROM
-					"user" u
+					collaborator u
 				WHERE u.role = 'employee' AND user_id = $1`
 	var u models.UserSession
 
@@ -132,7 +132,7 @@ func (a *AdminRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) (*
 }
 
 func (a *AdminRepository) DeleteUser(ctx context.Context, userID uuid.UUID) error {
-	query := `DELETE FROM "user" u WHERE u.role = 'employee' AND u.user_id = $1`
+	query := `DELETE FROM collaborator u WHERE u.role = 'employee' AND u.user_id = $1`
 	_, err := a.pgpool.Exec(ctx, query, userID)
 	slog.Info("Deleted user", "user_id", userID)
 	return err
@@ -143,7 +143,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 
 	// Check if the username already exists for a different user
 	err := a.pgpool.QueryRow(ctx, `SELECT user_id
-										FROM "user"
+										FROM collaborator
 										WHERE username = $1
 										AND user_id != $2`, form.Username, form.UserID).Scan(&form.UserID)
 	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
@@ -156,7 +156,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 	//}
 
 	// Check if the email already exists for a different user
-	err = a.pgpool.QueryRow(ctx, `SELECT user_id FROM "user"
+	err = a.pgpool.QueryRow(ctx, `SELECT user_id FROM collaborator
                							WHERE email = $1
                							AND user_id != $2`, form.Email, form.UserID).Scan(&form.UserID)
 	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
@@ -183,7 +183,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 
 	// Construct the base query
 	query := `
-        UPDATE "user"
+        UPDATE collaborator
         SET username = $1, email = $2, role = $3, updated_at = NOW()
         WHERE user_id = $4
     `
@@ -194,7 +194,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 	// Conditionally append password_hash to the query and args
 	if setPasswordHash {
 		query = `
-            UPDATE "user"
+            UPDATE collaborator
             SET username = $1, email = $2, role = $3, updated_at = NOW(), password_hash = $5
             WHERE user_id = $4
         `
@@ -234,7 +234,7 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 		row, _ := tx.Query(
 			ctx,
 			`
-			insert into "user" (username, email, password_hash, created_at, updated_at)
+			insert into collaborator (username, email, password_hash, created_at, updated_at)
 				values ($1, $2, $3, $4, $4)
 			returning
 				user_id,
@@ -284,7 +284,7 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 
 func (a *AdminRepository) GetUsersSum(ctx context.Context) (int, error) {
 	var count int
-	row := a.pgpool.QueryRow(ctx, `SELECT Count(DISTINCT u.user_id) FROM "user" u`)
+	row := a.pgpool.QueryRow(ctx, `SELECT Count(DISTINCT u.user_id) FROM collaborator u`)
 	if err := row.Scan(&count); err != nil {
 		return 0, err
 	}

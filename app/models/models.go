@@ -76,12 +76,14 @@ type SettingsPage struct {
 }
 
 type LoginPage struct {
-	Errors []string
+	Errors      []string
+	FieldErrors map[string]string
 }
 
 type RegisterPage struct {
-	Errors []string
-	Values map[string]string
+	Errors      []string
+	FieldErrors map[string]string
+	Values      map[string]string
 }
 
 type Columns struct {

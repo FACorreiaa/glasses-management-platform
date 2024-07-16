@@ -303,6 +303,7 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		RightEye:  parseFloat(r.FormValue("right_eye_strength")),
 		Color:     r.FormValue("color"),
 		Type:      r.FormValue("type"),
+		Feature:   r.FormValue("features"),
 	}
 
 	err = h.service.UpdateGlasses(context.Background(), g)
@@ -491,16 +492,20 @@ func (h *Handler) GlassesStockPage(w http.ResponseWriter, r *http.Request) error
 	var hasStock bool
 	vars := mux.Vars(r)
 	stock := vars["stock"]
+
 	if stock == "current" {
 		hasStock = true
 	} else {
 		hasStock = false
 	}
+
 	renderTable, err := h.renderInventoryTable(w, r, hasStock)
+
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
 	home := glasses.GlassesLayoutPage("Glasses Inventory Management", "Glasses Inventory Management", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Inventory Management", home).Render(context.Background(), w)
 }
