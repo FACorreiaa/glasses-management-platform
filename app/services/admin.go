@@ -38,3 +38,7 @@ func (s *Service) GetUsersSum() (int, error) {
 	}
 	return lastPage, nil
 }
+
+func (s *Service) GetAdminID(ctx context.Context, userID uuid.UUID) (*models.UserSession, error) {
+	return s.adminRepo.GetAdminID(ctx, userID)
+}

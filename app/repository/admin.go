@@ -139,8 +139,6 @@ func (a *AdminRepository) DeleteUser(ctx context.Context, userID uuid.UUID) erro
 }
 
 func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUserForm) error {
-	// var existingUserID uuid.UUID
-
 	// Check if the username already exists for a different user
 	err := a.pgpool.QueryRow(ctx, `SELECT user_id
 										FROM collaborator
@@ -150,10 +148,6 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 		slog.Error("checking existing username", "err", err)
 		return errors.New("internal server error")
 	}
-	//if existingUserID != uuid.Nil {
-	//	slog.Info("Username already exists", "existingUserID", existingUserID, "form.UserID", form.UserID)
-	//	return errors.New("username already exists")
-	//}
 
 	// Check if the email already exists for a different user
 	err = a.pgpool.QueryRow(ctx, `SELECT user_id FROM collaborator
@@ -163,10 +157,6 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 		slog.Error("checking existing email", "err", err)
 		return errors.New("internal server error")
 	}
-	//if existingUserID != uuid.Nil {
-	//	slog.Info("Email already exists", "existingUserID", existingUserID, "form.UserID", form.UserID)
-	//	return errors.New("email already exists")
-	//}
 
 	// Hash the new password if provided
 	var passwordHash []byte
@@ -184,19 +174,19 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 	// Construct the base query
 	query := `
         UPDATE collaborator
-        SET username = $1, email = $2, role = $3, updated_at = NOW()
-        WHERE user_id = $4
+        SET username = $1, email = $2, updated_at = NOW()
+        WHERE user_id = $3
     `
 
 	// Prepare arguments
-	args := []interface{}{form.Username, form.Email, form.Role, form.UserID}
+	args := []interface{}{form.Username, form.Email, form.UserID}
 
 	// Conditionally append password_hash to the query and args
 	if setPasswordHash {
 		query = `
             UPDATE collaborator
-            SET username = $1, email = $2, role = $3, updated_at = NOW(), password_hash = $5
-            WHERE user_id = $4
+            SET username = $1, email = $2, updated_at = NOW(), password_hash = $4
+            WHERE user_id = $3
         `
 		args = append(args, passwordHash)
 	}
@@ -290,4 +280,32 @@ func (a *AdminRepository) GetUsersSum(ctx context.Context) (int, error) {
 	}
 	slog.Info("User count", "count", count)
 	return count, nil
+}
+
+func (a *AdminRepository) GetAdminID(ctx context.Context, userID uuid.UUID) (*models.UserSession, error) {
+	query := `SELECT
+					user_id,
+					username,
+					email,
+					role,
+					updated_at,
+					created_at
+				FROM
+					collaborator u
+				WHERE u.role = 'admin' AND user_id = $1`
+	var u models.UserSession
+
+	err := a.pgpool.QueryRow(ctx, query, userID).Scan(
+		&u.ID, &u.Username, &u.Email, &u.Role, &u.UpdatedAt, &u.CreatedAt,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		slog.Error(" getting user", "err", err)
+		return nil, errors.New("internal server error")
+	}
+
+	slog.Info("Found user", "user_id", userID)
+	return &u, nil
 }

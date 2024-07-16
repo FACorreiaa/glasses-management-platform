@@ -5676,9 +5676,6 @@ details.collapse summary::-webkit-details-marker {
 .p-2 {
   padding: 0.5rem;
 }
-.p-2\.5 {
-  padding: 0.625rem;
-}
 .p-24 {
   padding: 6rem;
 }

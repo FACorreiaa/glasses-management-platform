@@ -122,7 +122,7 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
 	}
 
-	http.Redirect(w, r, "/collaborators", http.StatusSeeOther)
+	http.Redirect(w, r, "/settings/collaborators", http.StatusSeeOther)
 	return nil
 }
 
@@ -143,7 +143,7 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Return a success response
-	w.Header().Set("HX-Redirect", "/collaborators")
+	w.Header().Set("HX-Redirect", "/settings/collaborators")
 
 	return nil
 }
@@ -191,8 +191,6 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	println(r.FormValue("Email"))
-
 	g := models.UpdateUserForm{
 		UserID:          userID,
 		Email:           r.FormValue("email"),
@@ -212,6 +210,6 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	w.Header().Set("HX-Redirect", "/collaborators")
+	w.Header().Set("HX-Redirect", "/settings/collaborators")
 	return nil
 }

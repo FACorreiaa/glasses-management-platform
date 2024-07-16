@@ -12,7 +12,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
-func UserSettingsPage(settings models.SettingsPage) templ.Component {
+func AdminSettingsPage(settings models.SettingsPage) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -30,7 +30,7 @@ func UserSettingsPage(settings models.SettingsPage) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto my-24 md:px-6\"><p class=\"text-center text-gray-900 text-6xl\">Your Settings</p><p class=\"text-center text-gray-900 text-6xl\">Explain the admin what you can do</p></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto md:px-6\"><p class=\"text-center text-gray-900 text-6xl\">Admin Settings</p><div class=\"text-left\"><p class=\"text-xl font-bold\">This part is dedicated to explain to the admin what he can see here and might be deleted later.</p><br><p>Here you can change your own credentials on \"Change details\".</p><p>On the other views you have the same list details as on the normal pages, except here you can see who made the transactions</p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -330,7 +330,6 @@ func (h *Handler) getGlassesByType(w http.ResponseWriter, r *http.Request) (int,
 	sortBy := r.FormValue("sortBy")
 	vars := mux.Vars(r)
 	filter := vars["type"]
-	println(filter)
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 
 	if err != nil {

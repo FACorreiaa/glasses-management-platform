@@ -84,7 +84,6 @@ func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title str
 			{Path: "/", Label: "Home"},
 			{Path: "/glasses", Label: "Glasses Inventory"},
 			{Path: "/shipping", Label: "Shipping Orders"},
-			{Path: "/collaborators", Label: "Users"},
 			{Path: "/settings", Label: "Settings"},
 			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}

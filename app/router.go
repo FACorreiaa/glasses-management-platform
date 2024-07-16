@@ -102,13 +102,18 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	auth.HandleFunc("/glasses/{glasses_id}/update", handler(h.UpdateGlasses)).Methods(http.MethodPut)
 	auth.HandleFunc("/glasses/{stock}/inventory", handler(h.GlassesStockPage)).Methods(http.MethodGet)
 
-	// Users
-	auth.HandleFunc("/collaborators", handler(h.UsersPage)).Methods(http.MethodGet)
+	// Settings
+
+	// Collaborators
 	auth.HandleFunc("/collaborators/register", handler(h.UserInsertPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/collaborators/register", handler(h.UserRegisterPost)).Methods(http.MethodPost)
 	auth.HandleFunc("/collaborators/{user_id}", handler(h.DeleteUser)).Methods(http.MethodDelete)
 	auth.HandleFunc("/collaborators/{user_id}/edit", handler(h.UpdateUserPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/collaborators/{user_id}/update", handler(h.UpdateUser)).Methods(http.MethodPut)
+
+	auth.HandleFunc("/settings/collaborators", handler(h.UsersPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/settings/admin", handler(h.UpdateAdminPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/settings/admin/update", handler(h.UpdateAdmin)).Methods(http.MethodPut)
 
 	return r
 }
