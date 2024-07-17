@@ -53,10 +53,42 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 	return al, nil
 }
 
+func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query string, args ...interface{}) ([]models.Glasses, error) {
+	var al []models.Glasses
+
+	rows, err := r.pgpool.Query(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var a models.Glasses
+		err := rows.Scan(
+			&a.UserName, &a.UserEmail, &a.LeftEye, &a.RightEye,
+			&a.Reference, &a.IsInStock, &a.UpdatedAt, &a.CreatedAt,
+		)
+
+		if err != nil {
+			slog.Error(" scanning glasses", "err", err)
+			return nil, errors.New("internal server error")
+		}
+		al = append(al, a)
+	}
+
+	if err := rows.Err(); err != nil {
+		slog.Error(" fetching glasses", "err", err)
+		return nil, errors.New("internal server error")
+	}
+
+	slog.Info("Glasses fetched", "glasses", al)
+	return al, nil
+}
+
 func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
-       				reference, is_in_stock, features,  COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+       				reference, is_in_stock, features, COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
 			 	AND ($5::float8 IS NULL OR g.left_eye_strength = $5)
@@ -131,11 +163,13 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.Glasses)
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.Glasses) error {
 	query := `
-		INSERT INTO glasses (color, brand, right_eye_strength, left_eye_strength, reference, type, is_in_stock, features, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, true, $7, NOW(), NOW())
+		INSERT INTO glasses (color, brand, right_eye_strength, left_eye_strength, reference, type, is_in_stock,
+		                     features, created_at, updated_at, user_id)
+		VALUES ($1, $2, $3, $4, $5, $6, true, $7, NOW(), NOW(), $8)
 		RETURNING glasses_id
 	`
-	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type, g.Feature).Scan(&g.GlassesID)
+	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye,
+		g.Reference, g.Type, g.Feature, g.UserID).Scan(&g.GlassesID)
 	if err != nil {
 		slog.Error(" inserting glasses", "err", err)
 		return errors.New("internal server error")

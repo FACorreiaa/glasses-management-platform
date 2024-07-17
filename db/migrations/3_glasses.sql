@@ -1,6 +1,7 @@
 create table glasses
 (
   glasses_id         uuid primary key     default uuid_generate_v4(),
+  user_id            uuid        not null references "user" (user_id),
   reference          text        not null,
   brand              text        not null,
   color              text        not null,

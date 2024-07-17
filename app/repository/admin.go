@@ -87,7 +87,7 @@ func (a *AdminRepository) GetUsers(ctx context.Context, page, pageSize int, orde
 			updated_at,
 			created_at
 		FROM
-			collaborator u
+			"user" u
 		WHERE u.role = 'employee'
 		AND Trim(Upper(u.email)) ILIKE trim(upper('%' || $4 || '%'))
 		ORDER BY
@@ -112,7 +112,7 @@ func (a *AdminRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) (*
 					updated_at,
 					created_at
 				FROM
-					collaborator u
+					"user" u
 				WHERE u.role = 'employee' AND user_id = $1`
 	var u models.UserSession
 
@@ -132,7 +132,7 @@ func (a *AdminRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) (*
 }
 
 func (a *AdminRepository) DeleteUser(ctx context.Context, userID uuid.UUID) error {
-	query := `DELETE FROM collaborator u WHERE u.role = 'employee' AND u.user_id = $1`
+	query := `DELETE FROM "user" u WHERE u.role = 'employee' AND u.user_id = $1`
 	_, err := a.pgpool.Exec(ctx, query, userID)
 	slog.Info("Deleted user", "user_id", userID)
 	return err
@@ -141,7 +141,7 @@ func (a *AdminRepository) DeleteUser(ctx context.Context, userID uuid.UUID) erro
 func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUserForm) error {
 	// Check if the username already exists for a different user
 	err := a.pgpool.QueryRow(ctx, `SELECT user_id
-										FROM collaborator
+										FROM "user"
 										WHERE username = $1
 										AND user_id != $2`, form.Username, form.UserID).Scan(&form.UserID)
 	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
@@ -150,7 +150,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 	}
 
 	// Check if the email already exists for a different user
-	err = a.pgpool.QueryRow(ctx, `SELECT user_id FROM collaborator
+	err = a.pgpool.QueryRow(ctx, `SELECT user_id FROM "user"
                							WHERE email = $1
                							AND user_id != $2`, form.Email, form.UserID).Scan(&form.UserID)
 	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
@@ -173,7 +173,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 
 	// Construct the base query
 	query := `
-        UPDATE collaborator
+        UPDATE "user"
         SET username = $1, email = $2, updated_at = NOW()
         WHERE user_id = $3
     `
@@ -184,7 +184,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 	// Conditionally append password_hash to the query and args
 	if setPasswordHash {
 		query = `
-            UPDATE collaborator
+            UPDATE "user"
             SET username = $1, email = $2, updated_at = NOW(), password_hash = $4
             WHERE user_id = $3
         `
@@ -224,7 +224,7 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 		row, _ := tx.Query(
 			ctx,
 			`
-			insert into collaborator (username, email, password_hash, created_at, updated_at)
+			insert into "user" (username, email, password_hash, created_at, updated_at)
 				values ($1, $2, $3, $4, $4)
 			returning
 				user_id,
@@ -274,7 +274,7 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 
 func (a *AdminRepository) GetUsersSum(ctx context.Context) (int, error) {
 	var count int
-	row := a.pgpool.QueryRow(ctx, `SELECT Count(DISTINCT u.user_id) FROM collaborator u`)
+	row := a.pgpool.QueryRow(ctx, `SELECT Count(DISTINCT u.user_id) FROM "user" u`)
 	if err := row.Scan(&count); err != nil {
 		return 0, err
 	}
@@ -291,7 +291,7 @@ func (a *AdminRepository) GetAdminID(ctx context.Context, userID uuid.UUID) (*mo
 					updated_at,
 					created_at
 				FROM
-					collaborator u
+					"user" u
 				WHERE u.role = 'admin' AND user_id = $1`
 	var u models.UserSession
 
@@ -308,4 +308,31 @@ func (a *AdminRepository) GetAdminID(ctx context.Context, userID uuid.UUID) (*mo
 
 	slog.Info("Found user", "user_id", userID)
 	return &u, nil
+}
+
+func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSize int, orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+	query := `
+		SELECT
+			u.username, u.email, g.left_eye_strength, g.right_eye_strength,
+			g.reference, g.is_in_stock,
+			COALESCE(g.updated_at, '1970-01-01 00:00:00') AS updated_at, g.created_at
+		FROM glasses g
+		JOIN "user" u ON g.user_id = u.user_id
+		WHERE
+			Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
+			AND ($5::float8 IS NULL OR g.left_eye_strength = $5)
+			AND ($6::float8 IS NULL OR g.right_eye_strength = $6)
+		ORDER BY
+			CASE
+				WHEN $1 = 'Brand' THEN g.brand
+				WHEN $1 = 'Color' THEN g.color
+				WHEN $1 = 'Reference' THEN g.reference
+				WHEN $1 = 'Type' THEN g.type
+				WHEN $1 = 'Features' THEN g.features
+				ELSE g.brand
+			END ` + sortBy + `
+		OFFSET $2 LIMIT $3`
+	offset := (page - 1) * pageSize
+	slog.Info("Glasses fetched", "offset", offset)
+	return r.fetchGlassesDetails(ctx, query, orderBy, offset, pageSize, reference, leftEye, rightEye)
 }

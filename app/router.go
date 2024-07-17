@@ -114,7 +114,7 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	auth.HandleFunc("/settings/collaborators", handler(h.UsersPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/settings/admin", handler(h.UpdateAdminPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/settings/admin/update", handler(h.UpdateAdmin)).Methods(http.MethodPut)
-
+	auth.HandleFunc("/settings/glasses", handler(h.SettingsGlassesPage)).Methods(http.MethodGet)
 	return r
 }
 

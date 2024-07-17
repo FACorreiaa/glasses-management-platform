@@ -8,6 +8,7 @@ import (
 
 	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
@@ -189,6 +190,17 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		return fmt.Errorf("invalid right eye strength: %v", err)
 	}
 
+	//
+	user, err := repository.GetUserFromContext(r.Context())
+	if err != nil {
+		http.Error(w, "User not authenticated", http.StatusUnauthorized)
+	}
+
+	if user == nil {
+		http.Error(w, "User not authenticated", http.StatusUnauthorized)
+		return nil
+	}
+
 	g := models.Glasses{
 		Reference: r.FormValue("reference"),
 		Brand:     r.FormValue("brand"),
@@ -197,6 +209,7 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		RightEye:  rightVal,
 		Type:      r.FormValue("type"),
 		Feature:   r.FormValue("features"),
+		UserID:    user.ID,
 	}
 
 	err = h.service.InsertGlasses(context.Background(), g)

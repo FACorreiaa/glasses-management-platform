@@ -91,6 +91,9 @@ type Columns struct {
 }
 
 type Glasses struct {
+	UserName  string    `json:"username"`
+	UserEmail string    `json:"email"`
+	UserID    uuid.UUID `json:"user_id"`
 	GlassesID uuid.UUID `json:"glasses_id"`
 	Reference string    `json:"reference"`
 	Brand     string    `json:"brand"`

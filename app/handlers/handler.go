@@ -7,6 +7,7 @@ import (
 	"context"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 	"github.com/FACorreiaa/glasses-management-platform/app/services"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/a-h/templ"
@@ -58,16 +59,10 @@ func HandleError(err error, message string) {
 	}
 }
 
-func (h *Handler) CreateLayout(_ http.ResponseWriter, r *http.Request, title string, data templ.Component) templ.Component {
-	var user *models.UserSession
-	userCtx := r.Context().Value(models.CtxKeyAuthUser)
-	if userCtx != nil {
-		switch u := userCtx.(type) {
-		case *models.UserSession:
-			user = u
-		default:
-			log.Printf("Unexpected type in userCtx: %T", userCtx)
-		}
+func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title string, data templ.Component) templ.Component {
+	user, err := repository.GetUserFromContext(r.Context())
+	if err != nil {
+		http.Error(w, "User not authenticated", http.StatusUnauthorized)
 	}
 
 	var nav []models.NavItem

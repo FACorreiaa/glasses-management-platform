@@ -1,0 +1,97 @@
+package settings
+
+import (
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"fmt"
+	"strconv"
+)
+
+templ GlassesTable(a models.GlassesTable) {
+	<div class="flex flex-col items-left shadow-xl overflow-hidden">
+		@components.InputGroupContainer() {
+			<div class="mr-2">
+				@components.InputSearch("Filter reference", "/glasses", "reference", "#searchResults")
+			</div>
+			<div class="mr-2">
+				@components.InputComboComponent("Filter left eye", "Filter right eye", "/glasses", "left_eye_strength", "#searchResults", "right_eye_strength")
+			</div>
+		}
+		<div class="flex flex-col">
+			<div class="overflow-x-auto">
+				<div class="inline-block min-w-full">
+					<div class="overflow-hidden border-b border-neutral-200 shadow sm:rounded-lg">
+						<table class="table table-xs min-w-full divide-y divide-neutral-200">
+							<!-- head -->
+							<thead class="bg-neutral-100 dark:bg-neutral-800">
+								<tr>
+									for _, col := range a.Column {
+										<th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+											<div class="flex items-center">
+												{ col.Title }
+												<form class="ml-2" method="get">
+													<a
+														class="text-neutral-400 hover:text-neutral-900"
+														href={ templ.URL(fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.Page, col.Title, col.SortParam)) }
+													>
+														@col.Icon
+													</a>
+												</form>
+											</div>
+										</th>
+									}
+								</tr>
+							</thead>
+							<!-- rows -->
+							<tbody class="bg-white divide-y divide-neutral-200">
+								for _, glasses := range a.Glasses {
+									<tr class="hover:bg-neutral-100">
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.UserName }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.UserEmail }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.LeftEye) }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Reference }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%v", glasses.IsInStock) }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.CreatedAt.Format("02-01-2006") }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.UpdatedAt.Format("02-01-2006") }</td>
+										<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+											if glasses.IsInStock {
+												<a
+													href={ templ.SafeURL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)) }
+													class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
+												>
+													<span>Edit</span>
+													<ion-icon name="create-outline"></ion-icon>
+												</a>
+											}
+											<button
+												hx-delete={ fmt.Sprintf("/glasses/%s", glasses.GlassesID) }
+												type="button"
+												hx-confirm="Are you sure?"
+												hx-target="closest tr"
+												hx-swap="outerHTML swap:1s"
+												class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
+											>
+												<span>Delete</span>
+												<ion-icon name="trash-outline"></ion-icon>
+											</button>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		@components.PaginatorComponent("/glasses",
+			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.PrevPage, a.OrderParam, a.SortParam),
+			strconv.Itoa(a.Page),
+			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.NextPage, a.OrderParam, a.SortParam),
+			fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.LastPage, a.OrderParam, a.SortParam),
+			strconv.Itoa(a.LastPage),
+			a.OrderParam,
+			a.SortParam)
+		<div id="detailsSpace"></div>
+	</div>
+}

@@ -42,3 +42,8 @@ func (s *Service) GetUsersSum() (int, error) {
 func (s *Service) GetAdminID(ctx context.Context, userID uuid.UUID) (*models.UserSession, error) {
 	return s.adminRepo.GetAdminID(ctx, userID)
 }
+
+func (s *Service) GetGlassesDetails(ctx context.Context, page, pageSize int,
+	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+	return s.glassesRepo.GetGlassesDetails(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+}

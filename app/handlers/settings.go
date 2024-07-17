@@ -1,14 +1,22 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"context"
 
+	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/repository"
+	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/admin"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/settings"
+	"github.com/a-h/templ"
 )
 
 func (h *Handler) renderSettingsSidebar() []models.SidebarItem {
@@ -16,15 +24,130 @@ func (h *Handler) renderSettingsSidebar() []models.SidebarItem {
 		{Path: "/settings", Label: "Home"},
 		{Path: "/settings/admin", Label: "Change details"},
 		{Path: "/settings/collaborators", Label: "View collaborators"},
-		{Path: "/settings/glasses", Label: "View glasses"},
+		{Path: "/settings/glasses", Label: "View glasses stock"},
 		{Path: "/settings/operations", Label: "View transactions"},
 		{Path: "/log-out", Label: "Log out"},
 	}
 	return sidebar
 }
 
+func (h *Handler) getGlassesDetails(w http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
+	pageSize := 10
+	orderBy := r.FormValue("orderBy")
+	sortBy := r.FormValue("sortBy")
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	reference := r.FormValue("reference")
+
+	leftEyeStr := r.FormValue("left_eye_strength")
+	rightEyeStr := r.FormValue("right_eye_strength")
+
+	var leftEye, rightEye *float64
+
+	if leftEyeStr != "" {
+		parsedLeftEye, err := strconv.ParseFloat(leftEyeStr, 64)
+		if err != nil {
+			HandleError(err, "parse left eye")
+			return 0, nil, err
+		}
+		leftEye = &parsedLeftEye
+	}
+
+	if rightEyeStr != "" {
+		parsedRightEye, err := strconv.ParseFloat(rightEyeStr, 64)
+		if err != nil {
+			HandleError(err, "parse right eye")
+			return 0, nil, err
+		}
+		rightEye = &parsedRightEye
+	}
+
+	if leftEye != nil {
+		fmt.Printf("leftEye: %f\n", *leftEye)
+	} else {
+		fmt.Println("leftEye is nil")
+	}
+
+	if rightEye != nil {
+		fmt.Printf("rightEye: %f\n", *rightEye)
+	} else {
+		fmt.Println("rightEye is nil")
+	}
+
+	g, err := h.service.GetGlassesDetails(context.Background(), page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+	if err != nil {
+		httperror.ErrNotFound.WriteError(w)
+		return 0, nil, err
+	}
+
+	return page, g, nil
+}
+
+func (h *Handler) renderGlassesTableDetails(w http.ResponseWriter, r *http.Request) (templ.Component, error) {
+	var page int
+	var sortAux string
+	orderBy := r.FormValue("orderBy")
+	sortBy := r.FormValue("sortBy")
+	brand := r.FormValue("brand")
+
+	if sortBy == ASC {
+		sortAux = DESC
+	} else {
+		sortAux = ASC
+	}
+
+	//
+	columnNames := []models.ColumnItems{
+		{Title: "Username", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Email", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+	}
+
+	page, g, _ := h.getGlassesDetails(w, r)
+
+	if len(g) == 0 {
+		message := components.EmptyPageComponent()
+		return message, nil
+	}
+
+	nextPage := page + 1
+	prevPage := page - 1
+	if prevPage <= 1 {
+		prevPage = 1
+	}
+
+	lastPage, err := h.service.GetSum()
+	if err != nil {
+		HandleError(err, " fetching tax")
+		return nil, err
+	}
+	data := models.GlassesTable{
+		Column:      columnNames,
+		Glasses:     g,
+		PrevPage:    prevPage,
+		NextPage:    nextPage,
+		Page:        page,
+		LastPage:    lastPage,
+		FilterBrand: brand,
+		OrderParam:  orderBy,
+		SortParam:   sortAux,
+	}
+	t := settings.GlassesTable(data)
+
+	return t, nil
+}
+
 func (h *Handler) UpdateAdmin(w http.ResponseWriter, r *http.Request) error {
 	var user *models.UserSession
+
 	userCtx := r.Context().Value(models.CtxKeyAuthUser)
 	if userCtx != nil {
 		switch u := userCtx.(type) {
@@ -69,19 +192,12 @@ func (h *Handler) UpdateAdmin(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) UpdateAdminPage(w http.ResponseWriter, r *http.Request) error {
-	var user *models.UserSession
-	userCtx := r.Context().Value(models.CtxKeyAuthUser)
-	if userCtx != nil {
-		switch u := userCtx.(type) {
-		case *models.UserSession:
-			user = u
-		default:
-			log.Printf("Unexpected type in userCtx: %T", userCtx)
-		}
+	user, err := repository.GetUserFromContext(r.Context())
+	if err != nil {
+		http.Error(w, "User not authenticated", http.StatusUnauthorized)
 	}
 
 	if user == nil {
-		log.Printf("User not authenticated")
 		http.Error(w, "User not authenticated", http.StatusUnauthorized)
 		return nil
 	}
@@ -116,4 +232,14 @@ func (h *Handler) SettingsPage(w http.ResponseWriter, r *http.Request) error {
 	page := settings.AdminSettingsLayoutPage("Settings Page", "Admin settings main page", h.renderSettingsSidebar(), s)
 	data := h.CreateLayout(w, r, "Settings", page).Render(context.Background(), w)
 	return data
+}
+
+func (h *Handler) SettingsGlassesPage(w http.ResponseWriter, r *http.Request) error {
+	sidebar := h.renderSettingsSidebar()
+	renderTable, err := h.renderGlassesTableDetails(w, r)
+	if err != nil {
+		HandleError(err, "rendering glasses table")
+	}
+	home := glasses.GlassesLayoutPage("Glasses Management Page", "Check glasses stock details", sidebar, renderTable)
+	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }

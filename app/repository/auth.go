@@ -87,7 +87,7 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 			role,
 			created_at,
 			updated_at
-		from collaborator where email = $1 limit 1
+		from "user" where email = $1 limit 1
 		`,
 		form.Email,
 	)
@@ -167,7 +167,7 @@ func (m *MiddlewareRepository) UserFromSessionToken(ctx context.Context, token T
 			role,
 			created_at,
 			updated_at
-		from collaborator where user_id = $1 limit 1
+		from "user" where user_id = $1 limit 1
 		`,
 		userID,
 	)
