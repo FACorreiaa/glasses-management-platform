@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-templ GlassesTable(a models.GlassesTable) {
+templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 	<div class="flex flex-col items-left shadow-xl overflow-hidden">
 		@components.InputGroupContainer() {
 			<div class="mr-2">
@@ -21,6 +21,9 @@ templ GlassesTable(a models.GlassesTable) {
 			<div class="overflow-x-auto">
 				<div class="inline-block min-w-full">
 					<div class="overflow-hidden border-b border-neutral-200 shadow sm:rounded-lg">
+						<div class="pb-8">
+							@GlassesInsertModal(form)
+						</div>
 						<table class="table table-xs min-w-full divide-y divide-neutral-200">
 							<!-- head -->
 							<thead class="bg-neutral-100 dark:bg-neutral-800">
@@ -60,7 +63,24 @@ templ GlassesTable(a models.GlassesTable) {
 										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.LeftEye) }</td>
 										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
 										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Reference }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%v", glasses.IsInStock) }</td>
+										<div>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
+												{ fmt.Sprintf("%v", glasses.IsInStock) }
+												if glasses.IsInStock == true {
+													<button
+														hx-delete={ fmt.Sprintf("/glasses/%s", glasses.GlassesID) }
+														type="button"
+														hx-confirm="Are you sure?"
+														hx-target="closest tr"
+														hx-swap="outerHTML swap:1s"
+														class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
+													>
+														<span>Send</span>
+														<ion-icon name="trash-outline"></ion-icon>
+													</button>
+												}
+											</td>
+										</div>
 										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Feature }</td>
 										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.CreatedAt.Format("02-01-2006") }</td>
 										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.UpdatedAt.Format("02-01-2006") }</td>

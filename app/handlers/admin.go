@@ -82,9 +82,9 @@ func (h *Handler) renderCollaboratorsTable(w http.ResponseWriter, r *http.Reques
 		OrderParam: orderBy,
 		SortParam:  sortAux,
 	}
-	taxTable := admin.UsersTable(data)
+	t := admin.UsersTable(data, models.RegisterPage{})
 
-	return taxTable, nil
+	return t, nil
 }
 
 // UsersPage users page for admin to manage views TODO
@@ -122,7 +122,14 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
 	}
 
-	http.Redirect(w, r, "/settings/collaborators", http.StatusSeeOther)
+	actionType := r.FormValue("action")
+
+	if actionType == "back" {
+		w.Header().Set("HX-Redirect", "/settings/collaborators")
+	} else if actionType == "submit" {
+		w.Header().Set("HX-Redirect", "/settings/collaborators")
+	}
+
 	return nil
 }
 

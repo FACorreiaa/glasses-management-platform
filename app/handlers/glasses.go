@@ -21,7 +21,6 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
 		{Path: "/", Label: "Home"},
 		{Path: "/glasses", Label: "Glasses stock"},
-		{Path: "/glasses/register", Label: "Insert glasses"},
 		{
 			Label: "Type",
 			SubItems: []models.SidebarItem{
@@ -152,9 +151,9 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 		OrderParam:  orderBy,
 		SortParam:   sortAux,
 	}
-	taxTable := glasses.GlassesTable(data)
+	t := glasses.GlassesTable(data, models.GlassesForm{})
 
-	return taxTable, nil
+	return t, nil
 }
 
 func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
@@ -233,6 +232,7 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		w.Header().Set("HX-Redirect", "/glasses")
 	}
 
+	//
 	return nil
 }
 
@@ -415,9 +415,9 @@ func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ
 		OrderParam:  orderBy,
 		SortParam:   sortAux,
 	}
-	taxTable := glasses.GlassesByFilter(data)
+	t := glasses.GlassesByFilter(data)
 
-	return taxTable, nil
+	return t, nil
 }
 
 func (h *Handler) GlassesTypePage(w http.ResponseWriter, r *http.Request) error {
