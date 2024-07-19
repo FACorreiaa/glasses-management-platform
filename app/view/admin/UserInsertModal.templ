@@ -1,6 +1,7 @@
 package admin
 
 import "github.com/FACorreiaa/glasses-management-platform/app/models"
+import "github.com/FACorreiaa/glasses-management-platform/app/view/components"
 
 templ UserInsertModal(register models.RegisterPage) {
 	<div
@@ -9,7 +10,7 @@ templ UserInsertModal(register models.RegisterPage) {
 		:class="{ 'z-40': modalOpen }"
 		class="relative w-auto h-auto"
 	>
-		<button @click="modalOpen=true" class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none">Insert collaborator</button>
+		<button @click="modalOpen=true" class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none">Insert collaborator</button>
 		<template x-teleport="body">
 			<div x-show="modalOpen" class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen" x-cloak>
 				<div
@@ -108,21 +109,8 @@ templ UserInsertModal(register models.RegisterPage) {
 											/>
 										</fieldset>
 										<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-											<button
-												type="button"
-												@click="modalOpen=false"
-												class="btn btn-xs btn-warning inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
-											>
-												<span>Cancel</span>
-												<ion-icon name="create-outline"></ion-icon>
-											</button>
-											<button
-												type="submit"
-												name="action"
-												hx-post={ "/collaborators/register" }
-												value="submit"
-												class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
-											>Insert user</button>
+											@components.ButtonCancelComponent()
+											@components.ButtonConfirmComponent("/collaborators/register", "Insert user")
 										</div>
 									</form>
 								</div>

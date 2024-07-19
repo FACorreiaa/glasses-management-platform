@@ -10,10 +10,8 @@ import (
 
 	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
-	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/admin"
-	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/settings"
 	"github.com/a-h/templ"
@@ -114,7 +112,7 @@ func (h *Handler) renderGlassesTableDetails(w http.ResponseWriter, r *http.Reque
 	page, g, _ := h.getGlassesDetails(w, r)
 
 	if len(g) == 0 {
-		message := components.EmptyPageComponent()
+		message := glasses.GlassesEmptyPage()
 		return message, nil
 	}
 
@@ -192,14 +190,15 @@ func (h *Handler) UpdateAdmin(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) UpdateAdminPage(w http.ResponseWriter, r *http.Request) error {
-	user, err := repository.GetUserFromContext(r.Context())
-	if err != nil {
-		http.Error(w, "User not authenticated", http.StatusUnauthorized)
-	}
-
-	if user == nil {
-		http.Error(w, "User not authenticated", http.StatusUnauthorized)
-		return nil
+	var user *models.UserSession
+	userCtx := r.Context().Value(models.CtxKeyAuthUser)
+	if userCtx != nil {
+		switch u := userCtx.(type) {
+		case *models.UserSession:
+			user = u
+		default:
+			log.Printf("Unexpected type in userCtx: %T", userCtx)
+		}
 	}
 
 	g, err := h.service.GetAdminID(context.Background(), user.ID)

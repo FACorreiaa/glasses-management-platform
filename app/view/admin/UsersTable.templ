@@ -68,13 +68,7 @@ templ UsersTable(user models.UsersTable, register models.RegisterPage) {
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">"N/A"</td>
 										}
 										<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-											<a
-												href={ templ.SafeURL(fmt.Sprintf("/collaborators/%s/edit", us.ID)) }
-												class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
-											>
-												<span>Edit</span>
-												<ion-icon name="create-outline"></ion-icon>
-											</a>
+											@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/collaborators/%s/edit", us.ID)))
 											<button
 												hx-delete={ fmt.Sprintf("/collaborators/%s", us.ID) }
 												type="button"

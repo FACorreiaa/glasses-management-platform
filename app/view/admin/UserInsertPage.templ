@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
 templ RegisterPage(register models.RegisterPage) {
@@ -73,14 +74,8 @@ templ RegisterPage(register models.RegisterPage) {
 						/>
 					</fieldset>
 					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-						<a
-							href={ templ.SafeURL("/") }
-							class="btn btn-xs btn-warning inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
-						>
-							<span>Cancel</span>
-							<ion-icon name="create-outline"></ion-icon>
-						</a>
-						<button type="submit" class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2">Insert user</button>
+						@components.ButtonReturnComponent(templ.SafeURL("/"))
+						@components.ButtonConfirmComponent("/collaborators/register", "Insert user")
 					</div>
 				</form>
 			</div>

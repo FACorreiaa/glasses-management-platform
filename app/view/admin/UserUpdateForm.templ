@@ -3,17 +3,11 @@ package admin
 import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"fmt"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
 templ UserUpdateForm(form models.UpdateUserForm, id string) {
 	<section class="w-full bg-white">
-		<a
-			href={ templ.SafeURL(fmt.Sprintf("/collaborators")) }
-			class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 mb-10"
-		>
-			<span>Go back</span>
-			<ion-icon name="create-outline"></ion-icon>
-		</a>
 		<div class="mx-auto max-w-7xl justify-center">
 			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update user</h2>
 			<div class="flex flex-col lg:flex-row">
@@ -90,13 +84,8 @@ templ UserUpdateForm(form models.UpdateUserForm, id string) {
 						</select>
 					</fieldset>
 					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-						<button
-							hx-put={ string(templ.URL(fmt.Sprintf("/collaborators/%s/update", id))) }
-							type="submit"
-							name="action"
-							class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
-							value="update_and_redirect"
-						>Update and Go to List</button>
+						@components.ButtonReturnComponent(templ.SafeURL(fmt.Sprintf("/settings/collaborators")))
+						@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/collaborators/%s/update", id))), "Update")
 					</div>
 					<div id="success-message" class="mt-4 text-success"></div>
 				</form>

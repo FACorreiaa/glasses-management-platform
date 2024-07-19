@@ -2,8 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
-	"log"
 	"net/http"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
@@ -90,16 +88,18 @@ func (m *MiddlewareRepository) RedirectIfAuth(next http.Handler) http.Handler {
 //	})
 //}
 
-func GetUserFromContext(ctx context.Context) (*models.UserSession, error) {
-	userCtx := ctx.Value(models.CtxKeyAuthUser)
-	if userCtx != nil {
-		switch u := userCtx.(type) {
-		case *models.UserSession:
-			return u, nil
-		default:
-			log.Printf("Unexpected type in userCtx: %T", userCtx)
-			return nil, errors.New("unexpected type in user context")
-		}
-	}
-	return nil, errors.New("user not authenticated")
-}
+//func GetUserFromContext(ctx context.Context) (*models.UserSession, error) {
+//	userCtx := ctx.Value(models.CtxKeyAuthUser)
+//	var user *models.UserSession
+//
+//	if userCtx != nil {
+//		switch u := userCtx.(type) {
+//		case *models.UserSession:
+//			user = u
+//		default:
+//			log.Printf("Unexpected type in userCtx: %T", userCtx)
+//			return nil, errors.New("unexpected type in user context")
+//		}
+//	}
+//	return user, errors.New("user not authenticated")
+//}

@@ -3,14 +3,13 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
-	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
-	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
@@ -125,7 +124,7 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 	page, g, _ := h.getGlasses(w, r)
 
 	if len(g) == 0 {
-		message := components.EmptyPageComponent()
+		message := glasses.GlassesEmptyPage()
 		return message, nil
 	}
 
@@ -174,6 +173,17 @@ func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) er
 }
 
 func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
+	var user *models.UserSession
+	userCtx := r.Context().Value(models.CtxKeyAuthUser)
+	if userCtx != nil {
+		switch u := userCtx.(type) {
+		case *models.UserSession:
+			user = u
+		default:
+			log.Printf("Unexpected type in userCtx: %T", userCtx)
+		}
+	}
+
 	if err := r.ParseForm(); err != nil {
 		HandleError(err, "parsing form")
 		return err
@@ -187,17 +197,6 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	rightVal, err := strconv.ParseFloat(r.FormValue("right_eye_strength"), 64)
 	if err != nil {
 		return fmt.Errorf("invalid right eye strength: %v", err)
-	}
-
-	//
-	user, err := repository.GetUserFromContext(r.Context())
-	if err != nil {
-		http.Error(w, "User not authenticated", http.StatusUnauthorized)
-	}
-
-	if user == nil {
-		http.Error(w, "User not authenticated", http.StatusUnauthorized)
-		return nil
 	}
 
 	g := models.Glasses{
@@ -218,21 +217,10 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 
 	actionType := r.FormValue("action")
 
-	if actionType == "insert_more" {
-		w.Header().Set("HX-Trigger", "glassesAdded")
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_, _ = fmt.Fprintf(w, `
-			<div class="flex items-center">
-                <div class="success success-message">Glasses successfully added! You can add another.</div>
-                <svg class="w-[18px] h-[18px] ml-2" viewBox="0 0 24 24" fill="green" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM16.7744 9.63269C17.1238 9.20501 17.0604 8.57503 16.6327 8.22559C16.2051 7.87615 15.5751 7.93957 15.2256 8.36725L10.6321 13.9892L8.65936 12.2524C8.24484 11.8874 7.61295 11.9276 7.248 12.3421C6.88304 12.7566 6.92322 13.3885 7.33774 13.7535L9.31046 15.4903C10.1612 16.2393 11.4637 16.1324 12.1808 15.2547L16.7744 9.63269Z" fill="currentColor"></path>
-                </svg>
-			</div>`)
-	} else if actionType == "insert_and_redirect" {
+	if actionType == "submit" {
 		w.Header().Set("HX-Redirect", "/glasses")
 	}
 
-	//
 	return nil
 }
 
@@ -389,7 +377,7 @@ func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ
 	page, g, _ := h.getGlassesByType(w, r)
 
 	if len(g) == 0 {
-		message := components.EmptyPageComponent()
+		message := glasses.GlassesEmptyPage()
 		return message, nil
 	}
 
@@ -468,7 +456,7 @@ func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, h
 	}
 
 	if len(g) == 0 {
-		message := components.EmptyPageComponent()
+		message := glasses.GlassesEmptyPage()
 		return message, nil
 	}
 

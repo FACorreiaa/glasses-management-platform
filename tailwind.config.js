@@ -83,9 +83,9 @@ module.exports = {
       'pastel',
       'cupcake',
       'night',
-      'lemonade',
       'bumblebee',
       'business',
+      'lemonade',
       {
         'catppuccin-latte': {
           primary: '#1e66f5',

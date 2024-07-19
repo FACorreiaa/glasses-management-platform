@@ -7,7 +7,6 @@ import (
 	"context"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
-	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 	"github.com/FACorreiaa/glasses-management-platform/app/services"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/a-h/templ"
@@ -22,10 +21,6 @@ import (
 
 const ASC = "ASC"
 const DESC = "DESC"
-
-type contextKey string
-
-var themeContextKey contextKey = "theme"
 
 type Handler struct {
 	service     *services.Service
@@ -60,9 +55,15 @@ func HandleError(err error, message string) {
 }
 
 func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title string, data templ.Component) templ.Component {
-	user, err := repository.GetUserFromContext(r.Context())
-	if err != nil {
-		http.Error(w, "User not authenticated", http.StatusUnauthorized)
+	var user *models.UserSession
+	userCtx := r.Context().Value(models.CtxKeyAuthUser)
+	if userCtx != nil {
+		switch u := userCtx.(type) {
+		case *models.UserSession:
+			user = u
+		default:
+			log.Printf("Unexpected type in userCtx: %T", userCtx)
+		}
 	}
 
 	var nav []models.NavItem
@@ -78,7 +79,6 @@ func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title str
 		nav = []models.NavItem{
 			{Path: "/", Label: "Home"},
 			{Path: "/glasses", Label: "Glasses Inventory"},
-			{Path: "/shipping", Label: "Shipping Orders"},
 			{Path: "/settings", Label: "Settings"},
 			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}
@@ -86,7 +86,6 @@ func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title str
 		nav = []models.NavItem{
 			{Path: "/", Label: "Home"},
 			{Path: "/glasses", Label: "Glasses Inventory"},
-			{Path: "/shipping", Label: "Shipping Orders"},
 			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}
 	}

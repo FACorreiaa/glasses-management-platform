@@ -2,6 +2,7 @@ package glasses
 
 import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
 templ GlassesRegisterForm(form models.GlassesForm) {
@@ -9,7 +10,7 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<h2 class="mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl">Insert Glasses</h2>
 			<div class="flex flex-col lg:flex-row">
-				<form method="post" hx-target="#success-message" class="w-full space-y-4">
+				<form method="post" class="w-full space-y-4">
 					<div class="flex flex-wrap -mx-4">
 						<div class="w-full md:w-1/2 px-4 mb-4">
 							<label class="block font-medium text-gray-900 mb-1" for="reference">Reference</label>
@@ -112,25 +113,14 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 							value={ form.Values["Feature"] }
 						></textarea>
 					</div>
-					<div class="flex flex-wrap -mx-4">
+					<div class="flex flex-wrap mx-4">
 						<div class="w-full md:w-1/2 px-4 mb-4">
-							<button
-								type="submit"
-								class="btn w-full px-4 py-3 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none "
-								name="action"
-								value="insert_more"
-							>Insert and Add Another</button>
+							@components.ButtonReturnComponent(templ.SafeURL("/"))
 						</div>
 						<div class="w-full md:w-1/2 px-4 mb-4">
-							<button
-								type="submit"
-								class="btn w-full px-4 py-3 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none "
-								name="action"
-								value="insert_and_redirect"
-							>Insert and Go to List</button>
+							@components.ButtonInsertComponent("Insert")
 						</div>
 					</div>
-					<div id="success-message" class="mt-4 text-green-500"></div>
 				</form>
 			</div>
 		</div>

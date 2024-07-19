@@ -2,13 +2,13 @@ package components
 
 templ ThemeSwitcher() {
 	<div
-		x-data="{ theme: localStorage.getItem('theme') || 'lemonade' }"
+		x-data="{ theme: localStorage.getItem('theme') || 'light' }"
 		x-init="$watch('theme', val => { document.documentElement.setAttribute('data-theme', val); localStorage.setItem('theme', val); })"
 	>
-		<div x-show="theme === 'dark'" class="cursor-pointer" @click="theme = 'lemonade'">
+		<div x-show="theme === 'dark'" class="cursor-pointer" @click="theme = 'light'">
 			@LightIcon()
 		</div>
-		<div x-show="theme === 'lemonade'" class="cursor-pointer" @click="theme = 'dark'">
+		<div x-show="theme === 'light'" class="cursor-pointer" @click="theme = 'dark'">
 			@DarkIcon()
 		</div>
 	</div>

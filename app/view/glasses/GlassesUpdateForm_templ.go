@@ -122,7 +122,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"submit\" name=\"action\" class=\"btn btn-primary w-full max-w-xs\" value=\"update_and_redirect\">Update and Go to List</button></div></div><div id=\"success-message\" class=\"mt-4 text-success\"></div></form></div></div></section><script>\n        document.addEventListener(\"glassesUpdated\", function() {\n            const successMessage = document.getElementById(\"success-message\");\n            if (successMessage) {\n                setTimeout(() => {\n                    successMessage.style.display = \"none\";\n                }, 3000);\n            }\n        });\n    </script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"submit\" name=\"action\" class=\"btn btn-primary w-full max-w-xs\" value=\"submit\">Update and Go to List</button></div></div><div id=\"success-message\" class=\"mt-4 text-success\"></div></form></div></div></section><script>\n        document.addEventListener(\"glassesUpdated\", function() {\n            const successMessage = document.getElementById(\"success-message\");\n            if (successMessage) {\n                setTimeout(() => {\n                    successMessage.style.display = \"none\";\n                }, 3000);\n            }\n        });\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

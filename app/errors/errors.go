@@ -13,7 +13,10 @@ type HTTPError struct {
 func (e *HTTPError) WriteError(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(e.StatusCode)
-	json.NewEncoder(w).Encode(e)
+	err := json.NewEncoder(w).Encode(e)
+	if err != nil {
+		return
+	}
 }
 
 var (

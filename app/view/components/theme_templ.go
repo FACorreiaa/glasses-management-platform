@@ -26,7 +26,7 @@ func ThemeSwitcher() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"{ theme: localStorage.getItem(&#39;theme&#39;) || &#39;lemonade&#39; }\" x-init=\"$watch(&#39;theme&#39;, val =&gt; { document.documentElement.setAttribute(&#39;data-theme&#39;, val); localStorage.setItem(&#39;theme&#39;, val); })\"><div x-show=\"theme === &#39;dark&#39;\" class=\"cursor-pointer\" @click=\"theme = &#39;lemonade&#39;\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"{ theme: localStorage.getItem(&#39;theme&#39;) || &#39;light&#39; }\" x-init=\"$watch(&#39;theme&#39;, val =&gt; { document.documentElement.setAttribute(&#39;data-theme&#39;, val); localStorage.setItem(&#39;theme&#39;, val); })\"><div x-show=\"theme === &#39;dark&#39;\" class=\"cursor-pointer\" @click=\"theme = &#39;light&#39;\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -34,7 +34,7 @@ func ThemeSwitcher() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div x-show=\"theme === &#39;lemonade&#39;\" class=\"cursor-pointer\" @click=\"theme = &#39;dark&#39;\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div x-show=\"theme === &#39;light&#39;\" class=\"cursor-pointer\" @click=\"theme = &#39;dark&#39;\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
