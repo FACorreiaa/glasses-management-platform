@@ -80,10 +80,14 @@ type LoginPage struct {
 	FieldErrors map[string]string
 }
 
-type RegisterPage struct {
-	Errors      []string
-	FieldErrors map[string]string
-	Values      map[string]string
+type RegisterFormValues struct {
+	Errors          []string
+	FieldErrors     map[string]string
+	Values          map[string]string
+	Username        string `form:"username" validate:"required"`
+	Email           string `form:"email" validate:"required,email"`
+	Password        string `form:"password" validate:"required,min=8,max=72"`
+	PasswordConfirm string `form:"password_confirm" validate:"required,eqfield=Password"`
 }
 
 type Columns struct {

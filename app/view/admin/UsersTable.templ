@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-templ UsersTable(user models.UsersTable, register models.RegisterPage) {
+templ UsersTable(user models.UsersTable, register models.RegisterFormValues) {
 	<div class="flex flex-col items-left shadow-xl overflow-hidden">
 		@components.InputGroupContainer() {
 			<div class="mr-2">

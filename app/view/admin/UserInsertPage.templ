@@ -5,14 +5,14 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
-templ RegisterPage(register models.RegisterPage) {
+templ RegisterPage(form models.RegisterFormValues) {
 	<section class="w-full bg-white">
 		<div class="mx-auto max-w-7xl">
 			<h2 class="mb-8 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Register user</h2>
 			<div class="flex flex-col lg:flex-row">
-				if register.Errors != nil {
-					<ul class="error-messages text-center">
-						for _, err := range register.Errors {
+				if form.Errors != nil {
+					<ul class="error-messages text-center text-red-500 mb-4">
+						for _, err := range form.Errors {
 							<li>{ err }</li>
 						}
 					</ul>
@@ -21,7 +21,7 @@ templ RegisterPage(register models.RegisterPage) {
 					<fieldset>
 						<label for="username" class="block text-sm font-medium text-gray-900 dark:text-white">Username</label>
 						<input
-							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none"
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							type="text"
@@ -30,13 +30,13 @@ templ RegisterPage(register models.RegisterPage) {
 							name="username"
 							autocomplete="username"
 							id="username"
-							value={ register.Values["Username"] }
+							value={ form.Values["username"] }
 						/>
 					</fieldset>
 					<fieldset class="max-w-lg mx-auto mt-2">
 						<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
 						<input
-							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none"
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							type="email"
@@ -44,13 +44,13 @@ templ RegisterPage(register models.RegisterPage) {
 							required
 							name="email"
 							id="email"
-							value={ register.Values["Email"] }
+							value={ form.Values["email"] }
 						/>
 					</fieldset>
 					<fieldset class="max-w-lg mx-auto mt-2">
-						<label for="passoword" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+						<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
 						<input
-							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none"
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							type="password"
@@ -58,10 +58,11 @@ templ RegisterPage(register models.RegisterPage) {
 							required
 							name="password"
 							autocomplete="new-password"
+							value={ form.Values["password"] }
 						/>
 					</fieldset>
 					<fieldset class="max-w-lg mx-auto mt-2">
-						<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+						<label for="password_confirm" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
 						<input
 							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none"
 							data-primary="blue-600"
@@ -71,6 +72,7 @@ templ RegisterPage(register models.RegisterPage) {
 							required
 							name="password_confirm"
 							autocomplete="new-password"
+							value={ form.Values["password_confirm"] }
 						/>
 					</fieldset>
 					<div class="flex flex-wrap mt-2">
@@ -78,7 +80,14 @@ templ RegisterPage(register models.RegisterPage) {
 							@components.ButtonReturnComponent(templ.SafeURL("/"))
 						</div>
 						<div class="w-full md:w-1/2 px-4 mb-4">
-						@components.ButtonConfirmComponent("/collaborators/register", "Insert")
+							<button
+								type="submit"
+								name="action"
+								value="submit"
+								class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
+							>Insert
+								 <ion-icon name="checkmark-outline"></ion-icon>
+							</button>
 						</div>
 					</div>
 				</form>

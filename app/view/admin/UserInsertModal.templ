@@ -3,7 +3,7 @@ package admin
 import "github.com/FACorreiaa/glasses-management-platform/app/models"
 import "github.com/FACorreiaa/glasses-management-platform/app/view/components"
 
-templ UserInsertModal(register models.RegisterPage) {
+templ UserInsertModal(form models.RegisterFormValues) {
 	<div
 		x-data="{ modalOpen: false }"
 		@keydown.escape.window="modalOpen = false"
@@ -45,9 +45,9 @@ templ UserInsertModal(register models.RegisterPage) {
 							<div class="mx-auto max-w-7xl">
 								<h2 class="mb-8 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Register user</h2>
 								<div class="flex flex-col lg:flex-row">
-									if register.Errors != nil {
+									if form.Errors != nil {
 										<ul class="error-messages text-center">
-											for _, err := range register.Errors {
+											for _, err := range form.Errors {
 												<li>{ err }</li>
 											}
 										</ul>
@@ -65,7 +65,7 @@ templ UserInsertModal(register models.RegisterPage) {
 												name="username"
 												autocomplete="username"
 												id="username"
-												value={ register.Values["Username"] }
+												value={ form.Values["username"] }
 											/>
 										</fieldset>
 										<fieldset class="max-w-lg mx-auto mt-2">
@@ -79,7 +79,7 @@ templ UserInsertModal(register models.RegisterPage) {
 												required
 												name="email"
 												id="email"
-												value={ register.Values["Email"] }
+												value={ form.Values["email"] }
 											/>
 										</fieldset>
 										<fieldset class="max-w-lg mx-auto mt-2">
@@ -93,6 +93,7 @@ templ UserInsertModal(register models.RegisterPage) {
 												required
 												name="password"
 												autocomplete="new-password"
+												value={ form.Values["password"] }
 											/>
 										</fieldset>
 										<fieldset class="max-w-lg mx-auto mt-2">
@@ -106,11 +107,12 @@ templ UserInsertModal(register models.RegisterPage) {
 												required
 												name="password_confirm"
 												autocomplete="new-password"
+												value={ form.Values["password_confirm"] }
 											/>
 										</fieldset>
 										<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
 											@components.ButtonCancelComponent()
-											@components.ButtonConfirmComponent("/collaborators/register", "Insert user")
+											@components.ButtonConfirmComponent("Insert")
 										</div>
 									</form>
 								</div>

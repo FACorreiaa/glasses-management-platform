@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -13,6 +14,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
+
+const SubmitAction = "submit"
 
 func (h *Handler) getCollaborators(w http.ResponseWriter, r *http.Request) (int, []models.UserSession, error) {
 	pageSize := 10
@@ -82,7 +85,7 @@ func (h *Handler) renderCollaboratorsTable(w http.ResponseWriter, r *http.Reques
 		OrderParam: orderBy,
 		SortParam:  sortAux,
 	}
-	t := admin.UsersTable(data, models.RegisterPage{})
+	t := admin.UsersTable(data, models.RegisterFormValues{})
 
 	return t, nil
 }
@@ -99,18 +102,17 @@ func (h *Handler) UsersPage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
-	register := admin.RegisterPage(models.RegisterPage{})
+	register := admin.RegisterPage(models.RegisterFormValues{})
 	u := admin.UserLayoutPage("List of collaborators", "List of collaborators", register)
 	return h.CreateLayout(w, r, "Insert new collaborator", u).Render(context.Background(), w)
 }
 
-func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error {
+func (h *Handler) UserRegisterPostT(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
 		return err
 	}
 
 	var f models.RegisterForm
-	// var err error
 
 	err := h.formDecoder.Decode(&f, r.PostForm)
 	if err == nil {
@@ -118,15 +120,99 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 	}
 
 	if err != nil {
-		register := admin.RegisterPage(models.RegisterPage{Errors: h.formErrors(err)})
+		rp := models.RegisterFormValues{
+			Errors: []string{"Error decoding form data"},
+			Values: map[string]string{
+				"username": r.PostFormValue("username"),
+				"email":    r.PostFormValue("email"),
+			},
+		}
+		register := admin.RegisterPage(rp)
 		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
+	}
+
+	if f.Password != f.PasswordConfirm {
+		rp := models.RegisterFormValues{
+			Errors: []string{"Passwords do not match"},
+			Values: map[string]string{
+				"username": f.Username,
+				"email":    f.Email,
+			},
+		}
+		register := admin.RegisterPage(rp)
+		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
+	}
+
+	_, err = h.service.InsertUser(r.Context(), f)
+	if err != nil {
+		rp := models.RegisterFormValues{
+			Errors: []string{err.Error()},
+			Values: map[string]string{
+				"username": f.Username,
+				"email":    f.Email,
+			},
+		}
+		register := admin.RegisterPage(rp)
+		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
+	}
+
+	actionType := r.FormValue("action")
+	if actionType == "back" {
+		w.Header().Set("HX-Redirect", "/settings/collaborators")
+	} else if actionType == SubmitAction {
+		w.Header().Set("HX-Redirect", "/settings/collaborators")
+	}
+
+	return nil
+}
+
+func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
+		HandleError(err, "parsing form")
+		return err
+	}
+
+	f := models.RegisterForm{
+		Username:        r.FormValue("username"),
+		Email:           r.FormValue("email"),
+		Password:        r.FormValue("password"),
+		PasswordConfirm: r.FormValue("password_confirm"),
+	}
+
+	var errors []string
+	if f.Password != f.PasswordConfirm {
+		errors = append(errors, "Passwords do not match")
+	}
+
+	if len(f.Username) < 3 {
+		errors = append(errors, "Username must be at least 3 characters long")
+	}
+
+	for e := range errors {
+		println(errors[e])
+	}
+
+	if len(errors) > 0 {
+		rp := models.RegisterFormValues{
+			Errors: errors,
+			Values: map[string]string{
+				"username": f.Username,
+				"email":    f.Email,
+			},
+		}
+		register := admin.RegisterPage(rp)
+		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
+	}
+
+	if _, err := h.service.InsertUser(context.Background(), f); err != nil {
+		return fmt.Errorf("error inserting users: %v", err)
 	}
 
 	actionType := r.FormValue("action")
 
 	if actionType == "back" {
 		w.Header().Set("HX-Redirect", "/settings/collaborators")
-	} else if actionType == "submit" {
+	} else if actionType == SubmitAction {
 		w.Header().Set("HX-Redirect", "/settings/collaborators")
 	}
 
