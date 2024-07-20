@@ -3,6 +3,7 @@ package glasses
 import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"fmt"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
 templ GlassesUpdateForm(form models.GlassesForm, id string) {
@@ -127,13 +128,7 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 					</div>
 					<div class="flex flex-row">
 						<div class="w-50 md:w-1/2 px-4 mb-8">
-							<button
-								hx-put={ string(templ.URL(fmt.Sprintf("/glasses/%s/update", id))) }
-								type="submit"
-								name="action"
-								class="btn btn-primary w-full max-w-xs"
-								value="submit"
-							>Update and Go to List</button>
+							@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/glasses/%s/update", id))), "Update")
 						</div>
 					</div>
 					<div id="success-message" class="mt-4 text-success"></div>

@@ -69,16 +69,7 @@ templ UsersTable(user models.UsersTable, register models.RegisterPage) {
 										}
 										<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 											@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/collaborators/%s/edit", us.ID)))
-											<button
-												hx-delete={ fmt.Sprintf("/collaborators/%s", us.ID) }
-												type="button"
-												hx-target="closest tr"
-												hx-swap="outerHTML swap:1s"
-												class="fade-me-out.htmx-swapping btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
-											>
-												<span>Delete</span>
-												<ion-icon name="trash-outline"></ion-icon>
-											</button>
+											@components.ButtonDeleteComponent(fmt.Sprintf("/collaborators/%s", us.ID))
 										</td>
 									</tr>
 								}

@@ -73,9 +73,13 @@ templ RegisterPage(register models.RegisterPage) {
 							autocomplete="new-password"
 						/>
 					</fieldset>
-					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-						@components.ButtonReturnComponent(templ.SafeURL("/"))
-						@components.ButtonConfirmComponent("/collaborators/register", "Insert user")
+					<div class="flex flex-wrap mt-2">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							@components.ButtonReturnComponent(templ.SafeURL("/"))
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-4">
+						@components.ButtonConfirmComponent("/collaborators/register", "Insert")
+						</div>
 					</div>
 				</form>
 			</div>

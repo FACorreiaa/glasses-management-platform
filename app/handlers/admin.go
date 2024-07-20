@@ -110,9 +110,9 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 	}
 
 	var f models.RegisterForm
-	var err error
+	// var err error
 
-	err = h.formDecoder.Decode(&f, r.PostForm)
+	err := h.formDecoder.Decode(&f, r.PostForm)
 	if err == nil {
 		_, err = h.service.InsertUser(r.Context(), f)
 	}
