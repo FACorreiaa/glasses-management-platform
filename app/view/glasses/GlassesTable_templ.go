@@ -224,7 +224,7 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var12 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/glasses/%s/send", glasses.GlassesID))
+				var templ_7745c5c3_Var12 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/customer/glasses/%s/send", glasses.GlassesID))
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var12)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err

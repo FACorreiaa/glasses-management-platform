@@ -28,6 +28,7 @@ func setupBusinessComponents(pool *pgxpool.Pool, redisClient *redis.Client, vali
 	authRepo := repository.NewAccountRepository(pool, redisClient, validate, sessions.NewCookieStore(sessionSecret))
 	glassesRepo := repository.NewGlassesRepository(pool)
 	adminRepo := repository.NewAdminRepository(pool, redisClient, validate, sessions.NewCookieStore(sessionSecret))
+	customerRepo := repository.NewCustomerRepository(pool)
 	// Middleware
 	middleware := &repository.MiddlewareRepository{
 		Pgpool:      pool,
@@ -37,7 +38,7 @@ func setupBusinessComponents(pool *pgxpool.Pool, redisClient *redis.Client, vali
 	}
 
 	// Service
-	service := services.NewService(authRepo, glassesRepo, adminRepo)
+	service := services.NewService(authRepo, glassesRepo, adminRepo, customerRepo)
 
 	// Handler
 	handler := handlers.NewHandler(service, sessions.NewCookieStore(sessionSecret), pool, redisClient)
@@ -101,8 +102,6 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	auth.HandleFunc("/glasses/{glasses_id}/edit", handler(h.UpdateGlassesPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/glasses/{glasses_id}/update", handler(h.UpdateGlasses)).Methods(http.MethodPut)
 	auth.HandleFunc("/glasses/{stock}/inventory", handler(h.GlassesStockPage)).Methods(http.MethodGet)
-	auth.HandleFunc("/glasses/{glasses_id}/send", handler(h.InsertShippingFormPage)).Methods(http.MethodGet)
-	// Settings
 
 	// Collaborators
 	auth.HandleFunc("/collaborators/register", handler(h.UserInsertPage)).Methods(http.MethodGet)
@@ -115,6 +114,10 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	auth.HandleFunc("/settings/admin", handler(h.UpdateAdminPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/settings/admin/update", handler(h.UpdateAdmin)).Methods(http.MethodPut)
 	auth.HandleFunc("/settings/glasses", handler(h.SettingsGlassesPage)).Methods(http.MethodGet)
+
+	auth.HandleFunc("/customer/glasses/{glasses_id}/send", handler(h.InsertShippingFormPage)).Methods(http.MethodGet)
+	// Settings
+
 	return r
 }
 

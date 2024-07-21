@@ -13,7 +13,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
-func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component {
+func CustomerShipingDetailsForm(form models.CustomerShippingForm) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -31,14 +31,14 @@ func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white py-8\"><div class=\"mx-auto max-w-7xl px-4 sm:px-4 lg:px-8\"><h2 class=\"mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl\">Send glasses</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\" class=\"w-full space-y-4\"><div class=\"flex flex-wrap \"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"name\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert customer nme\" name=\"name\" autocomplete=\"name\" id=\"name\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white py-8\"><div class=\"mx-auto max-w-7xl sm:px-4 lg:px-8\"><h2 class=\"mb-4 text-3xl font-extrabold text-gray-900 xl:text-4xl px-4\">Send glasses</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\" class=\"w-full space-y-4\"><div class=\"flex flex-wrap \"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"name\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert customer nme\" name=\"name\" autocomplete=\"name\" id=\"name\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Name"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 25, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 25, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -51,7 +51,7 @@ func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["CardIDNumber"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 38, Col: 43}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 38, Col: 43}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -64,7 +64,7 @@ func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Address"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 52, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 52, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -77,46 +77,46 @@ func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["AddressDetails"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 63, Col: 45}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 63, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex flex-wrap \"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"color\">City</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert city\" name=\"city\" autocomplete=\"city\" id=\"city\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"grid grid-cols-1 md:grid-cols-3 gap-4\"><div class=\"w-full col-span-1 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"color\">City</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert city\" name=\"city\" autocomplete=\"city\" id=\"city\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["City"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 77, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 77, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"type\">Country</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert country\" name=\"country\" autocomplete=\"country\" id=\"country\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full col-span-1 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"type\">Country</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert country\" name=\"country\" autocomplete=\"country\" id=\"country\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Country"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 89, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 89, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"type\">Continent</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert continent\" name=\"continent\" autocomplete=\"continent\" id=\"continent\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full col-span-1 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"type\">Continent</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert continent\" name=\"continent\" autocomplete=\"continent\" id=\"continent\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Continent"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 101, Col: 40}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 101, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -129,7 +129,7 @@ func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["PostalCode"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 115, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 115, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
@@ -142,7 +142,7 @@ func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["PhoneNumber"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 127, Col: 42}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 127, Col: 42}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -155,7 +155,7 @@ func GlassesShipingDetailsForm(form models.CustomerShippingForm) templ.Component
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Email"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/GlassesShippingDetailsForm.templ`, Line: 141, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/customer/CustomerShippingDetailsForm.templ`, Line: 141, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {

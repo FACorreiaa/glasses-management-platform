@@ -68,7 +68,7 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 												if glasses.IsInStock == true {
 												  <span>Yes</span>
 													<a
-														href={ templ.SafeURL(fmt.Sprintf("/glasses/%s/send", glasses.GlassesID)) }
+														href={ templ.SafeURL(fmt.Sprintf("/customer/glasses/%s/send", glasses.GlassesID)) }
 														class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
 													>
 														<span>Send</span>

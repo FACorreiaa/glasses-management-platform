@@ -12,7 +12,7 @@ import (
 func (h *Handler) InsertShippingFormPage(w http.ResponseWriter, r *http.Request) error {
 	sidebar := h.renderSidebar()
 
-	form := customer.GlassesShipingDetailsForm(models.CustomerShippingForm{})
+	form := customer.CustomerShipingDetailsForm(models.CustomerShippingForm{})
 	home := glasses.GlassesLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, form)
 	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
 }
