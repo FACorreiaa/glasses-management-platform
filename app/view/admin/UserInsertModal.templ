@@ -1,7 +1,7 @@
 package admin
 
-import "github.com/FACorreiaa/glasses-management-platform/app/models"
-import "github.com/FACorreiaa/glasses-management-platform/app/view/components"
+ import ("github.com/FACorreiaa/glasses-management-platform/app/models"
+ "github.com/FACorreiaa/glasses-management-platform/app/view/components")
 
 templ UserInsertModal(form models.RegisterFormValues) {
 	<div
@@ -45,13 +45,6 @@ templ UserInsertModal(form models.RegisterFormValues) {
 							<div class="mx-auto max-w-7xl">
 								<h2 class="mb-8 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Register user</h2>
 								<div class="flex flex-col lg:flex-row">
-									if form.Errors != nil {
-										<ul class="error-messages text-center">
-											for _, err := range form.Errors {
-												<li>{ err }</li>
-											}
-										</ul>
-									}
 									<form method="post" class="w-full space-y-4">
 										<fieldset>
 											<label for="username" class="block text-sm font-medium text-gray-900 dark:text-white">Username</label>
@@ -67,6 +60,9 @@ templ UserInsertModal(form models.RegisterFormValues) {
 												id="username"
 												value={ form.Values["username"] }
 											/>
+											if form.FieldErrors["username"] != "" {
+												<p class="text-error">{ form.FieldErrors["username"] }</p>
+											}
 										</fieldset>
 										<fieldset class="max-w-lg mx-auto mt-2">
 											<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -95,6 +91,9 @@ templ UserInsertModal(form models.RegisterFormValues) {
 												autocomplete="new-password"
 												value={ form.Values["password"] }
 											/>
+											if form.FieldErrors["password"] != "" {
+												<p class="text-error">{ form.FieldErrors["password"] }</p>
+											}
 										</fieldset>
 										<fieldset class="max-w-lg mx-auto mt-2">
 											<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
@@ -109,6 +108,9 @@ templ UserInsertModal(form models.RegisterFormValues) {
 												autocomplete="new-password"
 												value={ form.Values["password_confirm"] }
 											/>
+											if form.FieldErrors["password_confirm"] != "" {
+												<p class="text-error">{ form.FieldErrors["password_confirm"] }</p>
+											}
 										</fieldset>
 										<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
 											@components.ButtonCancelComponent()

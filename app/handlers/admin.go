@@ -179,22 +179,23 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 		PasswordConfirm: r.FormValue("password_confirm"),
 	}
 
-	var errors []string
+	fieldErrors := make(map[string]string)
+
+	if len(f.Password) < 5 {
+		fieldErrors["password"] = "Password must be at least 5 characters long"
+	}
+
 	if f.Password != f.PasswordConfirm {
-		errors = append(errors, "Passwords do not match")
+		fieldErrors["password_confirm"] = "Passwords do not match"
 	}
 
 	if len(f.Username) < 3 {
-		errors = append(errors, "Username must be at least 3 characters long")
+		fieldErrors["username"] = "Username must be at least 3 characters long"
 	}
 
-	for e := range errors {
-		println(errors[e])
-	}
-
-	if len(errors) > 0 {
+	if len(fieldErrors) > 0 {
 		rp := models.RegisterFormValues{
-			Errors: errors,
+			FieldErrors: fieldErrors,
 			Values: map[string]string{
 				"username": f.Username,
 				"email":    f.Email,
