@@ -30,7 +30,7 @@ func AdminSettingsPage(settings models.SettingsPage) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto md:px-6\"><p class=\"text-center text-gray-900 text-6xl\">Admin Settings</p><div class=\"text-left\"><p class=\"text-xl font-bold\">This part is dedicated to explain to the admin what he can see here and might be deleted later.</p><br><p>Here you can change your own credentials on \"Change details\".</p><p>On the other views you have the same list details as on the normal pages, except here you can see who made the transactions</p></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto md:px-4\"><p class=\"text-center text-gray-900 text-6xl\">Admin Settings</p><div class=\"text-left\"><p class=\"text-xl font-bold\">This part is dedicated to explain to the admin what he can see here and might be deleted later.</p><br><p>Here you can change your own credentials on \"Change details\".</p><p>On the other views you have the same list details as on the normal pages, except here you can see who made the transactions</p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

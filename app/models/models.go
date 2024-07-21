@@ -154,6 +154,25 @@ type GlassesForm struct {
 	Errors    map[string]string
 }
 
+type CustomerShippingForm struct {
+	CustomerID     uuid.UUID `json:"customer_id" schema:"customer_id"`
+	UserID         uuid.UUID `json:"user_id"     schema:"user_id"`
+	GlassesID      uuid.UUID `json:"glasses_id"  schema:"glasses_id"`
+	Name           string    `json:"name"        schema:"name"`
+	CardIDNumber   string    `json:"card_id_number" schema:"card_id_number"`
+	Address        string    `json:"address" schema:"address"`
+	AddressDetails string    `json:"address_details" schema:"address_details"`
+	City           string    `json:"city" schema:"city"`
+	Country        string    `json:"country" schema:"country"`
+	Continent      string    `json:"continent" schema:"continent"`
+	PostalCode     string    `json:"postal_code" schema:"postal_code"`
+	PhoneNumber    string    `json:"phone_number" schema:"phone_number"`
+	Email          string    `json:"email" schema:"email"`
+	Updated        bool
+	Values         map[string]string
+	Errors         map[string]string
+}
+
 type UpdateUserForm struct {
 	UserID          uuid.UUID `json:"user_id"`
 	Username        string    `form:"username"`

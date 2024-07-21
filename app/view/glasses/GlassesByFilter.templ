@@ -23,10 +23,10 @@ templ GlassesByFilter(a models.GlassesTable) {
 					<div class="overflow-hidden border-b border-neutral-200 shadow sm:rounded-lg">
 						<table class="table table-xs min-w-full divide-y divide-neutral-200">
 							<!-- head -->
-							<thead class="bg-neutral-100 dark:bg-neutral-800">
+							<thead class="bg-neutral-100 dark:bg-neutral-600">
 								<tr>
 									for _, col := range a.Column {
-										<th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+										<th class="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
 											<div class="flex items-center">
 												{ col.Title }
 												<form class="ml-2" method="get">
@@ -46,7 +46,7 @@ templ GlassesByFilter(a models.GlassesTable) {
 							<tbody class="bg-white divide-y divide-neutral-200">
 								for _, glasses := range a.Glasses {
 									<tr class="hover:bg-neutral-100">
-										<td class="px-6 py-4 whitespace-nowrap" hx-boost="true">
+										<td class="px-4 py-4 whitespace-nowrap" hx-boost="true">
 											<a
 												class="text-sm text-neutral-900"
 												hx-trigger="load delay:50ms"
@@ -55,15 +55,15 @@ templ GlassesByFilter(a models.GlassesTable) {
 												{ glasses.Brand }
 											</a>
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Color }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Type }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.LeftEye) }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Reference }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%v", glasses.IsInStock) }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Feature }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.CreatedAt.Format("02-01-2006") }</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.UpdatedAt.Format("02-01-2006") }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Color }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Type }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.LeftEye) }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", glasses.RightEye) }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Reference }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%v", glasses.IsInStock) }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Feature }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.CreatedAt.Format("02-01-2006") }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.UpdatedAt.Format("02-01-2006") }</td>
 									</tr>
 								}
 							</tbody>

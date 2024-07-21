@@ -101,7 +101,7 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	auth.HandleFunc("/glasses/{glasses_id}/edit", handler(h.UpdateGlassesPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/glasses/{glasses_id}/update", handler(h.UpdateGlasses)).Methods(http.MethodPut)
 	auth.HandleFunc("/glasses/{stock}/inventory", handler(h.GlassesStockPage)).Methods(http.MethodGet)
-
+	auth.HandleFunc("/glasses/{glasses_id}/send", handler(h.InsertShippingFormPage)).Methods(http.MethodGet)
 	// Settings
 
 	// Collaborators
