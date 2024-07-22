@@ -233,3 +233,28 @@ type ShippingDetailsTable struct {
 	OrderParam  string
 	SortParam   string
 }
+
+type SettingsShippingDetails struct {
+	CollaboratorName  string    `json:"username"`
+	CollaboratorEmail string    `json:"collaborator_email"`
+	Name              string    `json:"name"`
+	CardID            string    `json:"card_id_number"`
+	Email             string    `json:"email"`
+	Reference         string    `json:"reference"`
+	LeftEyeStrength   float64   `json:"left_eye_strength"`
+	RightEyeStrength  float64   `json:"right_eye_strength"`
+	CreatedAt         time.Time `json:"created_at"`
+	UpdatedAt         time.Time `json:"updated_at"`
+}
+
+type SettingsShippingDetailsTable struct {
+	Column      []ColumnItems
+	Shipping    []SettingsShippingDetails
+	PrevPage    int
+	NextPage    int
+	Page        int
+	LastPage    int
+	FilterBrand string
+	OrderParam  string
+	SortParam   string
+}

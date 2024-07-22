@@ -20,3 +20,12 @@ func (s *Service) GetShippingDetails(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.ShippingDetails, error) {
 	return s.customerRepo.GetShippingDetails(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
 }
+
+func (s *Service) GetShippingExpandedDetails(ctx context.Context, page, pageSize int,
+	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
+	return s.customerRepo.GetShippingExpandedDetails(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+}
+
+func (s *Service) DeleteCustomer(ctx context.Context, customerID string) error {
+	return s.glassesRepo.DeleteCustomer(ctx, customerID)
+}

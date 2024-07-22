@@ -110,16 +110,20 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	auth.HandleFunc("/collaborators/{user_id}/edit", handler(h.UpdateUserPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/collaborators/{user_id}/update", handler(h.UpdateUser)).Methods(http.MethodPut)
 
+	// Settings
+
 	auth.HandleFunc("/settings/collaborators", handler(h.UsersPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/settings/admin", handler(h.UpdateAdminPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/settings/admin/update", handler(h.UpdateAdmin)).Methods(http.MethodPut)
 	auth.HandleFunc("/settings/glasses", handler(h.SettingsGlassesPage)).Methods(http.MethodGet)
-
+	auth.HandleFunc("/settings/shipping", handler(h.SettingsShippingPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/customer/glasses/{glasses_id}/send", handler(h.InsertShippingFormPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/customer/glasses/{glasses_id}/send", handler(h.InsertShippingForm)).Methods(http.MethodPost)
-	// Settings
 
 	auth.HandleFunc("/shipping", handler(h.GetShippingDetailsPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/settings/shipping/{card_id_number}", handler(h.DeleteCustomer)).Methods(http.MethodDelete)
+	// auth.HandleFunc("/settings/shipping/{card_id_number}/edit", handler(h.UpdateCustomerPage)).Methods(http.MethodGet)
+	// auth.HandleFunc("/settings/shipping/{card_id_number}/update", handler(h.UpdateCustomer)).Methods(http.MethodPut)
 	return r
 }
 

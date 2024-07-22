@@ -124,3 +124,59 @@ func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageS
 
 	return sd, nil
 }
+
+func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, page, pageSize int,
+	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
+	var sd []models.SettingsShippingDetails
+	query := `select u.username, u.email as "collaborator_email", c.name, c.card_id_number, c.email, g.reference,
+       			g.left_eye_strength, g.right_eye_strength,
+       			c.created_at, c.updated_at
+				from customer c
+				join glasses g on g.glasses_id = c.glasses_id
+				join "user" u on u.user_id = c.user_id
+				WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $1 || '%'))
+			 	AND ($2::float8 IS NULL OR g.left_eye_strength = $2)
+			 	AND ($3::float8 IS NULL OR g.right_eye_strength = $3)
+				ORDER BY
+				CASE
+					WHEN $4 = 'Brand' THEN g.brand
+					WHEN $4 = 'Color' THEN g.color
+					WHEN $4 = 'Reference' THEN g.reference
+					WHEN $4 = 'Type' THEN g.type
+					WHEN $4 = 'Features' THEN g.features
+
+					ELSE g.brand
+				END ` + sortBy + `
+			    OFFSET $5 LIMIT $6`
+	offset := (page - 1) * pageSize
+	rows, err := r.pgpool.Query(ctx, query, reference, leftEye, rightEye, orderBy, offset, pageSize)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var s models.SettingsShippingDetails
+		if err := rows.Scan(&s.CollaboratorName, &s.CollaboratorEmail, &s.Name, &s.CardID, &s.Email, &s.Reference,
+			&s.LeftEyeStrength, &s.RightEyeStrength, &s.CreatedAt, &s.UpdatedAt); err != nil {
+			return nil, err
+		}
+		sd = append(sd, s)
+	}
+
+	slog.Info("Fetching shippingDetails", "page", page, "pageSize", pageSize, "offset", offset)
+
+	return sd, nil
+}
+
+func (r *GlassesRepository) DeleteCustomer(ctx context.Context, customerID string) error {
+	query := `DELETE FROM customer WHERE card_id_number = $1`
+	_, err := r.pgpool.Exec(ctx, query, customerID)
+	if err != nil {
+		slog.Error(" deleting customer", "err", err)
+		return errors.New("internal server error")
+	}
+	slog.Info("Deleted customer", "card_id", customerID)
+	return err
+}

@@ -12,10 +12,13 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/admin"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/settings"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/shipping"
 	"github.com/a-h/templ"
+	"github.com/gorilla/mux"
 )
 
 func (h *Handler) renderSettingsSidebar() []models.SidebarItem {
@@ -24,7 +27,7 @@ func (h *Handler) renderSettingsSidebar() []models.SidebarItem {
 		{Path: "/settings/admin", Label: "Change details"},
 		{Path: "/settings/collaborators", Label: "View collaborators"},
 		{Path: "/settings/glasses", Label: "View glasses stock"},
-		{Path: "/settings/operations", Label: "View transactions"},
+		{Path: "/settings/shipping", Label: "View transactions"},
 		{Path: "/log-out", Label: "Log out"},
 	}
 	return sidebar
@@ -242,4 +245,148 @@ func (h *Handler) SettingsGlassesPage(w http.ResponseWriter, r *http.Request) er
 	}
 	home := pages.MainLayoutPage("Glasses Management Page", "Check glasses stock details", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
+}
+
+// SETTINGS
+
+func (h *Handler) getSettingsShipping(w http.ResponseWriter, r *http.Request) (int, []models.SettingsShippingDetails, error) {
+	pageSize := 10
+	orderBy := r.FormValue("orderBy")
+	sortBy := r.FormValue("sortBy")
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	reference := r.FormValue("reference")
+	leftEyeStr := r.FormValue("left_eye_strength")
+	rightEyeStr := r.FormValue("right_eye_strength")
+
+	var leftEye, rightEye *float64
+
+	if leftEyeStr != "" {
+		parsedLeftEye, err := strconv.ParseFloat(leftEyeStr, 64)
+		if err != nil {
+			HandleError(err, "parse left eye")
+			return 0, nil, err
+		}
+		leftEye = &parsedLeftEye
+	}
+
+	if rightEyeStr != "" {
+		parsedRightEye, err := strconv.ParseFloat(rightEyeStr, 64)
+		if err != nil {
+			HandleError(err, "parse right eye")
+			return 0, nil, err
+		}
+		rightEye = &parsedRightEye
+	}
+
+	// Debug print statements to check values
+	if leftEye != nil {
+		fmt.Printf("leftEye: %f\n", *leftEye)
+	} else {
+		fmt.Println("leftEye is nil")
+	}
+
+	if rightEye != nil {
+		fmt.Printf("rightEye: %f\n", *rightEye)
+	} else {
+		fmt.Println("rightEye is nil")
+	}
+
+	s, err := h.service.GetShippingExpandedDetails(context.Background(), page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+	if err != nil {
+		httperror.ErrNotFound.WriteError(w)
+		return 0, nil, err
+	}
+
+	return page, s, nil
+}
+
+func (h *Handler) renderSettingsShippingTable(w http.ResponseWriter, r *http.Request) (templ.Component, error) {
+	var page int
+	var sortAux string
+	orderBy := r.FormValue("orderBy")
+	sortBy := r.FormValue("sortBy")
+	brand := r.FormValue("brand")
+
+	if sortBy == ASC {
+		sortAux = DESC
+	} else {
+		sortAux = ASC
+	}
+
+	columnNames := []models.ColumnItems{
+		{Title: "Collaborator Name", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Collaborator Email", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Customer Name", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Customer Card ID", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Customer Email", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Glasses Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Right Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Left Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Created at:", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Updated at:", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+	}
+
+	page, s, _ := h.getSettingsShipping(w, r)
+
+	if len(s) == 0 {
+		message := components.EmptyPageComponent()
+		return message, nil
+	}
+
+	nextPage := page + 1
+	prevPage := page - 1
+	if prevPage <= 1 {
+		prevPage = 1
+	}
+
+	lastPage, err := h.service.GetSum()
+	if err != nil {
+		HandleError(err, " fetching tax")
+		return nil, err
+	}
+	data := models.SettingsShippingDetailsTable{
+		Column:      columnNames,
+		Shipping:    s,
+		PrevPage:    prevPage,
+		NextPage:    nextPage,
+		Page:        page,
+		LastPage:    lastPage,
+		FilterBrand: brand,
+		OrderParam:  orderBy,
+		SortParam:   sortAux,
+	}
+	t := shipping.ShippingDetailsExpanded(data, models.SettingsShippingDetails{})
+
+	return t, nil
+}
+
+func (h *Handler) SettingsShippingPage(w http.ResponseWriter, r *http.Request) error {
+	sidebar := h.renderSettingsSidebar()
+	renderTable, err := h.renderSettingsShippingTable(w, r)
+	if err != nil {
+		HandleError(err, "rendering glasses table")
+	}
+	home := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, renderTable)
+	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
+}
+
+func (h *Handler) DeleteCustomer(w http.ResponseWriter, r *http.Request) error {
+	vars := mux.Vars(r)
+	id := vars["card_id_number"]
+
+	// Delete the glasses
+	err := h.service.DeleteCustomer(context.Background(), id)
+	if err != nil {
+		http.Error(w, "Failed to delete customer", http.StatusInternalServerError)
+		return err
+	}
+
+	// Return a success response
+	w.Header().Set("HX-Redirect", "/settings/shipping")
+
+	return nil
 }
