@@ -159,7 +159,7 @@ type CustomerShippingForm struct {
 	UserID         uuid.UUID `json:"user_id"     schema:"user_id"`
 	GlassesID      uuid.UUID `json:"glasses_id"  schema:"glasses_id"`
 	Name           string    `json:"name"        schema:"name"`
-	CardIDNumber   string    `json:"card_id_number" schema:"card_id_number"`
+	CardID         string    `json:"card_id_number" schema:"card_id_number"`
 	Address        string    `json:"address" schema:"address"`
 	AddressDetails string    `json:"address_details" schema:"address_details"`
 	City           string    `json:"city" schema:"city"`
@@ -170,7 +170,33 @@ type CustomerShippingForm struct {
 	Email          string    `json:"email" schema:"email"`
 	Updated        bool
 	Values         map[string]string
-	Errors         map[string]string
+	FieldErrors    map[string]string
+}
+
+type Customer struct {
+	CustomerID     uuid.UUID `json:"customer_id"`
+	Name           string    `json:"name"       `
+	CardID         string    `json:"card_id_number" `
+	Address        string    `json:"address" `
+	AddressDetails string    `json:"address_details" `
+	City           string    `json:"city" `
+	Country        string    `json:"country" `
+	Continent      string    `json:"continent" `
+	PostalCode     string    `json:"postal_code" `
+	PhoneNumber    string    `json:"phone_number" `
+	Email          string    `json:"email"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+type Shipping struct {
+	ShippingID   uuid.UUID `json:"shipping_id"`
+	GlassesID    uuid.UUID `json:"glasses_id"`
+	CustomerID   uuid.UUID `json:"customer_id"`
+	ShippedBy    uuid.UUID `json:"shipped_by"`
+	ShippingDate time.Time `json:"shipping_date"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 type UpdateUserForm struct {
@@ -183,4 +209,27 @@ type UpdateUserForm struct {
 	Updated         bool
 	Values          map[string]string
 	Errors          map[string]string
+}
+
+type ShippingDetails struct {
+	Name             string    `json:"name"`
+	CardID           string    `json:"card_id_number"`
+	Email            string    `json:"email"`
+	Reference        string    `json:"reference"`
+	LeftEyeStrength  float64   `json:"left_eye_strength"`
+	RightEyeStrength float64   `json:"right_eye_strength"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
+}
+
+type ShippingDetailsTable struct {
+	Column      []ColumnItems
+	Shipping    []ShippingDetails
+	PrevPage    int
+	NextPage    int
+	Page        int
+	LastPage    int
+	FilterBrand string
+	OrderParam  string
+	SortParam   string
 }

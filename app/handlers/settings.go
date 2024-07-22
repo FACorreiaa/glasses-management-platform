@@ -13,6 +13,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/admin"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/settings"
 	"github.com/a-h/templ"
 )
@@ -239,6 +240,6 @@ func (h *Handler) SettingsGlassesPage(w http.ResponseWriter, r *http.Request) er
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 	}
-	home := glasses.GlassesLayoutPage("Glasses Management Page", "Check glasses stock details", sidebar, renderTable)
+	home := pages.MainLayoutPage("Glasses Management Page", "Check glasses stock details", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }

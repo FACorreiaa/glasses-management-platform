@@ -12,7 +12,7 @@ create table customer
   country         text,
   continent       text,
   phone_number    text,
-  email           citext unique,
+  email           citext,
   created_at      timestamptz not null default now(),
   updated_at      timestamptz
 );

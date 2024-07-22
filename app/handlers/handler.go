@@ -79,6 +79,7 @@ func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title str
 		nav = []models.NavItem{
 			{Path: "/", Label: "Home"},
 			{Path: "/glasses", Label: "Glasses Inventory"},
+			{Path: "/shipping", Label: "Shipped Glasses"},
 			{Path: "/settings", Label: "Settings"},
 			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}
@@ -86,6 +87,7 @@ func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title str
 		nav = []models.NavItem{
 			{Path: "/", Label: "Home"},
 			{Path: "/glasses", Label: "Glasses Inventory"},
+			{Path: "/shipped", Label: "Shipped Glasses"},
 			{Path: "/logout", Label: "Sign out", IsLogout: true},
 		}
 	}

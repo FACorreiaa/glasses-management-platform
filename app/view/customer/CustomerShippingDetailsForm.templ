@@ -35,8 +35,11 @@ templ CustomerShipingDetailsForm(form models.CustomerShippingForm) {
 								autocomplete="text"
 								id="brand"
 								required
-								value={ form.Values["CardIDNumber"] }
+								value={ form.Values["CardID"] }
 							/>
+							if form.FieldErrors["card_id_number"] != "" {
+								<p class="text-error">{ form.FieldErrors["card_id_number"] }</p>
+							}
 						</div>
 					</div>
 					<div class="flex flex-wrap ">

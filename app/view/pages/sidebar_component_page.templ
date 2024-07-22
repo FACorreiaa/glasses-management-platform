@@ -1,11 +1,11 @@
-package glasses
+package pages
 
 import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
-templ GlassesLayoutPage(title, description string, sidebar []models.SidebarItem, component templ.Component) {
+templ MainLayoutPage(title, description string, sidebar []models.SidebarItem, component templ.Component) {
 	<div>
 		@components.BannerComponent(title, description)
 		<div class="flex items-center justify-center flex-grow">

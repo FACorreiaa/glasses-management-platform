@@ -1,8 +1,6 @@
 package services
 
 import (
-	"log"
-
 	"github.com/FACorreiaa/glasses-management-platform/app/repository"
 )
 
@@ -11,12 +9,6 @@ type Service struct {
 	glassesRepo  *repository.GlassesRepository
 	adminRepo    *repository.AdminRepository
 	customerRepo *repository.CustomerRepository
-}
-
-func HandleError(err error, message string) {
-	if err != nil {
-		log.Printf("%s: %v", message, err)
-	}
 }
 
 func NewService(

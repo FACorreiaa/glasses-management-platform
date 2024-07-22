@@ -11,6 +11,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -161,14 +162,14 @@ func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 	}
-	home := glasses.GlassesLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
+	home := pages.MainLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }
 
 func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) error {
 	form := glasses.GlassesRegisterForm(models.GlassesForm{})
 	sidebar := h.renderSidebar()
-	insertPagePage := glasses.GlassesLayoutPage("Insert glasses", "form to insert new glasses", sidebar, form)
+	insertPagePage := pages.MainLayoutPage("Insert glasses", "form to insert new glasses", sidebar, form)
 	return h.CreateLayout(w, r, "Insert glasses", insertPagePage).Render(context.Background(), w)
 }
 
@@ -217,7 +218,9 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 
 	actionType := r.FormValue("action")
 
-	if actionType == "submit" {
+	if actionType == "back" {
+		w.Header().Set("HX-Redirect", "/glasses")
+	} else if actionType == SubmitAction {
 		w.Header().Set("HX-Redirect", "/glasses")
 	}
 
@@ -277,7 +280,7 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 
 	f := glasses.GlassesUpdateForm(form, glassesIDStr)
 	sidebar := h.renderSidebar()
-	updatePage := glasses.GlassesLayoutPage("Update Glasses", "form to update glasses", sidebar, f)
+	updatePage := pages.MainLayoutPage("Update Glasses", "form to update glasses", sidebar, f)
 	return h.CreateLayout(w, r, "Update Glasses", updatePage).Render(context.Background(), w)
 }
 
@@ -414,7 +417,7 @@ func (h *Handler) GlassesTypePage(w http.ResponseWriter, r *http.Request) error 
 	if err != nil {
 		HandleError(err, " rendering glasses table")
 	}
-	home := glasses.GlassesLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
+	home := pages.MainLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }
 
@@ -506,6 +509,6 @@ func (h *Handler) GlassesStockPage(w http.ResponseWriter, r *http.Request) error
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	home := glasses.GlassesLayoutPage("Glasses Inventory Management", "Glasses Inventory Management", sidebar, renderTable)
+	home := pages.MainLayoutPage("Glasses Inventory Management", "Glasses Inventory Management", sidebar, renderTable)
 	return h.CreateLayout(w, r, "Glasses Inventory Management", home).Render(context.Background(), w)
 }

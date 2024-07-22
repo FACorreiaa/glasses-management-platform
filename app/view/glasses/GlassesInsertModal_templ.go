@@ -132,7 +132,7 @@ func GlassesInsertModal(form models.GlassesForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"submit\" class=\"btn w-full px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none \" name=\"action\" value=\"insert_and_redirect\">Insert</button></div></div></form></div></div></section></div></div></div></template></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"submit\" class=\"btn w-full px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none \" name=\"action\" value=\"submit\">Insert</button></div></div></form></div></div></section></div></div></div></template></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
