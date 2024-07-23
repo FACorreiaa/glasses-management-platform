@@ -258,3 +258,17 @@ type SettingsShippingDetailsTable struct {
 	OrderParam  string
 	SortParam   string
 }
+
+type ShippingDetailsForm struct {
+	Name             string  `json:"name" schema:"name"`
+	CardID           string  `json:"card_id_number" schema:"card_id_number"`
+	Email            string  `json:"email" schema:"email"`
+	Reference        string  `json:"reference" schema:"reference"`
+	LeftEyeStrength  float64 `json:"left_eye_strength" schema:"left_eye_strength"`
+	RightEyeStrength float64 `json:"right_eye_strength" schema:"right_eye_strength"`
+	// CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Updated   bool
+	Values    map[string]string
+	Errors    map[string]string
+}

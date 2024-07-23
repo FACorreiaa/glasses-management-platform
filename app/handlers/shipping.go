@@ -13,6 +13,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/shipping"
 	"github.com/a-h/templ"
+	"github.com/gorilla/mux"
 )
 
 func (h *Handler) renderShippingSidebar() []models.SidebarItem {
@@ -144,5 +145,29 @@ func (h *Handler) GetShippingDetailsPage(w http.ResponseWriter, r *http.Request)
 		HandleError(err, "rendering glasses table")
 	}
 	home := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, renderTable)
+	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
+}
+
+func (h *Handler) UpdateCustomerPage(w http.ResponseWriter, r *http.Request) error {
+	sidebar := h.renderSettingsSidebar()
+	vars := mux.Vars(r)
+	id := vars["card_id_number"]
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		return err
+	}
+
+	form := models.ShippingDetailsForm{
+		Name:             r.FormValue("name"),
+		CardID:           r.FormValue("card_id_number"),
+		Email:            r.FormValue("email"),
+		Reference:        r.FormValue("reference"),
+		LeftEyeStrength:  parseFloat(r.FormValue("left_eye_strength")),
+		RightEyeStrength: parseFloat(r.FormValue("right_eye_strength")),
+	}
+
+	f := shipping.ShippingUpdateForm(form, id)
+	home := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, f)
 	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
 }

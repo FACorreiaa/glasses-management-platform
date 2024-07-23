@@ -122,7 +122,7 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 
 	auth.HandleFunc("/shipping", handler(h.GetShippingDetailsPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/settings/shipping/{card_id_number}", handler(h.DeleteCustomer)).Methods(http.MethodDelete)
-	// auth.HandleFunc("/settings/shipping/{card_id_number}/edit", handler(h.UpdateCustomerPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/settings/shipping/{card_id_number}/edit", handler(h.UpdateCustomerPage)).Methods(http.MethodGet)
 	// auth.HandleFunc("/settings/shipping/{card_id_number}/update", handler(h.UpdateCustomer)).Methods(http.MethodPut)
 	return r
 }
