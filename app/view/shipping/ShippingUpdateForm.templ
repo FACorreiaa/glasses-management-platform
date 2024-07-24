@@ -6,12 +6,12 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
-templ ShippingUpdateForm(form models.ShippingDetailsForm, id string) {
+templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 	<section class="w-full bg-white">
 		<div class="mx-auto max-w-7xl justify-center">
-			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update user</h2>
+			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update transactions details</h2>
 			<div class="flex flex-col lg:flex-row">
-				<form method="put" hx-target="#success-message" hx-swap="outerHTML">
+				<form method="put">
 					<input type="hidden" name="_method" value="PUT"/>
 					<div class="flex flex-wrap mb-10">
 						<div class="w-full md:w-1/2 px-4 mb-8">
@@ -111,20 +111,10 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm, id string) {
 					</div>
 					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
 						@components.ButtonReturnComponent(templ.SafeURL(fmt.Sprintf("/settings/shipping")))
-						@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/collaborators/%s/update", id))), "Update")
+						@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/settings/shipping/%s/update", form.CustomerID))), "Update")
 					</div>
 				</form>
 			</div>
 		</div>
 	</section>
-	<script>
-        document.addEventListener("glassesUpdated", function() {
-            const successMessage = document.getElementById("success-message");
-            if (successMessage) {
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                }, 3000);
-            }
-        });
-    </script>
 }

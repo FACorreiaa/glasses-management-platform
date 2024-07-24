@@ -310,8 +310,7 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		Feature:   r.FormValue("features"),
 	}
 
-	err = h.service.UpdateGlasses(context.Background(), g)
-	if err != nil {
+	if err = h.service.UpdateGlasses(context.Background(), g); err != nil {
 		http.Error(w, "Failed to update glasses", http.StatusInternalServerError)
 		return err
 	}

@@ -11,13 +11,13 @@ import (
 	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
-	"github.com/FACorreiaa/glasses-management-platform/app/view/admin"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/settings"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/shipping"
 	"github.com/a-h/templ"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -226,7 +226,9 @@ func (h *Handler) UpdateAdminPage(w http.ResponseWriter, r *http.Request) error 
 	}
 
 	f := settings.AdminUpdateForm(form, user.ID)
-	updatePage := admin.UserLayoutPage("Update users", "form to update users", f)
+	sidebar := h.renderSettingsSidebar()
+
+	updatePage := pages.MainLayoutPage("Update users", "form to update users", sidebar, f)
 	return h.CreateLayout(w, r, "Update Glasses", updatePage).Render(context.Background(), w)
 }
 
@@ -376,11 +378,15 @@ func (h *Handler) SettingsShippingPage(w http.ResponseWriter, r *http.Request) e
 
 func (h *Handler) DeleteCustomer(w http.ResponseWriter, r *http.Request) error {
 	vars := mux.Vars(r)
-	id := vars["card_id_number"]
+	id := vars["customer_id"]
+	customerID, err := uuid.Parse(id)
+	if err != nil {
+		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
+		return err
+	}
 
 	// Delete the glasses
-	err := h.service.DeleteCustomer(context.Background(), id)
-	if err != nil {
+	if err = h.service.DeleteCustomer(context.Background(), customerID); err != nil {
 		http.Error(w, "Failed to delete customer", http.StatusInternalServerError)
 		return err
 	}

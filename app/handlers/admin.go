@@ -10,6 +10,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/admin"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -96,14 +97,17 @@ func (h *Handler) UsersPage(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 	}
-	users := admin.UserLayoutPage("List of collaborators", "List of collaborators", table)
+	sidebar := h.renderSettingsSidebar()
+	users := pages.MainLayoutPage("List of collaborators", "List of collaborators", sidebar, table)
 	data := h.CreateLayout(w, r, "Users", users).Render(context.Background(), w)
 	return data
 }
 
 func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
 	register := admin.RegisterPage(models.RegisterFormValues{})
-	u := admin.UserLayoutPage("List of collaborators", "List of collaborators", register)
+	sidebar := h.renderSettingsSidebar()
+
+	u := pages.MainLayoutPage("List of collaborators", "List of collaborators", sidebar, register)
 	return h.CreateLayout(w, r, "Insert new collaborator", u).Render(context.Background(), w)
 }
 
@@ -266,7 +270,9 @@ func (h *Handler) UpdateUserPage(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	f := admin.UserUpdateForm(form, userID)
-	updatePage := admin.UserLayoutPage("Update users", "form to update users", f)
+	sidebar := h.renderSettingsSidebar()
+
+	updatePage := pages.MainLayoutPage("Update users", "form to update users", sidebar, f)
 	return h.CreateLayout(w, r, "Update Glasses", updatePage).Render(context.Background(), w)
 }
 

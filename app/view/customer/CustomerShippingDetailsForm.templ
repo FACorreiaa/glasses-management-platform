@@ -157,27 +157,4 @@ templ CustomerShipingDetailsForm(form models.CustomerShippingForm) {
 			</div>
 		</div>
 	</section>
-	<script>
-		document.addEventListener("submit", function(event) {
-			const form = event.target;
-			if (form.getAttribute('method') === 'post') {
-				const successMessage = document.getElementById("success-message");
-
-				// Display the success message
-				if (successMessage) {
-					successMessage.textContent = "Item inserted successfully!";
-					successMessage.style.display = "block";
-
-					// Hide the success message after 3 seconds
-					setTimeout(() => {
-						successMessage.style.display = "none";
-					}, 3000);
-
-					// Trigger custom event to handle additional logic if necessary
-					const glassesAddedEvent = new Event("glassesAdded");
-					document.dispatchEvent(glassesAddedEvent);
-				}
-			}
-		});
-	</script>
 }

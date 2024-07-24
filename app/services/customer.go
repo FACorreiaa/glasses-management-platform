@@ -26,6 +26,10 @@ func (s *Service) GetShippingExpandedDetails(ctx context.Context, page, pageSize
 	return s.customerRepo.GetShippingExpandedDetails(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
 }
 
-func (s *Service) DeleteCustomer(ctx context.Context, customerID string) error {
+func (s *Service) DeleteCustomer(ctx context.Context, customerID uuid.UUID) error {
 	return s.glassesRepo.DeleteCustomer(ctx, customerID)
+}
+
+func (s *Service) UpdateShippingDetails(ctx context.Context, g models.ShippingDetailsForm, id uuid.UUID) error {
+	return s.customerRepo.UpdateShippingDetails(ctx, g, id)
 }

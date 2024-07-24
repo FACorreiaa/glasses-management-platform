@@ -254,11 +254,11 @@ func ShippingDetailsExpanded(a models.SettingsShippingDetailsTable, form models.
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/settings/shipping/%s/edit", s.CardID))).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/settings/shipping/%s/edit", s.CollaboratorID))).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ButtonDeleteComponent(fmt.Sprintf("/settings/shipping/%s", s.CardID)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ButtonDeleteComponent(fmt.Sprintf("/settings/shipping/%s", s.CollaboratorID)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

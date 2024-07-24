@@ -11,10 +11,10 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 		<div class="mx-auto max-w-7xl">
 			<h2 class="px-4 mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update</h2>
 			<div class="flex flex-col lg:flex-row">
-				<form method="put" hx-target="#success-message">
+				<form method="put">
 					<input type="hidden" name="_method" value="PUT"/>
-					<div class="flex flex-row mb-10">
-						<div class="w-50 md:w-1/2 px-4 mb-8">
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<label class="font-medium text-slate-900">Reference</label>
 							<input
 								type="text"
@@ -29,7 +29,7 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								value={ form.Values["Reference"] }
 							/>
 						</div>
-						<div class="w-50 md:w-1/2 px-4 mb-8">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<label class="font-medium text-slate-900">Brand</label>
 							<input
 								type="text"
@@ -45,8 +45,8 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 							/>
 						</div>
 					</div>
-					<div class="flex flex-row mb-10">
-						<div class="w-50 md:w-1/2 px-4 mb-8">
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<label class="font-medium text-slate-900">Left eye strength</label>
 							<input
 								type="number"
@@ -64,7 +64,7 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								value={ form.Values["LeftEye"] }
 							/>
 						</div>
-						<div class="w-50 md:w-1/2 px-4 mb-8">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<label class="font-medium text-slate-900">Right eye strength</label>
 							<input
 								type="number"
@@ -83,8 +83,8 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 							/>
 						</div>
 					</div>
-					<div class="flex flex-row mb-10">
-						<div class="w-50 md:w-1/2 px-4 mb-8">
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<label class="font-medium text-slate-900">Color</label>
 							<input
 								type="text"
@@ -99,7 +99,7 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								value={ form.Values["Color"] }
 							/>
 						</div>
-						<div class="w-50 md:w-1/2 px-4 mb-8">
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							<label class="font-medium text-slate-900">Type</label>
 							<select
 								class="select block w-full max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
@@ -127,23 +127,15 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 						<div class="absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0"></div>
 					</div>
 					<div class="flex flex-row">
-						<div class="w-50 md:w-1/2 px-4 mb-8">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							@components.ButtonReturnComponent((templ.URL(fmt.Sprintf("/"))))
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-4">
 							@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/glasses/%s/update", id))), "Update")
 						</div>
 					</div>
-					<div id="success-message" class="mt-4 text-success"></div>
 				</form>
 			</div>
 		</div>
 	</section>
-	<script>
-        document.addEventListener("glassesUpdated", function() {
-            const successMessage = document.getElementById("success-message");
-            if (successMessage) {
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                }, 3000);
-            }
-        });
-    </script>
 }

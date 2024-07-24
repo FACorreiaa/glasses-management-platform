@@ -84,7 +84,7 @@ func (r *CustomerRepository) GetCardIDNumber(ctx context.Context, userID uuid.UU
 func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.ShippingDetails, error) {
 	var sd []models.ShippingDetails
-	query := `select c.name, card_id_number, email, g.reference,
+	query := `select c.customer_id, c.name, card_id_number, email, g.reference,
        			g.left_eye_strength, g.right_eye_strength,
        			c.created_at, c.updated_at
 				from customer c
@@ -113,7 +113,7 @@ func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageS
 
 	for rows.Next() {
 		var s models.ShippingDetails
-		if err := rows.Scan(&s.Name, &s.CardID, &s.Email, &s.Reference,
+		if err := rows.Scan(&s.CustomerID, &s.Name, &s.CardID, &s.Email, &s.Reference,
 			&s.LeftEyeStrength, &s.RightEyeStrength, &s.CreatedAt, &s.UpdatedAt); err != nil {
 			return nil, err
 		}
@@ -170,8 +170,8 @@ func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, pag
 	return sd, nil
 }
 
-func (r *GlassesRepository) DeleteCustomer(ctx context.Context, customerID string) error {
-	query := `DELETE FROM customer WHERE card_id_number = $1`
+func (r *GlassesRepository) DeleteCustomer(ctx context.Context, customerID uuid.UUID) error {
+	query := `DELETE FROM customer WHERE customer_id = $1`
 	_, err := r.pgpool.Exec(ctx, query, customerID)
 	if err != nil {
 		slog.Error(" deleting customer", "err", err)
@@ -179,4 +179,55 @@ func (r *GlassesRepository) DeleteCustomer(ctx context.Context, customerID strin
 	}
 	slog.Info("Deleted customer", "card_id", customerID)
 	return err
+}
+
+func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form models.ShippingDetailsForm,
+	id uuid.UUID) error {
+	tx, err := r.pgpool.Begin(ctx)
+	if err != nil {
+		slog.Error("starting transaction", "err", err)
+		return errors.New("internal server error")
+	}
+	defer func(tx pgx.Tx, ctx context.Context) {
+		if err := tx.Rollback(ctx); err != nil {
+			slog.Error("rolling back transaction", "err", err)
+		}
+	}(tx, ctx)
+
+	customerUpdateQuery := `
+		UPDATE customer
+		SET name = $1, card_id_number = $2, email = $3, updated_at = NOW()
+		WHERE customer_id = $4
+		RETURNING customer_id
+	`
+	var customerID uuid.UUID
+	if err := tx.QueryRow(ctx, customerUpdateQuery, form.Name, form.CardID, form.Email, id).Scan(&customerID); err != nil {
+		slog.Error("updating customer details", "err", err)
+		return errors.New("internal server error")
+	}
+
+	glassesUpdateQuery := `
+		UPDATE glasses
+		SET reference = $1, left_eye_strength = $2, right_eye_strength = $3, updated_at = NOW()
+		WHERE glasses_id = (
+			SELECT glasses_id
+			FROM customer
+			WHERE card_id_number = $4
+		)
+		RETURNING glasses_id
+	`
+	var glassesID uuid.UUID
+	if err := tx.QueryRow(ctx, glassesUpdateQuery, form.Reference, form.LeftEyeStrength, form.RightEyeStrength, form.CardID).Scan(&glassesID); err != nil {
+		slog.Error("updating glasses details", "err", err)
+		return errors.New("internal server error")
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		slog.Error("committing transaction", "err", err)
+		return errors.New("internal server error")
+	}
+
+	slog.Info("Shipping details updated", "customer_id", customerID, "glasses_id", glassesID)
+
+	return nil
 }

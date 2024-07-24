@@ -152,7 +152,7 @@ func RegisterPage(form models.RegisterFormValues) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><div class=\"flex flex-wrap mt-2\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><div class=\"flex flex-row mt-2\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -160,7 +160,7 @@ func RegisterPage(form models.RegisterFormValues) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"w-full md:w-1/2 px-4 mb-4\"><button type=\"submit\" name=\"action\" value=\"submit\" class=\"btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2\">Insert <ion-icon name=\"checkmark-outline\"></ion-icon></button></div></div></form></div></div></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"w-full md:w-1/2 px-4 mb-4\"><button type=\"submit\" name=\"action\" value=\"submit\" class=\"w-full btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2\">Insert <ion-icon name=\"checkmark-outline\"></ion-icon></button></div></div></form></div></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

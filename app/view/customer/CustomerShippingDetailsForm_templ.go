@@ -200,7 +200,7 @@ func CustomerShipingDetailsForm(form models.CustomerShippingForm) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></form></div></div></section><script>\n\t\tdocument.addEventListener(\"submit\", function(event) {\n\t\t\tconst form = event.target;\n\t\t\tif (form.getAttribute('method') === 'post') {\n\t\t\t\tconst successMessage = document.getElementById(\"success-message\");\n\n\t\t\t\t// Display the success message\n\t\t\t\tif (successMessage) {\n\t\t\t\t\tsuccessMessage.textContent = \"Item inserted successfully!\";\n\t\t\t\t\tsuccessMessage.style.display = \"block\";\n\n\t\t\t\t\t// Hide the success message after 3 seconds\n\t\t\t\t\tsetTimeout(() => {\n\t\t\t\t\t\tsuccessMessage.style.display = \"none\";\n\t\t\t\t\t}, 3000);\n\n\t\t\t\t\t// Trigger custom event to handle additional logic if necessary\n\t\t\t\t\tconst glassesAddedEvent = new Event(\"glassesAdded\");\n\t\t\t\t\tdocument.dispatchEvent(glassesAddedEvent);\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t</script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></form></div></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

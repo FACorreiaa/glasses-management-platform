@@ -14,7 +14,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 )
 
-func ShippingUpdateForm(form models.ShippingDetailsForm, id string) templ.Component {
+func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -32,7 +32,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm, id string) templ.Compon
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update user</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"put\" hx-target=\"#success-message\" hx-swap=\"outerHTML\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update customer name\" name=\"name\" autocomplete=\"name\" id=\"name\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update transactions details</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"put\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update customer name\" name=\"name\" autocomplete=\"name\" id=\"name\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -92,11 +92,11 @@ func ShippingUpdateForm(form models.ShippingDetailsForm, id string) templ.Compon
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/collaborators/%s/update", id))), "Update").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/settings/shipping/%s/update", form.CustomerID))), "Update").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></form></div></div></section><script>\n        document.addEventListener(\"glassesUpdated\", function() {\n            const successMessage = document.getElementById(\"success-message\");\n            if (successMessage) {\n                setTimeout(() => {\n                    successMessage.style.display = \"none\";\n                }, 3000);\n            }\n        });\n    </script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></form></div></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

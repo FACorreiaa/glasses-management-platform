@@ -77,7 +77,7 @@ templ RegisterPage(form models.RegisterFormValues) {
 							<p class="text-error">{ form.FieldErrors["password_confirm"] }</p>
 						}
 					</fieldset>
-					<div class="flex flex-wrap mt-2">
+					<div class="flex flex-row mt-2">
 						<div class="w-full md:w-1/2 px-4 mb-4">
 							@components.ButtonReturnComponent(templ.SafeURL("/"))
 						</div>
@@ -86,7 +86,7 @@ templ RegisterPage(form models.RegisterFormValues) {
 								type="submit"
 								name="action"
 								value="submit"
-								class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
+								class="w-full btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
 							>
 								Insert
 								<ion-icon name="checkmark-outline"></ion-icon>
