@@ -25,7 +25,6 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								name="name"
 								autocomplete="name"
 								id="name"
-								required
 								value={ form.Values["Name"] }
 							/>
 						</div>
@@ -40,9 +39,11 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								name="card_id_number"
 								autocomplete="card_id_number"
 								id="card_id_number"
-								required
 								value={ form.Values["CardID"] }
 							/>
+							if form.FieldErrors["card_id_number"] != "" {
+							<p class="text-error">{ form.FieldErrors["card_id_number"] }</p>
+						}
 						</div>
 						<div class="w-full md:w-1/2 px-4 mb-8">
 							<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -52,9 +53,9 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								data-rounded="rounded-lg"
 								type="email"
 								placeholder="Update email"
-								required
 								name="email"
 								autocomplete="email"
+								value={form.Values["Email"]}
 							/>
 						</div>
 					</div>
@@ -67,10 +68,13 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								data-rounded="rounded-lg"
 								type="text"
 								placeholder="Update glasses ref"
-								required
 								name="reference"
 								autocomplete="reference"
+								value={ form.Values["Reference"] }
 							/>
+							if form.FieldErrors["reference"] != "" {
+							<p class="text-error">{ form.FieldErrors["reference"] }</p>
+						}
 						</div>
 						<div class="w-full md:w-1/2 px-4 mb-8">
 							<label class="font-medium text-slate-900">Left eye strength</label>
@@ -86,7 +90,6 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								min="-99"
 								max="99"
 								step="0.1"
-								required
 								value={ form.Values["LeftEye"] }
 							/>
 						</div>
@@ -104,9 +107,9 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								min="-99"
 								max="99"
 								step="0.1"
-								required
 								value={ form.Values["RightEye"] }
 							/>
+
 						</div>
 					</div>
 					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">

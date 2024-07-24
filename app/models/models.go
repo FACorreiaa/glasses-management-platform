@@ -212,15 +212,15 @@ type UpdateUserForm struct {
 }
 
 type ShippingDetails struct {
-	CustomerID       uuid.UUID `json:"customer_id"`
-	Name             string    `json:"name"`
-	CardID           string    `json:"card_id_number"`
-	Email            string    `json:"email"`
-	Reference        string    `json:"reference"`
-	LeftEyeStrength  float64   `json:"left_eye_strength"`
-	RightEyeStrength float64   `json:"right_eye_strength"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
+	CustomerID uuid.UUID `json:"customer_id"`
+	Name       string    `json:"name"`
+	CardID     string    `json:"card_id_number"`
+	Email      string    `json:"email"`
+	Reference  string    `json:"reference"`
+	LeftEye    float64   `json:"left_eye_strength"`
+	RightEye   float64   `json:"right_eye_strength"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type ShippingDetailsTable struct {
@@ -236,15 +236,15 @@ type ShippingDetailsTable struct {
 }
 
 type SettingsShippingDetails struct {
-	CollaboratorID    uuid.UUID `json:"customer_id"`
+	CustomerID        uuid.UUID `json:"customer_id"`
 	CollaboratorName  string    `json:"username"`
 	CollaboratorEmail string    `json:"collaborator_email"`
 	Name              string    `json:"name"`
 	CardID            string    `json:"card_id_number"`
 	Email             string    `json:"email"`
 	Reference         string    `json:"reference"`
-	LeftEyeStrength   float64   `json:"left_eye_strength"`
-	RightEyeStrength  float64   `json:"right_eye_strength"`
+	LeftEye           float64   `json:"left_eye_strength"`
+	RightEye          float64   `json:"right_eye_strength"`
 	CreatedAt         time.Time `json:"created_at"`
 	UpdatedAt         time.Time `json:"updated_at"`
 }
@@ -262,16 +262,16 @@ type SettingsShippingDetailsTable struct {
 }
 
 type ShippingDetailsForm struct {
-	CustomerID       uuid.UUID `json:"customer_id"`
-	Name             string    `json:"name" schema:"name"`
-	CardID           string    `json:"card_id_number" schema:"card_id_number"`
-	Email            string    `json:"email" schema:"email"`
-	Reference        string    `json:"reference" schema:"reference"`
-	LeftEyeStrength  float64   `json:"left_eye_strength" schema:"left_eye_strength"`
-	RightEyeStrength float64   `json:"right_eye_strength" schema:"right_eye_strength"`
+	CustomerID uuid.UUID `json:"customer_id"`
+	Name       string    `json:"name" schema:"name"`
+	CardID     string    `json:"card_id_number" schema:"card_id_number"`
+	Email      string    `json:"email" schema:"email"`
+	Reference  string    `json:"reference" schema:"reference"`
+	LeftEye    float64   `json:"left_eye_strength" schema:"left_eye_strength"`
+	RightEye   float64   `json:"right_eye_strength" schema:"right_eye_strength"`
 	// CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Updated   bool
-	Values    map[string]string
-	Errors    map[string]string
+	UpdatedAt   time.Time `json:"updated_at"`
+	Updated     bool
+	Values      map[string]string
+	FieldErrors map[string]string
 }

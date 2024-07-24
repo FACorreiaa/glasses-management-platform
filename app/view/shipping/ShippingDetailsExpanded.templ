@@ -52,13 +52,13 @@ templ ShippingDetailsExpanded(a models.SettingsShippingDetailsTable, form models
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ s.CardID }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ s.Email }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ s.Reference }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", s.LeftEyeStrength) }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", s.RightEyeStrength) }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", s.LeftEye) }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.2f", s.RightEye) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ s.CreatedAt.Format("02-01-2006") }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ s.UpdatedAt.Format("02-01-2006") }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-											@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/settings/shipping/%s/edit", s.CollaboratorID)))
-											@components.ButtonDeleteComponent(fmt.Sprintf("/settings/shipping/%s", s.CollaboratorID))
+											@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/settings/shipping/%s/edit", s.CustomerID)))
+											@components.ButtonDeleteComponent(fmt.Sprintf("/settings/shipping/%s", s.CustomerID))
 										</td>
 									</tr>
 								}

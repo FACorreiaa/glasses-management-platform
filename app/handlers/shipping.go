@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -154,6 +155,7 @@ func (h *Handler) UpdateCustomerPage(w http.ResponseWriter, r *http.Request) err
 
 	vars := mux.Vars(r)
 	id := vars["customer_id"]
+	println("Received customer_id from URL UpdateCustomerPage:", id)
 	customerID, err := uuid.Parse(id)
 	if err != nil {
 		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
@@ -165,14 +167,24 @@ func (h *Handler) UpdateCustomerPage(w http.ResponseWriter, r *http.Request) err
 		return err
 	}
 
+	g, err := h.service.GetCustomerGlassesID(context.Background(), customerID)
+	if err != nil {
+		http.Error(w, "Failed to retrieve glasses", http.StatusInternalServerError)
+		return err
+	}
+
+	le := strconv.FormatFloat(g.LeftEye, 'f', 2, 64)
+	re := strconv.FormatFloat(g.RightEye, 'f', 2, 64)
+
 	form := models.ShippingDetailsForm{
-		CustomerID:       customerID,
-		Name:             r.FormValue("name"),
-		CardID:           r.FormValue("card_id_number"),
-		Email:            r.FormValue("email"),
-		Reference:        r.FormValue("reference"),
-		LeftEyeStrength:  parseFloat(r.FormValue("left_eye_strength")),
-		RightEyeStrength: parseFloat(r.FormValue("right_eye_strength")),
+		Values: map[string]string{
+			"Name":      r.FormValue("name"),
+			"CardID":    r.FormValue("card_id_number"),
+			"Email":     r.FormValue("email"),
+			"Reference": r.FormValue("reference"),
+			"LeftEye":   le,
+			"RightEye":  re,
+		},
 	}
 
 	f := shipping.ShippingUpdateForm(form)
@@ -183,7 +195,11 @@ func (h *Handler) UpdateCustomerPage(w http.ResponseWriter, r *http.Request) err
 func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 	vars := mux.Vars(r)
 	id := vars["customer_id"]
+	println("Received customer_id from URL UpdateCustomer:", id)
 	customerID, err := uuid.Parse(id)
+	fieldErrors := make(map[string]string)
+
+	println("Received customer_id from URL:", id)
 	if err != nil {
 		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
 		return err
@@ -195,12 +211,43 @@ func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	form := models.ShippingDetailsForm{
-		Name:             r.FormValue("name"),
-		CardID:           r.FormValue("card_id_number"),
-		Email:            r.FormValue("email"),
-		Reference:        r.FormValue("reference"),
-		LeftEyeStrength:  parseFloat(r.FormValue("left_eye_strength")),
-		RightEyeStrength: parseFloat(r.FormValue("right_eye_strength")),
+		CustomerID: customerID,
+		Name:       r.FormValue("name"),
+		CardID:     r.FormValue("card_id_number"),
+		Email:      r.FormValue("email"),
+		Reference:  r.FormValue("reference"),
+		LeftEye:    parseFloat(r.FormValue("left_eye_strength")),
+		RightEye:   parseFloat(r.FormValue("right_eye_strength")),
+	}
+
+	cardIDNumber, err := h.service.GetCardIDFromShipping(r.Context(), customerID)
+	if err != nil {
+		slog.Error("Error fetching card_id_number", "err", err)
+		http.Error(w, "Error fetching card_id_number", http.StatusInternalServerError)
+		return nil
+	}
+
+	if cardIDNumber == form.CardID {
+		fieldErrors["card_id_number"] = "Card ID number already exists"
+	}
+
+	referenceNumber, err := h.service.GetReferenceNumberFromShipping(r.Context(), customerID)
+	if err != nil {
+		slog.Error("Error fetching reference_number", "err", err)
+		http.Error(w, "Error fetching reference_number", http.StatusInternalServerError)
+		return nil
+	}
+
+	if referenceNumber == form.Reference {
+		fieldErrors["reference"] = "Reference number already exists"
+	}
+
+	if len(fieldErrors) > 0 {
+		form.FieldErrors = fieldErrors
+		sidebar := h.renderSidebar()
+		f := shipping.ShippingUpdateForm(form)
+		register := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, f)
+		return h.CreateLayout(w, r, "Insert Shipping Form", register).Render(context.Background(), w)
 	}
 
 	if err := h.service.UpdateShippingDetails(context.Background(), form, customerID); err != nil {

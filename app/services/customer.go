@@ -33,3 +33,15 @@ func (s *Service) DeleteCustomer(ctx context.Context, customerID uuid.UUID) erro
 func (s *Service) UpdateShippingDetails(ctx context.Context, g models.ShippingDetailsForm, id uuid.UUID) error {
 	return s.customerRepo.UpdateShippingDetails(ctx, g, id)
 }
+
+func (s *Service) GetCustomerGlassesID(ctx context.Context, customerID uuid.UUID) (*models.ShippingDetails, error) {
+	return s.customerRepo.GetCustomerGlassesID(ctx, customerID)
+}
+
+func (s *Service) GetCardIDFromShipping(ctx context.Context, customerID uuid.UUID) (string, error) {
+	return s.customerRepo.GetCardIDFromShipping(ctx, customerID)
+}
+
+func (s *Service) GetReferenceNumberFromShipping(ctx context.Context, customerID uuid.UUID) (string, error) {
+	return s.customerRepo.GetReferenceNumberFromShipping(ctx, customerID)
+}

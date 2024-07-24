@@ -114,7 +114,7 @@ func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageS
 	for rows.Next() {
 		var s models.ShippingDetails
 		if err := rows.Scan(&s.CustomerID, &s.Name, &s.CardID, &s.Email, &s.Reference,
-			&s.LeftEyeStrength, &s.RightEyeStrength, &s.CreatedAt, &s.UpdatedAt); err != nil {
+			&s.LeftEye, &s.RightEye, &s.CreatedAt, &s.UpdatedAt); err != nil {
 			return nil, err
 		}
 		sd = append(sd, s)
@@ -129,7 +129,7 @@ func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, pag
 	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
 	var sd []models.SettingsShippingDetails
 	query := `select u.username, u.email as "collaborator_email", c.name, c.card_id_number, c.email, g.reference,
-       			g.left_eye_strength, g.right_eye_strength,
+       			g.left_eye_strength, g.right_eye_strength, c.customer_id,
        			c.created_at, c.updated_at
 				from customer c
 				join glasses g on g.glasses_id = c.glasses_id
@@ -159,7 +159,7 @@ func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, pag
 	for rows.Next() {
 		var s models.SettingsShippingDetails
 		if err := rows.Scan(&s.CollaboratorName, &s.CollaboratorEmail, &s.Name, &s.CardID, &s.Email, &s.Reference,
-			&s.LeftEyeStrength, &s.RightEyeStrength, &s.CreatedAt, &s.UpdatedAt); err != nil {
+			&s.LeftEye, &s.RightEye, &s.CustomerID, &s.CreatedAt, &s.UpdatedAt); err != nil {
 			return nil, err
 		}
 		sd = append(sd, s)
@@ -181,25 +181,24 @@ func (r *GlassesRepository) DeleteCustomer(ctx context.Context, customerID uuid.
 	return err
 }
 
-func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form models.ShippingDetailsForm,
-	id uuid.UUID) error {
+func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form models.ShippingDetailsForm, id uuid.UUID) error {
 	tx, err := r.pgpool.Begin(ctx)
 	if err != nil {
 		slog.Error("starting transaction", "err", err)
 		return errors.New("internal server error")
 	}
 	defer func(tx pgx.Tx, ctx context.Context) {
-		if err := tx.Rollback(ctx); err != nil {
+		if err := tx.Rollback(ctx); err != nil && !errors.Is(err, pgx.ErrTxClosed) {
 			slog.Error("rolling back transaction", "err", err)
 		}
 	}(tx, ctx)
 
 	customerUpdateQuery := `
-		UPDATE customer
-		SET name = $1, card_id_number = $2, email = $3, updated_at = NOW()
-		WHERE customer_id = $4
-		RETURNING customer_id
-	`
+        UPDATE customer
+        SET name = $1, card_id_number = $2, email = $3, updated_at = NOW()
+        WHERE customer_id = $4
+        RETURNING customer_id
+    `
 	var customerID uuid.UUID
 	if err := tx.QueryRow(ctx, customerUpdateQuery, form.Name, form.CardID, form.Email, id).Scan(&customerID); err != nil {
 		slog.Error("updating customer details", "err", err)
@@ -207,17 +206,17 @@ func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form mod
 	}
 
 	glassesUpdateQuery := `
-		UPDATE glasses
-		SET reference = $1, left_eye_strength = $2, right_eye_strength = $3, updated_at = NOW()
-		WHERE glasses_id = (
-			SELECT glasses_id
-			FROM customer
-			WHERE card_id_number = $4
-		)
-		RETURNING glasses_id
-	`
+        UPDATE glasses
+        SET reference = $1, left_eye_strength = $2, right_eye_strength = $3, updated_at = NOW()
+        WHERE glasses_id = (
+            SELECT glasses_id
+            FROM customer
+            WHERE customer_id = $4
+        )
+        RETURNING glasses_id
+    `
 	var glassesID uuid.UUID
-	if err := tx.QueryRow(ctx, glassesUpdateQuery, form.Reference, form.LeftEyeStrength, form.RightEyeStrength, form.CardID).Scan(&glassesID); err != nil {
+	if err := tx.QueryRow(ctx, glassesUpdateQuery, form.Reference, form.LeftEye, form.RightEye, id).Scan(&glassesID); err != nil {
 		slog.Error("updating glasses details", "err", err)
 		return errors.New("internal server error")
 	}
@@ -228,6 +227,52 @@ func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form mod
 	}
 
 	slog.Info("Shipping details updated", "customer_id", customerID, "glasses_id", glassesID)
-
 	return nil
+}
+
+func (r *CustomerRepository) GetCustomerGlassesID(ctx context.Context, customerID uuid.UUID) (*models.ShippingDetails, error) {
+	query := `SELECT c.customer_id, g.right_eye_strength, g.left_eye_strength
+				FROM glasses g
+				JOIN customer c ON c.glasses_id = g.glasses_id
+				WHERE c.customer_id = $1`
+	var a models.ShippingDetails
+
+	err := r.pgpool.QueryRow(ctx, query, customerID).Scan(
+		&a.CustomerID, &a.RightEye, &a.LeftEye,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			slog.Error("No rows", "err", err)
+			return nil, errors.New("internal server error")
+		}
+		slog.Error(" scanning glasses", "err", err)
+		return nil, errors.New("internal server error")
+	}
+
+	slog.Info("Customer fetched", "customer", a)
+	return &a, nil
+}
+
+func (r *CustomerRepository) GetCardIDFromShipping(ctx context.Context, customerID uuid.UUID) (string, error) {
+	query := `SELECT card_id_number FROM customer WHERE customer_id = $1`
+	var cardID string
+	if err := r.pgpool.QueryRow(ctx, query, customerID).Scan(&cardID); err != nil {
+		slog.Error("Error fetching card_id_number", "err", err)
+		return "", err
+	}
+	slog.Info("Card id number fetched", "card_id", cardID)
+	return cardID, nil
+}
+
+func (r *CustomerRepository) GetReferenceNumberFromShipping(ctx context.Context, customerID uuid.UUID) (string, error) {
+	query := `SELECT reference FROM glasses
+              join customer on customer.glasses_id = glasses.glasses_id
+        	  WHERE customer_id = $1`
+	var reference string
+	if err := r.pgpool.QueryRow(ctx, query, customerID).Scan(&reference); err != nil {
+		slog.Error("Error fetching reference", "err", err)
+		return "", err
+	}
+	slog.Info("Reference number fetched", "reference", reference)
+	return reference, nil
 }
