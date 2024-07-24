@@ -42,8 +42,8 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								value={ form.Values["CardID"] }
 							/>
 							if form.FieldErrors["card_id_number"] != "" {
-							<p class="text-error">{ form.FieldErrors["card_id_number"] }</p>
-						}
+								<p class="text-error">{ form.FieldErrors["card_id_number"] }</p>
+							}
 						</div>
 						<div class="w-full md:w-1/2 px-4 mb-8">
 							<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -55,7 +55,7 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								placeholder="Update email"
 								name="email"
 								autocomplete="email"
-								value={form.Values["Email"]}
+								value={ form.Values["Email"] }
 							/>
 						</div>
 					</div>
@@ -73,8 +73,8 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								value={ form.Values["Reference"] }
 							/>
 							if form.FieldErrors["reference"] != "" {
-							<p class="text-error">{ form.FieldErrors["reference"] }</p>
-						}
+								<p class="text-error">{ form.FieldErrors["reference"] }</p>
+							}
 						</div>
 						<div class="w-full md:w-1/2 px-4 mb-8">
 							<label class="font-medium text-slate-900">Left eye strength</label>
@@ -109,7 +109,6 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 								step="0.1"
 								value={ form.Values["RightEye"] }
 							/>
-
 						</div>
 					</div>
 					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">

@@ -101,17 +101,19 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 								<option value="children">Children</option>
 							</select>
 						</div>
-					</div>
-					<div class="relative w-full mb-4">
-						<label class="block font-medium text-gray-900 mb-1" for="features">Features</label>
-						<textarea
-							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none "
-							name="features"
-							placeholder="Glasses features"
-							id="features"
-							required
-							value={ form.Values["Feature"] }
-						></textarea>
+						<div class="relative w-full mb-4">
+							<div class="w-full md:w-full px-4 mb-4">
+								<label class="block font-medium text-gray-900 mb-1" for="features">Features</label>
+								<textarea
+									class="w-full block px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none "
+									name="features"
+									placeholder="Glasses features"
+									id="features"
+									required
+									value={ form.Values["Feature"] }
+								></textarea>
+							</div>
+						</div>
 					</div>
 					<div class="flex flex-wrap mx-4">
 						<div class="w-full md:w-1/2 px-4 mb-4">
@@ -125,27 +127,4 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 			</div>
 		</div>
 	</section>
-	<script>
-		document.addEventListener("submit", function(event) {
-			const form = event.target;
-			if (form.getAttribute('method') === 'post') {
-				const successMessage = document.getElementById("success-message");
-
-				// Display the success message
-				if (successMessage) {
-					successMessage.textContent = "Item inserted successfully!";
-					successMessage.style.display = "block";
-
-					// Hide the success message after 3 seconds
-					setTimeout(() => {
-						successMessage.style.display = "none";
-					}, 3000);
-
-					// Trigger custom event to handle additional logic if necessary
-					const glassesAddedEvent = new Event("glassesAdded");
-					document.dispatchEvent(glassesAddedEvent);
-				}
-			}
-		});
-	</script>
 }

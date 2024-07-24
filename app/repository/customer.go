@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
@@ -187,6 +188,8 @@ func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form mod
 		slog.Error("starting transaction", "err", err)
 		return errors.New("internal server error")
 	}
+	fmt.Println("ID ON QUERY", id.String())
+
 	defer func(tx pgx.Tx, ctx context.Context) {
 		if err := tx.Rollback(ctx); err != nil && !errors.Is(err, pgx.ErrTxClosed) {
 			slog.Error("rolling back transaction", "err", err)
@@ -199,8 +202,8 @@ func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form mod
         WHERE customer_id = $4
         RETURNING customer_id
     `
-	var customerID uuid.UUID
-	if err := tx.QueryRow(ctx, customerUpdateQuery, form.Name, form.CardID, form.Email, id).Scan(&customerID); err != nil {
+	// var customerID uuid.UUID
+	if err := tx.QueryRow(ctx, customerUpdateQuery, form.Name, form.CardID, form.Email, id).Scan(&id); err != nil {
 		slog.Error("updating customer details", "err", err)
 		return errors.New("internal server error")
 	}
@@ -226,7 +229,7 @@ func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form mod
 		return errors.New("internal server error")
 	}
 
-	slog.Info("Shipping details updated", "customer_id", customerID, "glasses_id", glassesID)
+	slog.Info("Shipping details updated", "customer_id", id, "glasses_id", glassesID)
 	return nil
 }
 
@@ -257,6 +260,10 @@ func (r *CustomerRepository) GetCardIDFromShipping(ctx context.Context, customer
 	query := `SELECT card_id_number FROM customer WHERE customer_id = $1`
 	var cardID string
 	if err := r.pgpool.QueryRow(ctx, query, customerID).Scan(&cardID); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			slog.Error("No card_id_number found for customer", "customer_id", customerID)
+			return "", nil
+		}
 		slog.Error("Error fetching card_id_number", "err", err)
 		return "", err
 	}
@@ -270,6 +277,10 @@ func (r *CustomerRepository) GetReferenceNumberFromShipping(ctx context.Context,
         	  WHERE customer_id = $1`
 	var reference string
 	if err := r.pgpool.QueryRow(ctx, query, customerID).Scan(&reference); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			slog.Error("No reference found for customer", "customer_id", customerID)
+			return "", nil
+		}
 		slog.Error("Error fetching reference", "err", err)
 		return "", err
 	}

@@ -4401,6 +4401,14 @@ details.collapse summary::-webkit-details-marker {
   margin-top: 6rem;
   margin-bottom: 6rem;
 }
+.mx-12 {
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+.mx-8 {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
 .-ml-1 {
   margin-left: -0.25rem;
 }

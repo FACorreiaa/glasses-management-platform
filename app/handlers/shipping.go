@@ -197,7 +197,6 @@ func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 	id := vars["customer_id"]
 	println("Received customer_id from URL UpdateCustomer:", id)
 	customerID, err := uuid.Parse(id)
-	fieldErrors := make(map[string]string)
 
 	println("Received customer_id from URL:", id)
 	if err != nil {
@@ -211,13 +210,14 @@ func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	form := models.ShippingDetailsForm{
-		CustomerID: customerID,
-		Name:       r.FormValue("name"),
-		CardID:     r.FormValue("card_id_number"),
-		Email:      r.FormValue("email"),
-		Reference:  r.FormValue("reference"),
-		LeftEye:    parseFloat(r.FormValue("left_eye_strength")),
-		RightEye:   parseFloat(r.FormValue("right_eye_strength")),
+		CustomerID:  customerID,
+		Name:        r.FormValue("name"),
+		CardID:      r.FormValue("card_id_number"),
+		Email:       r.FormValue("email"),
+		Reference:   r.FormValue("reference"),
+		LeftEye:     parseFloat(r.FormValue("left_eye_strength")),
+		RightEye:    parseFloat(r.FormValue("right_eye_strength")),
+		FieldErrors: make(map[string]string),
 	}
 
 	cardIDNumber, err := h.service.GetCardIDFromShipping(r.Context(), customerID)
@@ -228,7 +228,7 @@ func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if cardIDNumber == form.CardID {
-		fieldErrors["card_id_number"] = "Card ID number already exists"
+		form.FieldErrors["card_id_number"] = "Card ID number already exists"
 	}
 
 	referenceNumber, err := h.service.GetReferenceNumberFromShipping(r.Context(), customerID)
@@ -239,11 +239,10 @@ func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if referenceNumber == form.Reference {
-		fieldErrors["reference"] = "Reference number already exists"
+		form.FieldErrors["reference"] = "Reference number already exists"
 	}
 
-	if len(fieldErrors) > 0 {
-		form.FieldErrors = fieldErrors
+	if len(form.FieldErrors) > 0 {
 		sidebar := h.renderSidebar()
 		f := shipping.ShippingUpdateForm(form)
 		register := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, f)
