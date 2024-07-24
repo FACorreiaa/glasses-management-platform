@@ -177,6 +177,7 @@ func (h *Handler) UpdateCustomerPage(w http.ResponseWriter, r *http.Request) err
 	re := strconv.FormatFloat(g.RightEye, 'f', 2, 64)
 
 	form := models.ShippingDetailsForm{
+		CustomerID: customerID,
 		Values: map[string]string{
 			"Name":      r.FormValue("name"),
 			"CardID":    r.FormValue("card_id_number"),

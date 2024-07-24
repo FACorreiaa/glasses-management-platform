@@ -293,8 +293,7 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	err = r.ParseForm()
-	if err != nil {
+	if err = r.ParseForm(); err != nil {
 		http.Error(w, "Failed to parse form", http.StatusBadRequest)
 		return err
 	}
