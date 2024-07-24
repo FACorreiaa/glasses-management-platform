@@ -79,44 +79,6 @@ func (h *Handler) LoginPost(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-// register
-
-// func (h *Handler) RegisterPage(w http.ResponseWriter, r *http.Request) error {
-//	register := user.RegisterPage(models.RegisterPage{})
-//	return h.CreateLayout(w, r, "Sign up", register).Render(context.Background(), w)
-// }
-//
-// func (h *Handler) RegisterPost(w http.ResponseWriter, r *http.Request) error {
-//	if err := r.ParseForm(); err != nil {
-//		return err
-//	}
-//
-//	var f models.RegisterForm
-//	var err error
-//
-//	var token *repository.Token
-//	err = h.formDecoder.Decode(&f, r.PostForm)
-//	if err == nil {
-//		token, err = h.service.RegisterNewAccount(r.Context(), f)
-//	}
-//
-//	if err != nil {
-//		register := user.RegisterPage(models.RegisterPage{Errors: h.formErrors(err)})
-//		return h.CreateLayout(w, r, "Sign up", register).Render(context.Background(), w)
-//	}
-//
-//	s, _ := h.sessions.Get(r, "auth")
-//	s.Values["token"] = token
-//	if err := s.Save(r, w); err != nil {
-//		return errors.New("failed to save session")
-//	}
-//
-//	http.Redirect(w, r, "/settings", http.StatusSeeOther)
-//	return nil
-// }
-
-// logout
-
 func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) error {
 	s, _ := h.sessions.Get(r, "auth")
 	token := s.Values["token"]

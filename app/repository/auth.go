@@ -114,22 +114,6 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 	token := fmt.Sprintf("%x", tokenBytes)
 	log.Printf("Generated token: %s", token)
 
-	// if _, err := a.pgpool.Exec(
-	//	ctx,
-	//	`
-	//	insert into user_token (user_id, token, context)
-	//	values ($1, $2, $3)
-	//	`,
-	//	user.ID,
-	//	token,
-	//	"auth",
-	// ); err != nil {
-	//	slog.Error(" inserting token", "err", err)
-	//	return nil, errors.New("internal server error")
-	//}
-
-	// Store the session token in Redis
-	// key := RedisPrefix + string(token)
 	err = a.redisClient.Set(ctx, token, (user.ID).String(), MaxAge).Err()
 	if err != nil {
 		log.Println(" inserting token into Redis:", err)
@@ -141,8 +125,6 @@ func (a *AccountRepository) Login(ctx context.Context, form models.LoginForm) (*
 }
 
 func (m *MiddlewareRepository) UserFromSessionToken(ctx context.Context, token Token) (*models.UserSession, error) {
-	// key := RedisPrefix + string(token)
-	// Retrieve user ID from Redis
 	log.Println("Retrieving user ID from Redis for token:", token)
 	userID, err := m.RedisClient.Get(ctx, token).Result()
 	log.Println("Retrieved user ID from Redis:", userID)

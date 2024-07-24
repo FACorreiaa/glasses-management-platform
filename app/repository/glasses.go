@@ -31,13 +31,11 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 
 	for rows.Next() {
 		var a models.Glasses
-		err := rows.Scan(
+		if err := rows.Scan(
 			&a.GlassesID, &a.Color, &a.Brand, &a.RightEye,
 			&a.LeftEye, &a.Reference, &a.Type, &a.IsInStock,
 			&a.Feature, &a.UpdatedAt, &a.CreatedAt,
-		)
-
-		if err != nil {
+		); err != nil {
 			slog.Error(" scanning glasses", "err", err)
 			return nil, errors.New("internal server error")
 		}
@@ -64,12 +62,10 @@ func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query strin
 
 	for rows.Next() {
 		var a models.Glasses
-		err := rows.Scan(
+		if err := rows.Scan(
 			&a.UserName, &a.UserEmail, &a.LeftEye, &a.RightEye,
 			&a.Reference, &a.IsInStock, &a.UpdatedAt, &a.CreatedAt,
-		)
-
-		if err != nil {
+		); err != nil {
 			slog.Error(" scanning glasses", "err", err)
 			return nil, errors.New("internal server error")
 		}
@@ -116,12 +112,11 @@ func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.U
 				WHERE glasses_id = $1`
 	var a models.Glasses
 
-	err := r.pgpool.QueryRow(ctx, query, glassesID).Scan(
+	if err := r.pgpool.QueryRow(ctx, query, glassesID).Scan(
 		&a.GlassesID, &a.Color, &a.Brand, &a.RightEye,
 		&a.LeftEye, &a.Reference, &a.Type, &a.IsInStock,
 		&a.Feature, &a.UpdatedAt, &a.CreatedAt,
-	)
-	if err != nil {
+	); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			slog.Error("No rows", "err", err)
 			return nil, errors.New("internal server error")
@@ -129,7 +124,6 @@ func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.U
 		slog.Error(" scanning glasses", "err", err)
 		return nil, errors.New("internal server error")
 	}
-
 	slog.Info("Glasses fetched", "glasses", a)
 	return &a, nil
 }
@@ -170,6 +164,7 @@ func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.Glasses)
 	`
 	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye,
 		g.Reference, g.Type, g.Feature, g.UserID).Scan(&g.GlassesID)
+
 	if err != nil {
 		slog.Error(" inserting glasses", "err", err)
 		return errors.New("internal server error")

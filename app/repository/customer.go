@@ -240,10 +240,9 @@ func (r *CustomerRepository) GetCustomerGlassesID(ctx context.Context, customerI
 				WHERE c.customer_id = $1`
 	var a models.ShippingDetails
 
-	err := r.pgpool.QueryRow(ctx, query, customerID).Scan(
+	if err := r.pgpool.QueryRow(ctx, query, customerID).Scan(
 		&a.CustomerID, &a.RightEye, &a.LeftEye,
-	)
-	if err != nil {
+	); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			slog.Error("No rows", "err", err)
 			return nil, errors.New("internal server error")

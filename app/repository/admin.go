@@ -52,19 +52,18 @@ func (a *AdminRepository) fetchUsers(ctx context.Context, query string, args ...
 
 	for rows.Next() {
 		var u models.UserSession
-		err := rows.Scan(
+		if err := rows.Scan(
 			&u.ID,
 			&u.Username,
 			&u.Email,
 			&u.Role,
 			&u.UpdatedAt,
 			&u.CreatedAt,
-		)
-
-		if err != nil {
+		); err != nil {
 			slog.Error(" scanning users", "err", err)
 			return nil, errors.New("internal server error")
 		}
+
 		us = append(us, u)
 	}
 
@@ -116,10 +115,9 @@ func (a *AdminRepository) GetUsersByID(ctx context.Context, userID uuid.UUID) (*
 				WHERE u.role = 'employee' AND user_id = $1`
 	var u models.UserSession
 
-	err := a.pgpool.QueryRow(ctx, query, userID).Scan(
+	if err := a.pgpool.QueryRow(ctx, query, userID).Scan(
 		&u.ID, &u.Username, &u.Email, &u.Role, &u.UpdatedAt, &u.CreatedAt,
-	)
-	if err != nil {
+	); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, nil
 		}
@@ -205,7 +203,7 @@ func (a *AdminRepository) UpdateUser(ctx context.Context, form models.UpdateUser
 	return nil
 }
 
-func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterForm) (*Token, error) {
+func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFormValues) (*Token, error) {
 	if err := a.validator.Struct(form); err != nil {
 		slog.Warn("Validation error")
 		return nil, err
@@ -220,7 +218,7 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 	var user models.UserSession
 	var token Token
 
-	err = pgx.BeginFunc(ctx, a.pgpool, func(tx pgx.Tx) error {
+	if err = pgx.BeginFunc(ctx, a.pgpool, func(tx pgx.Tx) error {
 		row, _ := tx.Query(
 			ctx,
 			`
@@ -256,9 +254,7 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 		}
 
 		return nil
-	})
-
-	if err != nil {
+	}); err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) && pgErr.Code == pgerrcode.UniqueViolation {
 			return nil, errors.New("username or email already taken")
@@ -295,10 +291,9 @@ func (a *AdminRepository) GetAdminID(ctx context.Context, userID uuid.UUID) (*mo
 				WHERE u.role = 'admin' AND user_id = $1`
 	var u models.UserSession
 
-	err := a.pgpool.QueryRow(ctx, query, userID).Scan(
+	if err := a.pgpool.QueryRow(ctx, query, userID).Scan(
 		&u.ID, &u.Username, &u.Email, &u.Role, &u.UpdatedAt, &u.CreatedAt,
-	)
-	if err != nil {
+	); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, nil
 		}

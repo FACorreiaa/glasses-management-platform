@@ -25,7 +25,7 @@ func (s *Service) UpdateUser(ctx context.Context, user models.UpdateUserForm) er
 	return s.adminRepo.UpdateUser(ctx, user)
 }
 
-func (s *Service) InsertUser(ctx context.Context, form models.RegisterForm) (*repository.Token, error) {
+func (s *Service) InsertUser(ctx context.Context, form models.RegisterFormValues) (*repository.Token, error) {
 	return s.adminRepo.InsertUser(ctx, form)
 }
 

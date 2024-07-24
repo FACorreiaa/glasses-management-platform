@@ -179,13 +179,23 @@ func (h *Handler) UpdateAdmin(w http.ResponseWriter, r *http.Request) error {
 		PasswordConfirm: r.FormValue("password_confirm"),
 	}
 
-	err = h.service.UpdateUser(context.Background(), g)
-	if err != nil {
-		if err.Error() == "username already exists" || err.Error() == "email already exists" {
-			http.Error(w, err.Error(), http.StatusConflict)
-		} else {
-			http.Error(w, "Failed to update user", http.StatusInternalServerError)
+	if err = h.service.UpdateUser(context.Background(), g); err != nil {
+		if err.Error() == "password too short" {
+			g.FieldErrors["password"] = "Password must be at least 5 characters long"
 		}
+
+		if err.Error() == "passwords do not match" {
+			g.FieldErrors["password_confirm"] = "Passwords do not match"
+		}
+
+		if err.Error() == "email already exists" {
+			g.FieldErrors["email"] = "Email already exists"
+		}
+
+		if err.Error() == "username already exists" {
+			g.FieldErrors["username"] = "Username already exists"
+		}
+		http.Error(w, "Failed to update user", http.StatusInternalServerError)
 		return err
 	}
 
@@ -224,6 +234,8 @@ func (h *Handler) UpdateAdminPage(w http.ResponseWriter, r *http.Request) error 
 			"Email":    g.Email,
 		},
 	}
+
+	// TODO: Add password validation
 
 	f := settings.AdminUpdateForm(form, user.ID)
 	sidebar := h.renderSettingsSidebar()

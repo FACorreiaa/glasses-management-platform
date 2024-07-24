@@ -2,23 +2,17 @@ package settings
 
 import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
-	"fmt"
+		"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"github.com/google/uuid"
+	"fmt"
 )
 
 templ AdminUpdateForm(form models.UpdateUserForm, id uuid.UUID) {
 	<section class="w-full bg-white">
-		<a
-			href={ templ.SafeURL(fmt.Sprintf("/settings")) }
-			class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 mb-10"
-		>
-			<span>Go back</span>
-			<ion-icon name="create-outline"></ion-icon>
-		</a>
 		<div class="mx-auto max-w-7xl justify-center">
 			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update user</h2>
 			<div class="flex flex-col lg:flex-row">
-				<form method="put" hx-target="#success-message" hx-swap="outerHTML">
+				<form method="put">
 					<input type="hidden" name="_method" value="PUT"/>
 					<fieldset class="max-w-lg mx-auto mt-2">
 						<label class="font-medium text-slate-900">Username</label>
@@ -49,6 +43,9 @@ templ AdminUpdateForm(form models.UpdateUserForm, id uuid.UUID) {
 							required
 							value={ form.Values["Email"] }
 						/>
+						if form.FieldErrors["email"] != "" {
+							<p class="text-error">{ form.FieldErrors["email"] }</p>
+						}
 					</fieldset>
 					<fieldset class="max-w-lg mx-auto mt-2">
 						<label for="passoword" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
@@ -61,7 +58,11 @@ templ AdminUpdateForm(form models.UpdateUserForm, id uuid.UUID) {
 							required
 							name="password"
 							autocomplete="new-password"
+							value={ form.Values["Password"] }
 						/>
+						if form.FieldErrors["password"] != "" {
+							<p class="text-error">{ form.FieldErrors["password"] }</p>
+						}
 					</fieldset>
 					<fieldset class="max-w-lg mx-auto mt-2">
 						<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
@@ -74,30 +75,24 @@ templ AdminUpdateForm(form models.UpdateUserForm, id uuid.UUID) {
 							required
 							name="password_confirm"
 							autocomplete="new-password"
+							value={ form.Values["PasswordConfirm"] }
 						/>
+						if form.FieldErrors["password_confirm"] != "" {
+							<p class="text-error">{ form.FieldErrors["password_confirm"] }</p>
+						}
 					</fieldset>
 					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
+						@components.ButtonReturnComponent(templ.SafeURL(fmt.Sprintf("/settings")))
 						<button
 							hx-put={ "/settings/admin/update" }
 							type="submit"
 							name="action"
 							class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
 							value="submit"
-						>Update details</button>
+						>Update</button>
 					</div>
-					<div id="success-message" class="mt-4 text-success"></div>
 				</form>
 			</div>
 		</div>
 	</section>
-	<script>
-        document.addEventListener("glassesUpdated", function() {
-            const successMessage = document.getElementById("success-message");
-            if (successMessage) {
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                }, 3000);
-            }
-        });
-    </script>
 }

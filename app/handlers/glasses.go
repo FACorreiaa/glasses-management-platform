@@ -211,9 +211,8 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		UserID:    user.ID,
 	}
 
-	err = h.service.InsertGlasses(context.Background(), g)
-	if err != nil {
-		return fmt.Errorf("error inserting glasses: %v", err)
+	if err = h.service.InsertGlasses(context.Background(), g); err != nil {
+		HandleError(err, "inserting glasses")
 	}
 
 	actionType := r.FormValue("action")
@@ -237,13 +236,11 @@ func (h *Handler) DeleteGlasses(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Delete the glasses
-	err = h.service.DeleteGlasses(context.Background(), glassesID)
-	if err != nil {
+	if err = h.service.DeleteGlasses(context.Background(), glassesID); err != nil {
 		http.Error(w, "Failed to delete glasses", http.StatusInternalServerError)
 		return err
 	}
 
-	// Return a success response
 	w.Header().Set("HX-Redirect", "/glasses")
 
 	return nil

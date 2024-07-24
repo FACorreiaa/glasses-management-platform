@@ -16,7 +16,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const SubmitAction = "submit"
+const (
+	SubmitAction       = "submit"
+	MinPasswordLength  = "Password must be at least 5 characters long"
+	PasswordDoNotMatch = "Passwords do not match"
+)
 
 func (h *Handler) getCollaborators(w http.ResponseWriter, r *http.Request) (int, []models.UserSession, error) {
 	pageSize := 10
@@ -111,101 +115,42 @@ func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
 	return h.CreateLayout(w, r, "Insert new collaborator", u).Render(context.Background(), w)
 }
 
-func (h *Handler) UserRegisterPostT(w http.ResponseWriter, r *http.Request) error {
-	if err := r.ParseForm(); err != nil {
-		return err
-	}
-
-	var f models.RegisterForm
-
-	err := h.formDecoder.Decode(&f, r.PostForm)
-	if err == nil {
-		_, err = h.service.InsertUser(r.Context(), f)
-	}
-
-	if err != nil {
-		rp := models.RegisterFormValues{
-			Errors: []string{"Error decoding form data"},
-			Values: map[string]string{
-				"username": r.PostFormValue("username"),
-				"email":    r.PostFormValue("email"),
-			},
-		}
-		register := admin.RegisterPage(rp)
-		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
-	}
-
-	if f.Password != f.PasswordConfirm {
-		rp := models.RegisterFormValues{
-			Errors: []string{"Passwords do not match"},
-			Values: map[string]string{
-				"username": f.Username,
-				"email":    f.Email,
-			},
-		}
-		register := admin.RegisterPage(rp)
-		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
-	}
-
-	_, err = h.service.InsertUser(r.Context(), f)
-	if err != nil {
-		rp := models.RegisterFormValues{
-			Errors: []string{err.Error()},
-			Values: map[string]string{
-				"username": f.Username,
-				"email":    f.Email,
-			},
-		}
-		register := admin.RegisterPage(rp)
-		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
-	}
-
-	actionType := r.FormValue("action")
-	if actionType == "back" {
-		w.Header().Set("HX-Redirect", "/settings/collaborators")
-	} else if actionType == SubmitAction {
-		w.Header().Set("HX-Redirect", "/settings/collaborators")
-	}
-
-	return nil
-}
-
 func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
 		HandleError(err, "parsing form")
 		return err
 	}
 
-	f := models.RegisterForm{
+	f := models.RegisterFormValues{
 		Username:        r.FormValue("username"),
 		Email:           r.FormValue("email"),
 		Password:        r.FormValue("password"),
 		PasswordConfirm: r.FormValue("password_confirm"),
+		FieldErrors:     make(map[string]string),
 	}
 
-	fieldErrors := make(map[string]string)
-
 	if len(f.Password) < 5 {
-		fieldErrors["password"] = "Password must be at least 5 characters long"
+		f.FieldErrors["password"] = MinPasswordLength
 	}
 
 	if f.Password != f.PasswordConfirm {
-		fieldErrors["password_confirm"] = "Passwords do not match"
+		f.FieldErrors["password_confirm"] = PasswordDoNotMatch
 	}
 
 	if len(f.Username) < 3 {
-		fieldErrors["username"] = "Username must be at least 3 characters long"
+		f.FieldErrors["username"] = "Username must be at least 3 characters long"
 	}
 
-	if len(fieldErrors) > 0 {
-		rp := models.RegisterFormValues{
-			FieldErrors: fieldErrors,
-			Values: map[string]string{
-				"username": f.Username,
-				"email":    f.Email,
-			},
-		}
-		register := admin.RegisterPage(rp)
+	if len(f.FieldErrors) > 0 {
+		sidebar := h.renderSettingsSidebar()
+		form := admin.RegisterPage(f)
+		//rp := models.RegisterFormValues{
+		//	Values: map[string]string{
+		//		"username": f.Username,
+		//		"email":    f.Email,
+		//	},
+		//}
+		register := pages.MainLayoutPage("Insert user Form", "Insert user Form", sidebar, form)
 		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
 	}
 
@@ -234,13 +179,11 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Delete the glasses
-	err = h.service.DeleteUser(context.Background(), userID)
-	if err != nil {
+	if err = h.service.DeleteUser(context.Background(), userID); err != nil {
 		http.Error(w, "Failed to delete glasses", http.StatusInternalServerError)
 		return err
 	}
 
-	// Return a success response
 	w.Header().Set("HX-Redirect", "/settings/collaborators")
 
 	return nil
@@ -285,8 +228,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	err = r.ParseForm()
-	if err != nil {
+	if err = r.ParseForm(); err != nil {
 		http.Error(w, "Failed to parse form", http.StatusBadRequest)
 		return err
 	}
@@ -298,15 +240,26 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		Role:            r.FormValue("role"),
 		Password:        r.FormValue("password"),
 		PasswordConfirm: r.FormValue("password_confirm"),
+		FieldErrors:     make(map[string]string),
 	}
 
-	err = h.service.UpdateUser(context.Background(), g)
-	if err != nil {
-		if err.Error() == "username already exists" || err.Error() == "email already exists" {
-			http.Error(w, err.Error(), http.StatusConflict)
-		} else {
-			http.Error(w, "Failed to update user", http.StatusInternalServerError)
+	if err = h.service.UpdateUser(context.Background(), g); err != nil {
+		if err.Error() == "password too short" {
+			g.FieldErrors["password"] = MinPasswordLength
 		}
+
+		if err.Error() == "passwords do not match" {
+			g.FieldErrors["password_confirm"] = PasswordDoNotMatch
+		}
+
+		if err.Error() == "email already exists" {
+			g.FieldErrors["email"] = "Email already exists"
+		}
+
+		if err.Error() == "username already exists" {
+			g.FieldErrors["username"] = "Username already exists"
+		}
+		http.Error(w, "Failed to update user", http.StatusInternalServerError)
 		return err
 	}
 

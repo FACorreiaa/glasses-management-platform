@@ -39,6 +39,9 @@ type RegisterForm struct {
 	Email           string `form:"email" validate:"required,email"`
 	Password        string `form:"password" validate:"required,min=8,max=72"`
 	PasswordConfirm string `form:"password_confirm" validate:"required,eqfield=Password"`
+	Updated         bool
+	Values          map[string]string
+	FieldErrors     map[string]string
 }
 
 type NavItem struct {
@@ -208,7 +211,7 @@ type UpdateUserForm struct {
 	PasswordConfirm string    `form:"password_confirm"`
 	Updated         bool
 	Values          map[string]string
-	Errors          map[string]string
+	FieldErrors     map[string]string
 }
 
 type ShippingDetails struct {
