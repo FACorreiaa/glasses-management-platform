@@ -28,7 +28,7 @@ func (h *Handler) renderSettingsSidebar() []models.SidebarItem {
 		{Path: "/settings/collaborators", Label: "View collaborators"},
 		{Path: "/settings/glasses", Label: "View glasses stock"},
 		{Path: "/settings/shipping", Label: "View transactions"},
-		{Path: "/log-out", Label: "Log out"},
+		{Path: "/logout", Label: "Log out"},
 	}
 	return sidebar
 }
@@ -171,31 +171,42 @@ func (h *Handler) UpdateAdmin(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
+	println("LALALALALLA")
+	action := r.FormValue("action")
+	println(action)
+	if action == "return" {
+		w.Header().Set("HX-Redirect", "/settings")
+		return nil
+	}
+
 	g := models.UpdateUserForm{
 		UserID:          user.ID,
 		Email:           r.FormValue("email"),
 		Username:        r.FormValue("username"),
 		Password:        r.FormValue("password"),
 		PasswordConfirm: r.FormValue("password_confirm"),
+		FieldErrors:     make(map[string]string),
+	}
+
+	if len(g.Password) < 5 {
+		g.FieldErrors["password"] = MinPasswordLength
+	}
+
+	if g.Password != g.PasswordConfirm {
+		g.FieldErrors["password_confirm"] = PasswordDoNotMatch
+	}
+
+	if len(g.Username) < 3 {
+		g.FieldErrors["username"] = "Username must be at least 3 characters long"
+	}
+
+	if len(g.FieldErrors) > 0 {
+		form := settings.AdminUpdateForm(g, user.ID).Render(context.Background(), w)
+		return form
 	}
 
 	if err = h.service.UpdateUser(context.Background(), g); err != nil {
-		if err.Error() == "password too short" {
-			g.FieldErrors["password"] = "Password must be at least 5 characters long"
-		}
-
-		if err.Error() == "passwords do not match" {
-			g.FieldErrors["password_confirm"] = "Passwords do not match"
-		}
-
-		if err.Error() == "email already exists" {
-			g.FieldErrors["email"] = "Email already exists"
-		}
-
-		if err.Error() == "username already exists" {
-			g.FieldErrors["username"] = "Username already exists"
-		}
-		http.Error(w, "Failed to update user", http.StatusInternalServerError)
+		http.Error(w, "Failed to update admin", http.StatusInternalServerError)
 		return err
 	}
 

@@ -32,7 +32,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update transactions details</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"put\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update customer name\" name=\"name\" autocomplete=\"name\" id=\"name\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"w-full bg-white\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update transactions details</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update customer name\" name=\"name\" autocomplete=\"name\" id=\"name\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -156,11 +156,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex items-center justify-center max-w-lg mx-auto mt-2\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.ButtonReturnComponent(templ.SafeURL(fmt.Sprintf("/settings/shipping"))).Render(ctx, templ_7745c5c3_Buffer)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex items-center justify-center max-w-lg mx-auto mt-2 px-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

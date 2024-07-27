@@ -21,7 +21,7 @@ func (s *Service) DeleteGlasses(ctx context.Context, glassesID uuid.UUID) error 
 	return s.glassesRepo.DeleteGlasses(ctx, glassesID)
 }
 
-func (s *Service) UpdateGlasses(ctx context.Context, g models.Glasses) error {
+func (s *Service) UpdateGlasses(ctx context.Context, g models.GlassesForm) error {
 	return s.glassesRepo.UpdateGlasses(ctx, g)
 }
 
@@ -29,7 +29,6 @@ func (s *Service) InsertGlasses(ctx context.Context, g models.Glasses) error {
 	return s.glassesRepo.InsertGlasses(ctx, g)
 }
 
-// CALCULATE GET SUM
 func (s *Service) GetGlassesByType(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
 	return s.glassesRepo.GetGlassesByType(ctx, page, pageSize, orderBy, sortBy, glassesType)
@@ -69,4 +68,8 @@ func (s *Service) GetSumByStock(isInStock bool) (int, error) {
 		return 0, err
 	}
 	return lastPage, nil
+}
+
+func (s *Service) GetGlassesReference(ctx context.Context, id uuid.UUID) (string, error) {
+	return s.glassesRepo.GetGlassesReference(ctx, id)
 }

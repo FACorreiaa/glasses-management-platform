@@ -139,7 +139,7 @@ func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID uuid.UU
 	return err
 }
 
-func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.Glasses) error {
+func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
 		UPDATE glasses
 		SET color = $1, brand = $2, right_eye_strength = $3, left_eye_strength = $4, reference = $5, type =$6,
@@ -157,13 +157,13 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.Glasses)
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.Glasses) error {
 	query := `
-		INSERT INTO glasses (color, brand, right_eye_strength, left_eye_strength, reference, type, is_in_stock,
-		                     features, created_at, updated_at, user_id)
-		VALUES ($1, $2, $3, $4, $5, $6, true, $7, NOW(), NOW(), $8)
+		INSERT INTO glasses (reference, brand, right_eye_strength, left_eye_strength, color, type, features,
+		                     is_in_stock, created_at, updated_at, user_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, true, NOW(), NOW(), $8)
 		RETURNING glasses_id
 	`
-	err := r.pgpool.QueryRow(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye,
-		g.Reference, g.Type, g.Feature, g.UserID).Scan(&g.GlassesID)
+	err := r.pgpool.QueryRow(ctx, query, g.Reference, g.Brand, g.RightEye, g.LeftEye,
+		g.Color, g.Type, g.Feature, g.UserID).Scan(&g.GlassesID)
 
 	if err != nil {
 		slog.Error(" inserting glasses", "err", err)
@@ -245,4 +245,20 @@ func (r *GlassesRepository) GetSumByStock(ctx context.Context, isInStock bool) (
 	}
 	slog.Info("Glasses count", "count", count)
 	return count, nil
+}
+
+func (r *GlassesRepository) GetGlassesReference(ctx context.Context, id uuid.UUID) (string, error) {
+	query := `SELECT reference FROM glasses WHERE glasses_id = $1`
+	var reference string
+	if err := r.pgpool.QueryRow(ctx, query, id).Scan(&reference); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			slog.Error("No rows", "err", err)
+			return "", errors.New("internal server error")
+		}
+		slog.Error("scanning glasses", "err", err)
+		return "", errors.New("internal server error")
+	}
+
+	slog.Info("Glasses fetched", "reference", reference)
+	return reference, nil
 }

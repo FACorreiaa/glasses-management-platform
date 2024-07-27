@@ -114,7 +114,7 @@ func (h *Handler) InsertShippingForm(w http.ResponseWriter, r *http.Request) err
 func (h *Handler) renderShippingSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
 		{Path: "/", Label: "Home"},
-		{Path: "/log-out", Label: "Log out"},
+		{Path: "/logout", Label: "Log out"},
 	}
 	return sidebar
 }

@@ -80,7 +80,7 @@ func ShippingDetailsSimple(a models.ShippingDetailsTable, form models.ShippingDe
 			return templ_7745c5c3_Err
 		}
 		for _, col := range a.Column {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<th class=\"px-4 py-2 text-left text-xs font-medium text-neutral-200 uppercase tracking-wider\"><div class=\"flex items-center\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<th class=\"px-4 py-2 text-left text-xs font-medium text-neutral-800 uppercase tracking-wider\"><div class=\"flex items-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

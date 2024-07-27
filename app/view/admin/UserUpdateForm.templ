@@ -7,99 +7,99 @@ import (
 )
 
 templ UserUpdateForm(form models.UpdateUserForm, id string) {
-	<section class="w-full bg-white">
+	<section class="w-full bg-white flex flex-col items-center justify-center" id="form">
 		<div class="mx-auto max-w-7xl justify-center">
 			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update user</h2>
 			<div class="flex flex-col lg:flex-row">
-				<form method="put" hx-target="#success-message" hx-swap="outerHTML">
-					<input type="hidden" name="_method" value="PUT"/>
-					<fieldset class="max-w-lg mx-auto mt-2">
+				<form
+					method="post"
+					hx-target="#form"
+				>
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
 						<label class="font-medium text-slate-900">Username</label>
 						<input
 							type="text"
-							class="block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="block w-60	px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							placeholder="Update username"
 							name="username"
 							autocomplete="username"
 							id="username"
-							required
 							value={ form.Values["Username"] }
 						/>
+						if form.FieldErrors["username"] != "" {
+							<p class="text-error  w-60">{ form.FieldErrors["username"] }</p>
+						}
 					</fieldset>
-					<fieldset class="max-w-lg mx-auto mt-2">
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
 						<label class="font-medium text-slate-900">Email</label>
 						<input
 							type="email"
-							class="block w-50 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="block w-60	 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							placeholder="Update email"
 							name="email"
 							autocomplete="email"
 							id="email"
-							required
 							value={ form.Values["Email"] }
 						/>
+						if form.FieldErrors["email"] != "" {
+							<p class="text-error  w-60">{ form.FieldErrors["email"] }</p>
+						}
 					</fieldset>
-					<fieldset class="max-w-lg mx-auto mt-2">
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
 						<label for="passoword" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
 						<input
-							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="block w-60	 px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							type="password"
 							placeholder="Password"
-							required
 							name="password"
 							autocomplete="new-password"
 						/>
+						if form.FieldErrors["password"] != "" {
+							<p class="text-error  w-60">{ form.FieldErrors["password"] }</p>
+						}
 					</fieldset>
-					<fieldset class="max-w-lg mx-auto mt-2">
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
 						<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
 						<input
-							class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="block w-60	 px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							type="password"
 							placeholder="Confirm Password"
-							required
 							name="password_confirm"
 							autocomplete="new-password"
 						/>
+						if form.FieldErrors["password_confirm"] != "" {
+							<p class="text-error  w-60">{ form.FieldErrors["password_confirm"] }</p>
+						}
 					</fieldset>
-					<fieldset class="max-w-lg mx-auto mt-2">
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
 						<label class="font-medium text-slate-900">Type</label>
 						<select
-							class="select block w-full max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+							class="select block w-60 max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
 							data-primary="blue-600"
 							data-rounded="rounded-lg"
 							name="role"
 							id="role"
-							required
 						>
 							<option value="employee">Employee</option>
 							<option value="admin">Admin</option>
 						</select>
 					</fieldset>
-					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-						@components.ButtonReturnComponent(templ.SafeURL(fmt.Sprintf("/settings/collaborators")))
-						@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/collaborators/%s/update", id))), "Update")
+					<div class="flex flex-row mt-2">
+
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/collaborators/%s/update", id))), "Update")
+						</div>
 					</div>
-					<div id="success-message" class="mt-4 text-success"></div>
 				</form>
 			</div>
 		</div>
 	</section>
-	<script>
-        document.addEventListener("glassesUpdated", function() {
-            const successMessage = document.getElementById("success-message");
-            if (successMessage) {
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                }, 3000);
-            }
-        });
-    </script>
 }

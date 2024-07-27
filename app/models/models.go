@@ -133,28 +133,30 @@ type GlassesTable struct {
 }
 
 type UsersTable struct {
-	Column     []ColumnItems
-	Users      []UserSession
-	PrevPage   int
-	NextPage   int
-	Page       int
-	LastPage   int
-	OrderParam string
-	SortParam  string
+	Column      []ColumnItems
+	Users       []UserSession
+	PrevPage    int
+	NextPage    int
+	Page        int
+	LastPage    int
+	OrderParam  string
+	SortParam   string
+	FieldErrors map[string]string
 }
 
 type GlassesForm struct {
-	Reference string  `json:"reference" schema:"reference"`
-	Brand     string  `json:"brand" schema:"brand"`
-	Color     string  `json:"color" schema:"color"`
-	LeftEye   float64 `json:"left_eye_strength" schema:"left_eye_strength"`
-	RightEye  float64 `json:"right_eye_strength" schema:"right_eye_strength"`
-	Type      string  `json:"type" schema:"type"`
-	IsInStock bool    `json:"is_in_stock" schema:"is_in_stock"`
-	Feature   string  `json:"features" schema:"features"`
-	Updated   bool
-	Values    map[string]string
-	Errors    map[string]string
+	GlassesID   uuid.UUID `json:"glasses_id" schema:"glasses_id"`
+	Reference   string    `json:"reference" schema:"reference"`
+	Brand       string    `json:"brand" schema:"brand"`
+	LeftEye     float64   `json:"left_eye_strength" schema:"left_eye_strength"`
+	RightEye    float64   `json:"right_eye_strength" schema:"right_eye_strength"`
+	Color       string    `json:"color" schema:"color"`
+	Type        string    `json:"type" schema:"type"`
+	IsInStock   bool      `json:"is_in_stock" schema:"is_in_stock"`
+	Feature     string    `json:"features" schema:"features"`
+	Updated     bool
+	Values      map[string]string
+	FieldErrors map[string]string
 }
 
 type CustomerShippingForm struct {

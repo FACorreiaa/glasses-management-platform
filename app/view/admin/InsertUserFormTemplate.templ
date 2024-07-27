@@ -15,7 +15,6 @@ templ InsertUserFormTemplate(form models.RegisterFormValues, className string) {
 				data-rounded="rounded-lg"
 				type="text"
 				placeholder="Username"
-				required
 				name="username"
 				autocomplete="username"
 				id="username"
@@ -33,7 +32,6 @@ templ InsertUserFormTemplate(form models.RegisterFormValues, className string) {
 				data-rounded="rounded-lg"
 				type="email"
 				placeholder="Email"
-				required
 				name="email"
 				id="email"
 				value={ form.Values["email"] }
@@ -47,7 +45,6 @@ templ InsertUserFormTemplate(form models.RegisterFormValues, className string) {
 				data-rounded="rounded-lg"
 				type="password"
 				placeholder="Password"
-				required
 				name="password"
 				autocomplete="new-password"
 				value={ form.Values["password"] }
@@ -64,7 +61,6 @@ templ InsertUserFormTemplate(form models.RegisterFormValues, className string) {
 				data-rounded="rounded-lg"
 				type="password"
 				placeholder="Confirm Password"
-				required
 				name="password_confirm"
 				autocomplete="new-password"
 				value={ form.Values["password_confirm"] }

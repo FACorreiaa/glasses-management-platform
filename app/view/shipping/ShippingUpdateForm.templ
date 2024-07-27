@@ -11,7 +11,7 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 		<div class="mx-auto max-w-7xl justify-center">
 			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update transactions details</h2>
 			<div class="flex flex-col lg:flex-row">
-				<form method="put">
+				<form method="post">
 					<input type="hidden" name="_method" value="PUT"/>
 					<div class="flex flex-wrap mb-10">
 						<div class="w-full md:w-1/2 px-4 mb-8">
@@ -111,8 +111,7 @@ templ ShippingUpdateForm(form models.ShippingDetailsForm) {
 							/>
 						</div>
 					</div>
-					<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-						@components.ButtonReturnComponent(templ.SafeURL(fmt.Sprintf("/settings/shipping")))
+					<div class="flex items-center justify-center max-w-lg mx-auto mt-2 px-4">
 						@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/settings/shipping/%s/update", form.CustomerID))), "Update")
 					</div>
 				</form>

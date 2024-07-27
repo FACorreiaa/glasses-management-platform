@@ -90,6 +90,7 @@ func (h *Handler) renderCollaboratorsTable(w http.ResponseWriter, r *http.Reques
 		OrderParam: orderBy,
 		SortParam:  sortAux,
 	}
+
 	t := admin.UsersTable(data, models.RegisterFormValues{})
 
 	return t, nil
@@ -110,11 +111,11 @@ func (h *Handler) UsersPage(w http.ResponseWriter, r *http.Request) error {
 func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
 	register := admin.RegisterPage(models.RegisterFormValues{})
 	sidebar := h.renderSettingsSidebar()
-
 	u := pages.MainLayoutPage("List of collaborators", "List of collaborators", sidebar, register)
 	return h.CreateLayout(w, r, "Insert new collaborator", u).Render(context.Background(), w)
 }
 
+// UserRegisterPost register new user
 func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
 		HandleError(err, "parsing form")
@@ -144,12 +145,6 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 	if len(f.FieldErrors) > 0 {
 		sidebar := h.renderSettingsSidebar()
 		form := admin.RegisterPage(f)
-		//rp := models.RegisterFormValues{
-		//	Values: map[string]string{
-		//		"username": f.Username,
-		//		"email":    f.Email,
-		//	},
-		//}
 		register := pages.MainLayoutPage("Insert user Form", "Insert user Form", sidebar, form)
 		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
 	}
@@ -233,6 +228,12 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
+	action := r.FormValue("action")
+	if action == "return" {
+		w.Header().Set("HX-Redirect", "/settings/collaborators")
+		return nil
+	}
+
 	g := models.UpdateUserForm{
 		UserID:          userID,
 		Email:           r.FormValue("email"),
@@ -243,26 +244,29 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		FieldErrors:     make(map[string]string),
 	}
 
+	if len(g.Password) < 5 {
+		g.FieldErrors["password"] = MinPasswordLength
+	}
+
+	if g.Password != g.PasswordConfirm {
+		g.FieldErrors["password_confirm"] = PasswordDoNotMatch
+	}
+
+	if len(g.Username) < 3 {
+		g.FieldErrors["username"] = "Username must be at least 3 characters long"
+	}
+
+	if len(g.FieldErrors) > 0 {
+		form := admin.UserUpdateForm(g, userIDStr).Render(context.Background(), w)
+		return form
+	}
+
 	if err = h.service.UpdateUser(context.Background(), g); err != nil {
-		if err.Error() == "password too short" {
-			g.FieldErrors["password"] = MinPasswordLength
-		}
-
-		if err.Error() == "passwords do not match" {
-			g.FieldErrors["password_confirm"] = PasswordDoNotMatch
-		}
-
-		if err.Error() == "email already exists" {
-			g.FieldErrors["email"] = "Email already exists"
-		}
-
-		if err.Error() == "username already exists" {
-			g.FieldErrors["username"] = "Username already exists"
-		}
 		http.Error(w, "Failed to update user", http.StatusInternalServerError)
 		return err
 	}
 
 	w.Header().Set("HX-Redirect", "/settings/collaborators")
+
 	return nil
 }

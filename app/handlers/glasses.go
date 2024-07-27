@@ -35,7 +35,7 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 				{Path: "/glasses/shipped/inventory", Label: "Check Shipped Inventory"},
 			},
 		},
-		{Path: "/log-out", Label: "Log out"},
+		{Path: "/logout", Label: "Log out"},
 	}
 	return sidebar
 }
@@ -203,9 +203,9 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	g := models.Glasses{
 		Reference: r.FormValue("reference"),
 		Brand:     r.FormValue("brand"),
-		Color:     r.FormValue("color"),
 		LeftEye:   leftVal,
 		RightEye:  rightVal,
+		Color:     r.FormValue("color"),
 		Type:      r.FormValue("type"),
 		Feature:   r.FormValue("features"),
 		UserID:    user.ID,
@@ -213,15 +213,10 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 
 	if err = h.service.InsertGlasses(context.Background(), g); err != nil {
 		HandleError(err, "inserting glasses")
+		return err
 	}
 
-	actionType := r.FormValue("action")
-
-	if actionType == "back" {
-		w.Header().Set("HX-Redirect", "/glasses")
-	} else if actionType == SubmitAction {
-		w.Header().Set("HX-Redirect", "/glasses")
-	}
+	w.Header().Set("HX-Redirect", "/glasses")
 
 	return nil
 }
@@ -275,6 +270,8 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 		},
 	}
 
+	fmt.Println(form.Values)
+
 	f := glasses.GlassesUpdateForm(form, glassesIDStr)
 	sidebar := h.renderSidebar()
 	updatePage := pages.MainLayoutPage("Update Glasses", "form to update glasses", sidebar, f)
@@ -295,15 +292,35 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	g := models.Glasses{
-		GlassesID: glassesID,
-		Reference: r.FormValue("reference"),
-		Brand:     r.FormValue("brand"),
-		LeftEye:   parseFloat(r.FormValue("left_eye_strength")),
-		RightEye:  parseFloat(r.FormValue("right_eye_strength")),
-		Color:     r.FormValue("color"),
-		Type:      r.FormValue("type"),
-		Feature:   r.FormValue("features"),
+	g := models.GlassesForm{
+		GlassesID:   glassesID,
+		Reference:   r.FormValue("reference"),
+		Brand:       r.FormValue("brand"),
+		LeftEye:     parseFloat(r.FormValue("left_eye_strength")),
+		RightEye:    parseFloat(r.FormValue("right_eye_strength")),
+		Color:       r.FormValue("color"),
+		Type:        r.FormValue("type"),
+		Feature:     r.FormValue("features"),
+		FieldErrors: map[string]string{},
+	}
+
+	fmt.Println("\n", g.Values)
+
+	ref, err := h.service.GetGlassesReference(context.Background(), glassesID)
+	if err != nil {
+		http.Error(w, "Failed to retrieve glasses", http.StatusInternalServerError)
+		return err
+	}
+
+	fmt.Println("\n", ref, g.Reference)
+
+	if ref == g.Reference {
+		g.FieldErrors["reference"] = "Glasses reference must be unique"
+	}
+
+	if len(g.FieldErrors) > 0 {
+		form := glasses.GlassesUpdateForm(g, glassesIDStr).Render(context.Background(), w)
+		return form
 	}
 
 	if err = h.service.UpdateGlasses(context.Background(), g); err != nil {
