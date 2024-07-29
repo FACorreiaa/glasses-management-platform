@@ -188,7 +188,7 @@ func (h *Handler) UpdateAdmin(w http.ResponseWriter, r *http.Request) error {
 		FieldErrors:     make(map[string]string),
 	}
 
-	if len(g.Password) < 5 {
+	if len(g.Password) < 10 {
 		g.FieldErrors["password"] = MinPasswordLength
 	}
 

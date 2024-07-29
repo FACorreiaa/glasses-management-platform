@@ -8,12 +8,16 @@ import (
 templ MainLayoutPage(title, description string, sidebar []models.SidebarItem, component templ.Component) {
 	<div>
 		@components.BannerComponent(title, description)
-		<div class="flex flex-grow justify-center items-start"> <!-- Adjusted to items-start to align items at the start -->
-			<div class="container flex flex-row pt-10 mx-auto px-4"> <!-- Adjusted to px-4 for consistent padding -->
-				<div class="w-2/12"> <!-- Sidebar fixed width -->
+		<div class="flex flex-grow justify-center items-start">
+			<!-- Adjusted to items-start to align items at the start -->
+			<div class="container flex flex-row pt-10 mx-auto px-4">
+				<!-- Adjusted to px-4 for consistent padding -->
+				<div class="w-2/12">
+					<!-- Sidebar fixed width -->
 					@components.SidebarComponent(sidebar)
 				</div>
-				<div class="w-10/12 overflow-x-auto"> <!-- Main content takes remaining width and ensures no overflow -->
+				<div class="w-10/12 overflow-x-auto">
+					<!-- Main content takes remaining width and ensures no overflow -->
 					@component
 				</div>
 			</div>
