@@ -93,7 +93,7 @@ func RegisterPage(form models.RegisterFormValues) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"\"> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -105,7 +105,7 @@ func RegisterPage(form models.RegisterFormValues) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["password"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/admin/UserInsertPage.templ`, Line: 60, Col: 59}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/admin/UserInsertPage.templ`, Line: 61, Col: 59}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -123,7 +123,7 @@ func RegisterPage(form models.RegisterFormValues) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["password_confirm"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/admin/UserInsertPage.templ`, Line: 74, Col: 46}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/admin/UserInsertPage.templ`, Line: 75, Col: 46}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -141,7 +141,7 @@ func RegisterPage(form models.RegisterFormValues) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["password_confirm"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/admin/UserInsertPage.templ`, Line: 77, Col: 67}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/admin/UserInsertPage.templ`, Line: 78, Col: 67}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -152,7 +152,7 @@ func RegisterPage(form models.RegisterFormValues) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><div class=\"flex flex-row mt-2\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><div class=\"flex flex-wrap mx-4 mt-2\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

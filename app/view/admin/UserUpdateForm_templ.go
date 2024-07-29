@@ -150,7 +150,7 @@ func UserUpdateForm(form models.UpdateUserForm, id string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Type</label> <select class=\"select block w-60 max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" name=\"role\" id=\"role\"><option value=\"employee\">Employee</option> <option value=\"admin\">Admin</option></select></fieldset><div class=\"flex flex-row mt-2\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Type</label> <select class=\"select block w-60 max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" name=\"role\" id=\"role\"><option value=\"employee\">Employee</option> <option value=\"admin\">Admin</option></select></fieldset><div class=\"flex flex-row mt-2 justify-center\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

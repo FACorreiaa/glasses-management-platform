@@ -39,7 +39,7 @@ func MainLayoutPage(title, description string, sidebar []models.SidebarItem, com
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex items-center justify-center flex-grow\"><div class=\"container flex flex-col pt-10 mx-auto mr:px-4 lg:flex-row\"><div class=\"w-2/12\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-grow justify-center items-start\"><!-- Adjusted to items-start to align items at the start --><div class=\"container flex flex-row pt-10 mx-auto px-4\"><!-- Adjusted to px-4 for consistent padding --><div class=\"w-2/12\"><!-- Sidebar fixed width -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -47,7 +47,7 @@ func MainLayoutPage(title, description string, sidebar []models.SidebarItem, com
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"w-full overflow-x-auto text-center\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"w-10/12 overflow-x-auto\"><!-- Main content takes remaining width and ensures no overflow -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

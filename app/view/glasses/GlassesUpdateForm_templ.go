@@ -133,7 +133,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"features\" value=\"features\" placeholder=\"Glasses features\" class=\"mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50\"></textarea><div class=\"absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0\"></div></div><div class=\"flex flex-row mt-2\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"features\" value=\"features\" placeholder=\"Glasses features\" class=\"mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50\"></textarea><div class=\"absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0\"></div></div><div class=\"flex flex-row mt-2 justify-center\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

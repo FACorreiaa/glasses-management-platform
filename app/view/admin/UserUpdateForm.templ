@@ -92,8 +92,7 @@ templ UserUpdateForm(form models.UpdateUserForm, id string) {
 							<option value="admin">Admin</option>
 						</select>
 					</fieldset>
-					<div class="flex flex-row mt-2">
-
+					<div class="flex flex-row mt-2 justify-center">
 						<div class="w-full md:w-1/2 px-4 mb-4">
 							@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/collaborators/%s/update", id))), "Update")
 						</div>

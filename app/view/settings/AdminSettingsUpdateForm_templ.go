@@ -176,7 +176,7 @@ func AdminUpdateForm(form models.UpdateUserForm, id uuid.UUID) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><div class=\"flex flex-row mt-2\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</fieldset><div class=\"flex flex-row mt-2 justify-center\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
