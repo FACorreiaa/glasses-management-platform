@@ -17,9 +17,10 @@ import (
 )
 
 const (
-	SubmitAction       = "submit"
-	MinPasswordLength  = "Password must be at least 5 characters long"
-	PasswordDoNotMatch = "Passwords do not match"
+	SubmitAction          = "submit"
+	MinPasswordLength     = "Password must be at least 10 characters long"
+	PasswordDoNotMatch    = "Passwords do not match"
+	UsernameMinCharLength = "Username must be at least 3 characters long"
 )
 
 func (h *Handler) getCollaborators(w http.ResponseWriter, r *http.Request) (int, []models.UserSession, error) {
@@ -115,6 +116,54 @@ func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
 	return h.CreateLayout(w, r, "Insert new collaborator", u).Render(context.Background(), w)
 }
 
+func (h *Handler) UserInsertModalForm(w http.ResponseWriter, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
+		HandleError(err, "parsing form")
+		return err
+	}
+
+	f := models.RegisterFormValues{
+		Username:        r.FormValue("username"),
+		Email:           r.FormValue("email"),
+		Password:        r.FormValue("password"),
+		PasswordConfirm: r.FormValue("password_confirm"),
+		FieldErrors:     make(map[string]string),
+	}
+
+	if len(f.Password) < 10 {
+		f.FieldErrors["password"] = MinPasswordLength
+	}
+
+	if f.Password != f.PasswordConfirm {
+		f.FieldErrors["password_confirm"] = PasswordDoNotMatch
+	}
+
+	if len(f.Username) < 3 {
+		f.FieldErrors["username"] = UsernameMinCharLength
+	}
+
+	if len(f.FieldErrors) > 0 {
+		// HTMX request, return the form only
+		form := admin.UserInsertModal(f).Render(context.Background(), w)
+		return form
+
+	}
+
+	if _, err := h.service.InsertUser(context.Background(), f); err != nil {
+		return fmt.Errorf("error inserting users: %v", err)
+	}
+
+	actionType := r.FormValue("action")
+
+	if actionType == "back" {
+		w.Header().Set("HX-Redirect", "/settings/collaborators")
+	} else if actionType == SubmitAction {
+		w.Header().Set("HX-Redirect", "/settings/collaborators")
+	}
+
+	return nil
+}
+
 // UserRegisterPost register new user
 func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
@@ -130,7 +179,7 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 		FieldErrors:     make(map[string]string),
 	}
 
-	if len(f.Password) < 5 {
+	if len(f.Password) < 10 {
 		f.FieldErrors["password"] = MinPasswordLength
 	}
 
@@ -139,7 +188,7 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 	}
 
 	if len(f.Username) < 3 {
-		f.FieldErrors["username"] = "Username must be at least 3 characters long"
+		f.FieldErrors["username"] = UsernameMinCharLength
 	}
 
 	if len(f.FieldErrors) > 0 {
@@ -147,6 +196,7 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 		form := admin.RegisterPage(f)
 		register := pages.MainLayoutPage("Insert user Form", "Insert user Form", sidebar, form)
 		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
+
 	}
 
 	if _, err := h.service.InsertUser(context.Background(), f); err != nil {
@@ -244,7 +294,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		FieldErrors:     make(map[string]string),
 	}
 
-	if len(g.Password) < 5 {
+	if len(g.Password) < 10 {
 		g.FieldErrors["password"] = MinPasswordLength
 	}
 
@@ -253,7 +303,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if len(g.Username) < 3 {
-		g.FieldErrors["username"] = "Username must be at least 3 characters long"
+		g.FieldErrors["username"] = UsernameMinCharLength
 	}
 
 	if len(g.FieldErrors) > 0 {
