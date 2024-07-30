@@ -331,3 +331,12 @@ func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSiz
 	slog.Info("Glasses fetched", "offset", offset)
 	return r.fetchGlassesDetails(ctx, query, orderBy, offset, pageSize, reference, leftEye, rightEye)
 }
+
+func (a *AdminRepository) GetEmail(ctx context.Context, email string) error {
+	var retrievedEmail string
+	row := a.pgpool.QueryRow(ctx, `SELECT email FROM "user" WHERE email = $1`, email)
+	if err := row.Scan(&retrievedEmail); err != nil {
+		return err
+	}
+	return nil
+}

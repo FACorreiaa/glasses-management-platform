@@ -102,7 +102,6 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
 	brand := r.FormValue("brand")
-
 	if sortBy == ASC {
 		sortAux = DESC
 	} else {
@@ -150,7 +149,9 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 		FilterBrand: brand,
 		OrderParam:  orderBy,
 		SortParam:   sortAux,
+		FieldErrors: map[string]string{},
 	}
+
 	t := glasses.GlassesTable(data, models.GlassesForm{})
 
 	return t, nil
@@ -176,6 +177,8 @@ func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) er
 func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	var user *models.UserSession
 	userCtx := r.Context().Value(models.CtxKeyAuthUser)
+
+	fieldError := make(map[string]string)
 	if userCtx != nil {
 		switch u := userCtx.(type) {
 		case *models.UserSession:
@@ -192,23 +195,46 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 
 	leftVal, err := strconv.ParseFloat(r.FormValue("left_eye_strength"), 64)
 	if err != nil {
-		return fmt.Errorf("invalid left eye strength: %v", err)
+		fieldError["left_eye_strength"] = "invalid left eye strength"
 	}
 
 	rightVal, err := strconv.ParseFloat(r.FormValue("right_eye_strength"), 64)
 	if err != nil {
-		return fmt.Errorf("invalid right eye strength: %v", err)
+		fieldError["left_eye_strength"] = "invalid left eye strength"
 	}
 
-	g := models.Glasses{
-		Reference: r.FormValue("reference"),
-		Brand:     r.FormValue("brand"),
-		LeftEye:   leftVal,
-		RightEye:  rightVal,
-		Color:     r.FormValue("color"),
-		Type:      r.FormValue("type"),
-		Feature:   r.FormValue("features"),
-		UserID:    user.ID,
+	g := models.GlassesForm{
+		Reference:   r.FormValue("reference"),
+		Brand:       r.FormValue("brand"),
+		LeftEye:     leftVal,
+		RightEye:    rightVal,
+		Color:       r.FormValue("color"),
+		Type:        r.FormValue("type"),
+		Feature:     r.FormValue("features"),
+		UserID:      user.ID,
+		FieldErrors: make(map[string]string),
+	}
+
+	if len(g.Reference) == 0 {
+		g.FieldErrors["reference"] = "reference cannot be empty"
+	}
+
+	if (g.RightEye) == 0 {
+		g.FieldErrors["right_eye_strength"] = "right eye strength cannot be empty"
+	}
+
+	if (g.LeftEye) == 0 {
+		g.FieldErrors["left_eye_strength"] = "left eye strength cannot be empty"
+	}
+
+	if len(g.Type) == 0 {
+		g.FieldErrors["type"] = "type cannot be empty"
+	}
+
+	// TO DO
+
+	if len(g.FieldErrors) > 0 {
+		return err
 	}
 
 	if err = h.service.InsertGlasses(context.Background(), g); err != nil {
@@ -269,8 +295,6 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 			"Features":  g.Feature,
 		},
 	}
-
-	fmt.Println(form.Values)
 
 	f := glasses.GlassesUpdateForm(form, glassesIDStr)
 	sidebar := h.renderSidebar()

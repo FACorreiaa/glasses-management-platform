@@ -28,7 +28,6 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								name="reference"
 								autocomplete="reference"
 								id="reference"
-								required
 								value={ form.Values["Reference"] }
 							/>
 							if form.FieldErrors["reference"] != "" {
@@ -46,7 +45,6 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								name="brand"
 								autocomplete="brand"
 								id="brand"
-								required
 								value={ form.Values["Brand"] }
 							/>
 						</div>
@@ -66,7 +64,6 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								min="-99"
 								max="99"
 								step="0.1"
-								required
 								value={ form.Values["LeftEye"] }
 							/>
 						</div>
@@ -84,7 +81,6 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								min="-99"
 								max="99"
 								step="0.1"
-								required
 								value={ form.Values["RightEye"] }
 							/>
 						</div>
@@ -101,7 +97,6 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								name="color"
 								autocomplete="color"
 								id="color"
-								required
 								value={ form.Values["Color"] }
 							/>
 						</div>
@@ -113,7 +108,6 @@ templ GlassesUpdateForm(form models.GlassesForm, id string) {
 								data-rounded="rounded-lg"
 								name="type"
 								id="type"
-								required
 							>
 								<option value="adult">Adult</option>
 								<option value="children">Children</option>

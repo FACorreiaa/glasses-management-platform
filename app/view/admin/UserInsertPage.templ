@@ -42,6 +42,9 @@ templ RegisterPage(form models.RegisterFormValues) {
 							id="email"
 							value={ form.Values["email"] }
 						/>
+						if form.FieldErrors["email"] != "" {
+							<p class="text-error">{ form.FieldErrors["email"] }</p>
+						}
 					</fieldset>
 					<fieldset class="max-w-lg mx-auto mt-2 text-left">
 						<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>

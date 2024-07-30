@@ -68,7 +68,6 @@ templ GlassesInsertModal(form models.GlassesForm) {
 													name="brand"
 													autocomplete="brand"
 													id="brand"
-													required
 													value={ form.Values["Brand"] }
 												/>
 											</div>
@@ -117,7 +116,6 @@ templ GlassesInsertModal(form models.GlassesForm) {
 													name="color"
 													autocomplete="color"
 													id="color"
-													required
 													value={ form.Values["Color"] }
 												/>
 											</div>
@@ -143,7 +141,6 @@ templ GlassesInsertModal(form models.GlassesForm) {
 												name="features"
 												placeholder="Glasses features"
 												id="features"
-												required
 												value={ form.Values["Feature"] }
 											></textarea>
 										</div>
@@ -152,14 +149,14 @@ templ GlassesInsertModal(form models.GlassesForm) {
 												<button
 													@click="modalOpen=false"
 													type="button"
-													class="btn w-full px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none "
+													class="btn w-full btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
 												>Cancel</button>
 											</div>
 											<div class="w-full md:w-1/2 px-4 mb-4">
 												<button
 													hx-post={ "/glasses/register" }
 													type="submit"
-													class="btn w-full px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-lg hover:bg-blue-600 focus:outline-none "
+													class="btn w-full btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
 													name="action"
 													value="submit"
 												>Insert</button>

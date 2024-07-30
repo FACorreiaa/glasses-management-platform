@@ -9,6 +9,16 @@ templ UserInsertModal(form models.RegisterFormValues) {
 	<div
 		x-data="{ modalOpen: false }"
 		@keydown.escape.window="modalOpen = false"
+		x-init="
+    $el.addEventListener('modalClose', () => {
+        modalOpen = false
+    });
+    $el.addEventListener('htmx:afterRequest', (event) => {
+        if (event.detail.responseHeaders['HX-Body'] === 'error') {
+            modalOpen = false;
+        }
+    })
+    "
 		:class="{ 'z-40': modalOpen }"
 		class="relative w-auto h-auto"
 	>
@@ -42,12 +52,12 @@ templ UserInsertModal(form models.RegisterFormValues) {
 							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
 						</button>
 					</div>
-					<div class="relative w-auto pb-8">
+					<div class="relative w-auto pb-8" id="form">
 						<section class="w-full bg-white">
 							<div class="mx-auto max-w-7xl">
 								<h2 class="mb-8 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Register user</h2>
 								<div class="flex flex-col lg:flex-row">
-									<form method="post" class="w-full space-y-4">
+									<form method="post" class="w-full space-y-4" hx-target="#form" hx-post="/collaborators/register/modal">
 										<fieldset>
 											<label for="username" class="block text-sm font-medium text-gray-900 dark:text-white">Username</label>
 											<input
@@ -114,15 +124,18 @@ templ UserInsertModal(form models.RegisterFormValues) {
 												<p class="text-error">{ form.FieldErrors["password_confirm"] }</p>
 											}
 										</fieldset>
-										<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-											@components.ButtonCancelComponent()
-											<button
-												hx-post={ "/collaborators/register" }
-												type="submit"
-												class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
-												name="action"
-												value="submit"
-											>Insert</button>
+										<div class="flex flex-wrap -mx-4">
+											<div class="w-full md:w-1/2 px-4 mb-4">
+												@components.ButtonCancelComponent()
+											</div>
+											<div class="w-full md:w-1/2 px-4 mb-4">
+												<button
+													type="submit"
+													class="btn w-full btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
+													name="action"
+													value="submit"
+												>Insert</button>
+											</div>
 										</div>
 									</form>
 								</div>

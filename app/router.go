@@ -106,6 +106,8 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 	// Collaborators
 	auth.HandleFunc("/collaborators/register", handler(h.UserInsertPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/collaborators/register", handler(h.UserRegisterPost)).Methods(http.MethodPost)
+	auth.HandleFunc("/collaborators/register/modal", handler(h.UserRegisterPostModal)).Methods(http.MethodPost)
+
 	auth.HandleFunc("/collaborators/{user_id}", handler(h.DeleteUser)).Methods(http.MethodDelete)
 	auth.HandleFunc("/collaborators/{user_id}/edit", handler(h.UpdateUserPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/collaborators/{user_id}/update", handler(h.UpdateUser)).Methods(http.MethodPut)

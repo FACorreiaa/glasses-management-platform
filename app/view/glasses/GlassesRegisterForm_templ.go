@@ -44,14 +44,14 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"brand\">Brand</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert brand\" name=\"brand\" autocomplete=\"brand\" id=\"brand\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"brand\">Brand</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert brand\" name=\"brand\" autocomplete=\"brand\" id=\"brand\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Brand"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 38, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 37, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -64,7 +64,7 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["LeftEye"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 56, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 55, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -77,20 +77,20 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["RightEye"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 72, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 71, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex flex-wrap mx-4\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"color\">Color</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert color\" name=\"color\" autocomplete=\"color\" id=\"color\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></div><div class=\"flex flex-wrap mx-4\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"color\">Color</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" placeholder=\"Insert color\" name=\"color\" autocomplete=\"color\" id=\"color\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Color"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 87, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 85, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -103,20 +103,20 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Type"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 97, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 95, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><option disabled selected>Select type</option> <option value=\"adult\">Adult</option> <option value=\"children\">Children</option></select></div><div class=\"relative w-full mb-4\"><div class=\"w-full md:w-full px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"features\">Features</label> <textarea class=\"w-full block px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" name=\"features\" placeholder=\"Glasses features\" id=\"features\" required value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><option disabled selected>Select type</option> <option value=\"adult\">Adult</option> <option value=\"children\">Children</option></select></div><div class=\"relative w-full mb-4\"><div class=\"w-full md:w-full px-4 mb-4\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"features\">Features</label> <textarea class=\"w-full block px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-none \" name=\"features\" placeholder=\"Glasses features\" id=\"features\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["Feature"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 113, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 110, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

@@ -116,7 +116,8 @@ func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
 	return h.CreateLayout(w, r, "Insert new collaborator", u).Render(context.Background(), w)
 }
 
-func (h *Handler) UserInsertModalForm(w http.ResponseWriter, r *http.Request) error {
+// UserRegisterPostModal TODO FIX HAVING TO REFRESH
+func (h *Handler) UserRegisterPostModal(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
 		HandleError(err, "parsing form")
 		return err
@@ -142,11 +143,14 @@ func (h *Handler) UserInsertModalForm(w http.ResponseWriter, r *http.Request) er
 		f.FieldErrors["username"] = UsernameMinCharLength
 	}
 
+	if err := h.service.GetEmail(context.Background(), f.Email); err == nil {
+		f.FieldErrors["email"] = "Email already exists"
+	}
+
 	if len(f.FieldErrors) > 0 {
 		// HTMX request, return the form only
-		form := admin.UserInsertModal(f).Render(context.Background(), w)
+		form := admin.RegisterPage(f).Render(context.Background(), w)
 		return form
-
 	}
 
 	if _, err := h.service.InsertUser(context.Background(), f); err != nil {
@@ -191,12 +195,15 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 		f.FieldErrors["username"] = UsernameMinCharLength
 	}
 
+	if err := h.service.GetEmail(context.Background(), f.Email); err == nil {
+		f.FieldErrors["email"] = "Email already exists"
+	}
+
 	if len(f.FieldErrors) > 0 {
 		sidebar := h.renderSettingsSidebar()
 		form := admin.RegisterPage(f)
 		register := pages.MainLayoutPage("Insert user Form", "Insert user Form", sidebar, form)
 		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
-
 	}
 
 	if _, err := h.service.InsertUser(context.Background(), f); err != nil {
@@ -284,7 +291,7 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	g := models.UpdateUserForm{
+	usf := models.UpdateUserForm{
 		UserID:          userID,
 		Email:           r.FormValue("email"),
 		Username:        r.FormValue("username"),
@@ -294,24 +301,28 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 		FieldErrors:     make(map[string]string),
 	}
 
-	if len(g.Password) < 10 {
-		g.FieldErrors["password"] = MinPasswordLength
+	if len(usf.Password) < 10 {
+		usf.FieldErrors["password"] = MinPasswordLength
 	}
 
-	if g.Password != g.PasswordConfirm {
-		g.FieldErrors["password_confirm"] = PasswordDoNotMatch
+	if usf.Password != usf.PasswordConfirm {
+		usf.FieldErrors["password_confirm"] = PasswordDoNotMatch
 	}
 
-	if len(g.Username) < 3 {
-		g.FieldErrors["username"] = UsernameMinCharLength
+	if len(usf.Username) < 3 {
+		usf.FieldErrors["username"] = UsernameMinCharLength
 	}
 
-	if len(g.FieldErrors) > 0 {
-		form := admin.UserUpdateForm(g, userIDStr).Render(context.Background(), w)
+	if err := h.service.GetEmail(context.Background(), usf.Email); err == nil {
+		usf.FieldErrors["email"] = "Email already exists"
+	}
+
+	if len(usf.FieldErrors) > 0 {
+		form := admin.UserUpdateForm(usf, userIDStr).Render(context.Background(), w)
 		return form
 	}
 
-	if err = h.service.UpdateUser(context.Background(), g); err != nil {
+	if err = h.service.UpdateUser(context.Background(), usf); err != nil {
 		http.Error(w, "Failed to update user", http.StatusInternalServerError)
 		return err
 	}

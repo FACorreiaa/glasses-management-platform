@@ -98,20 +98,21 @@ type Columns struct {
 }
 
 type Glasses struct {
-	UserName  string    `json:"username"`
-	UserEmail string    `json:"email"`
-	UserID    uuid.UUID `json:"user_id"`
-	GlassesID uuid.UUID `json:"glasses_id"`
-	Reference string    `json:"reference"`
-	Brand     string    `json:"brand"`
-	Color     string    `json:"color"`
-	LeftEye   float64   `json:"left_eye_strength"`
-	RightEye  float64   `json:"right_eye_strength"`
-	Type      string    `json:"type"`
-	IsInStock bool      `json:"is_in_stock"`
-	Feature   string    `json:"features"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	UserName    string    `json:"username"`
+	UserEmail   string    `json:"email"`
+	UserID      uuid.UUID `json:"user_id"`
+	GlassesID   uuid.UUID `json:"glasses_id"`
+	Reference   string    `json:"reference"`
+	Brand       string    `json:"brand"`
+	Color       string    `json:"color"`
+	LeftEye     float64   `json:"left_eye_strength"`
+	RightEye    float64   `json:"right_eye_strength"`
+	Type        string    `json:"type"`
+	IsInStock   bool      `json:"is_in_stock"`
+	Feature     string    `json:"features"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+	FieldErrors map[string]string
 }
 
 type ColumnItems struct {
@@ -130,6 +131,7 @@ type GlassesTable struct {
 	FilterBrand string
 	OrderParam  string
 	SortParam   string
+	FieldErrors map[string]string
 }
 
 type UsersTable struct {
@@ -145,6 +147,7 @@ type UsersTable struct {
 }
 
 type GlassesForm struct {
+	UserID      uuid.UUID `json:"user_id" schema:"user_id"`
 	GlassesID   uuid.UUID `json:"glasses_id" schema:"glasses_id"`
 	Reference   string    `json:"reference" schema:"reference"`
 	Brand       string    `json:"brand" schema:"brand"`

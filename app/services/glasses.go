@@ -25,7 +25,7 @@ func (s *Service) UpdateGlasses(ctx context.Context, g models.GlassesForm) error
 	return s.glassesRepo.UpdateGlasses(ctx, g)
 }
 
-func (s *Service) InsertGlasses(ctx context.Context, g models.Glasses) error {
+func (s *Service) InsertGlasses(ctx context.Context, g models.GlassesForm) error {
 	return s.glassesRepo.InsertGlasses(ctx, g)
 }
 

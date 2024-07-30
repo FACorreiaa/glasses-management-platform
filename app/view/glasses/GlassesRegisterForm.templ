@@ -34,7 +34,6 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 								name="brand"
 								autocomplete="brand"
 								id="brand"
-								required
 								value={ form.Values["Brand"] }
 							/>
 						</div>
@@ -83,7 +82,6 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 								name="color"
 								autocomplete="color"
 								id="color"
-								required
 								value={ form.Values["Color"] }
 							/>
 						</div>
@@ -109,7 +107,6 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 									name="features"
 									placeholder="Glasses features"
 									id="features"
-									required
 									value={ form.Values["Feature"] }
 								></textarea>
 							</div>

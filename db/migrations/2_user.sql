@@ -1,7 +1,7 @@
 create table "user"
 (
   user_id       uuid primary key       default uuid_generate_v4(),
-  username      citext unique not null,
+  username      citext        not null,
   email         citext unique not null,
   password_hash text          not null,
   role          text          not null default 'employee',

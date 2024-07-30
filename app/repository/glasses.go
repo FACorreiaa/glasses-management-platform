@@ -155,7 +155,7 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesF
 	return err
 }
 
-func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.Glasses) error {
+func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
 		INSERT INTO glasses (reference, brand, right_eye_strength, left_eye_strength, color, type, features,
 		                     is_in_stock, created_at, updated_at, user_id)
