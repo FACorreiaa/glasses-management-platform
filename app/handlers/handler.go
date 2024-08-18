@@ -16,7 +16,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/go-redis/v9"
 )
 
 const ASC = "ASC"
@@ -29,11 +28,10 @@ type Handler struct {
 	translator  ut.Translator
 	sessions    *sessions.CookieStore
 	pool        *pgxpool.Pool
-	redisClient *redis.Client
 }
 
 func NewHandler(s *services.Service, sessions *sessions.CookieStore,
-	pool *pgxpool.Pool, redisClient *redis.Client) *Handler {
+	pool *pgxpool.Pool) *Handler {
 	decoder := form.NewDecoder()
 	validate := validator.New()
 	translator, _ := ut.New(en.New(), en.New()).GetTranslator("en")
@@ -44,7 +42,6 @@ func NewHandler(s *services.Service, sessions *sessions.CookieStore,
 		translator:  translator,
 		sessions:    sessions,
 		pool:        pool,
-		redisClient: redisClient,
 	}
 }
 

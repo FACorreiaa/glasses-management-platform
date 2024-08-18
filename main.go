@@ -13,7 +13,6 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/config"
 	"github.com/FACorreiaa/glasses-management-platform/db"
 	"github.com/joho/godotenv"
-	"github.com/redis/go-redis/v9"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -68,19 +67,6 @@ func run(ctx context.Context) error {
 
 	db.WaitForDB(pool)
 
-	redisClient, err := db.InitRedis(cfg.Redis.Host, cfg.Redis.Password, cfg.Redis.DB)
-	if err != nil {
-		return fmt.Errorf("failed to set config: %w", err)
-
-	}
-	defer func(redisClient *redis.Client) {
-		err = redisClient.Close()
-		if err != nil {
-			log.Println(err)
-			os.Exit(1)
-		}
-	}(redisClient)
-
 	if err = db.Migrate(pool); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
 
@@ -91,7 +77,7 @@ func run(ctx context.Context) error {
 		WriteTimeout: cfg.Server.WriteTimeout,
 		ReadTimeout:  cfg.Server.ReadTimeout,
 		IdleTimeout:  cfg.Server.IdleTimeout,
-		Handler:      app.Router(pool, []byte(cfg.Server.SessionKey), redisClient),
+		Handler:      app.Router(pool, []byte(cfg.Server.SessionKey)),
 	}
 
 	go func() {

@@ -6,14 +6,11 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"log/slog"
-	"time"
-
-	"github.com/redis/go-redis/v9"
-
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	uuid "github.com/vgarvardt/pgx-google-uuid/v5"
+	"log/slog"
+	"time"
 )
 
 //go:embed migrations/*.sql
@@ -33,14 +30,6 @@ func Init(connectionURL string) (*pgxpool.Pool, error) {
 	}
 
 	return pgxpool.NewWithConfig(context.Background(), cfg)
-}
-
-func InitRedis(host, password string, db int) (*redis.Client, error) {
-	return redis.NewClient(&redis.Options{
-		Addr:     host,
-		Password: password,
-		DB:       db,
-	}), nil
 }
 
 func Migrate(conn *pgxpool.Pool) error {

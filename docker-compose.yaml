@@ -17,24 +17,6 @@ services:
       - ./.data/db/docker-postgres:/var/lib/postgresql/data
     networks:
       - glasses-client
-  redis:
-    env_file:
-      - .env
-    container_name: glasses_redis
-    image: redis:latest
-    command: redis-server --port 6380
-    ports:
-      - "6380:6380"
-    expose:
-      - "6380"
-    #    environment:
-    #      REDIS_HOST: ${REDIS_HOST}
-    #      REDIS_PASSWORD: ${REDIS_PASSWORD}
-    #      REDIS_DB: ${REDIS_DB}
-    volumes:
-      - ./.data/db/docker-redis:/var/lib/redis/data
-    networks:
-      - glasses-client
 
   app-dev:
     env_file:

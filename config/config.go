@@ -55,16 +55,10 @@ func NewConfig() (*Config, error) {
 		return nil, err
 	}
 
-	redisClient, err := NewRedisConfig()
-	if err != nil {
-		return nil, err
-	}
-
 	return &Config{
 		Log:      NewLogConfig(),
 		Database: database,
 		Server:   server,
-		Redis:    redisClient,
 	}, nil
 }
 
@@ -143,22 +137,6 @@ func NewDatabaseConfig() (*DatabaseConfig, error) {
 	}
 	return &DatabaseConfig{
 		ConnectionURL: connURL.String(),
-	}, nil
-}
-
-func NewRedisConfig() (*RedisConfig, error) {
-	host := GetEnv("REDIS_HOST", "redis:6380")
-	pass := GetEnv("REDIS_PASS", "qwerty")
-	// rdb := redis.NewClient(&redis.Options{
-	//	Addr:     host,
-	//	Password: pass, // no password set
-	//	DB:       0,    // use default DB
-	// })
-
-	return &RedisConfig{
-		Host:     host,
-		Password: pass,
-		DB:       0,
 	}, nil
 }
 
