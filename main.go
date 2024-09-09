@@ -9,11 +9,12 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/joho/godotenv"
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/FACorreiaa/glasses-management-platform/app"
 	"github.com/FACorreiaa/glasses-management-platform/config"
 	"github.com/FACorreiaa/glasses-management-platform/db"
-	"github.com/joho/godotenv"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func init() {
