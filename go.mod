@@ -12,7 +12,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/sessions v1.3.0
 	github.com/jackc/pgerrcode v0.0.0-20240316143900-6e2875d9b438
-	github.com/jackc/pgx/v5 v5.6.0
+	github.com/jackc/pgx/v5 v5.7.0
 	github.com/joho/godotenv v1.5.1
 	github.com/redis/go-redis/v9 v9.6.0
 	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0
