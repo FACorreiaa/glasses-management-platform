@@ -136,7 +136,7 @@ func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, pag
 				from customer c
 				join glasses g on g.glasses_id = c.glasses_id
 				join "user" u on u.user_id = c.user_id
-				WHERE Trim(Upper(g.username)) ILIKE trim(upper('%' || $1 || '%'))
+				WHERE Trim(Upper(u.username)) ILIKE trim(upper('%' || $1 || '%'))
 			 	AND ($2::float8 IS NULL OR g.left_eye_strength = $2)
 			 	AND ($3::float8 IS NULL OR g.right_eye_strength = $3)
 				ORDER BY

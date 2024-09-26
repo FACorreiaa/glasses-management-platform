@@ -284,7 +284,7 @@ func (h *Handler) getSettingsShipping(w http.ResponseWriter, r *http.Request) (i
 		page = 1
 	}
 
-	reference := r.FormValue("reference")
+	name := r.FormValue("name")
 	leftEyeStr := r.FormValue("left_eye_strength")
 	rightEyeStr := r.FormValue("right_eye_strength")
 
@@ -321,7 +321,7 @@ func (h *Handler) getSettingsShipping(w http.ResponseWriter, r *http.Request) (i
 		fmt.Println("rightEye is nil")
 	}
 
-	s, err := h.service.GetShippingExpandedDetails(context.Background(), page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+	s, err := h.service.GetShippingExpandedDetails(context.Background(), page, pageSize, orderBy, sortBy, name, leftEye, rightEye)
 	if err != nil {
 		httperror.ErrNotFound.WriteError(w)
 		return 0, nil, err

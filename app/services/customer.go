@@ -23,8 +23,8 @@ func (s *Service) GetShippingDetails(ctx context.Context, page, pageSize int,
 }
 
 func (s *Service) GetShippingExpandedDetails(ctx context.Context, page, pageSize int,
-	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
-	return s.customerRepo.GetShippingExpandedDetails(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+	orderBy, sortBy, name string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
+	return s.customerRepo.GetShippingExpandedDetails(ctx, page, pageSize, orderBy, sortBy, name, leftEye, rightEye)
 }
 
 func (s *Service) DeleteCustomer(ctx context.Context, customerID uuid.UUID) error {

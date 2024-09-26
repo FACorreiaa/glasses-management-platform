@@ -11,7 +11,7 @@ templ ShippingDetailsExpanded(a models.SettingsShippingDetailsTable, form models
 	<div class="flex flex-col items-left shadow-xl overflow-hidden">
 		@components.InputGroupContainer() {
 			<div class="mr-2">
-				@components.InputSearch("Filter reference", "/shipping", "reference", "#searchResults")
+				@components.InputSearch("Filter name", "/shipping", "name", "#searchResults")
 			</div>
 			<div class="mr-2">
 				@components.InputComboComponent("Filter left eye", "Filter right eye", "/shipping", "left_eye_strength", "#searchResults", "right_eye_strength")
