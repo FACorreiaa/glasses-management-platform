@@ -8,9 +8,7 @@ package user
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import (
-	"github.com/FACorreiaa/glasses-management-platform/app/models"
-)
+import "github.com/FACorreiaa/glasses-management-platform/app/models"
 
 func LoginPage(login models.LoginPage) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -50,7 +48,7 @@ func LoginPage(login models.LoginPage) templ.Component {
 				var templ_7745c5c3_Var2 string
 				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(err)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/login.templ`, Line: 28, Col: 19}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/login.templ`, Line: 26, Col: 19}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {

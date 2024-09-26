@@ -8,9 +8,7 @@ package user
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import (
-	"github.com/FACorreiaa/glasses-management-platform/app/models"
-)
+import "github.com/FACorreiaa/glasses-management-platform/app/models"
 
 func RegisterPage(register models.RegisterFormValues) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -59,7 +57,7 @@ func RegisterPage(register models.RegisterFormValues) templ.Component {
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(err)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/register.templ`, Line: 31, Col: 19}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/register.templ`, Line: 29, Col: 19}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -82,7 +80,7 @@ func RegisterPage(register models.RegisterFormValues) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(register.Values["Username"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/register.templ`, Line: 49, Col: 46}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/register.templ`, Line: 47, Col: 46}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -95,7 +93,7 @@ func RegisterPage(register models.RegisterFormValues) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(register.Values["Email"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/register.templ`, Line: 63, Col: 43}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/user/register.templ`, Line: 61, Col: 43}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {

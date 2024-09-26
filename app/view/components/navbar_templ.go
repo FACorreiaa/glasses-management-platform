@@ -8,9 +8,7 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import (
-	"github.com/FACorreiaa/glasses-management-platform/app/models"
-)
+import "github.com/FACorreiaa/glasses-management-platform/app/models"
 
 func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -46,7 +44,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 				var templ_7745c5c3_Var2 string
 				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(item.Label)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/navbar.templ`, Line: 24, Col: 22}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/navbar.templ`, Line: 22, Col: 22}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {
@@ -96,7 +94,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(item.Label)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/navbar.templ`, Line: 34, Col: 28}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/navbar.templ`, Line: 32, Col: 28}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -129,7 +127,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(user.Username)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/navbar.templ`, Line: 46, Col: 25}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/navbar.templ`, Line: 44, Col: 25}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
