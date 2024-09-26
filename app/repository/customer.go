@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
 type CustomerRepository struct {
@@ -83,14 +84,14 @@ func (r *CustomerRepository) GetCardIDNumber(ctx context.Context, userID uuid.UU
 }
 
 func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageSize int,
-	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.ShippingDetails, error) {
+	orderBy, sortBy, name string, leftEye, rightEye *float64) ([]models.ShippingDetails, error) {
 	var sd []models.ShippingDetails
 	query := `select c.customer_id, c.name, card_id_number, email, g.reference,
        			g.left_eye_strength, g.right_eye_strength,
        			c.created_at, c.updated_at
 				from customer c
 				join glasses g on g.glasses_id = c.glasses_id
-				WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $1 || '%'))
+				WHERE Trim(Upper(c.name)) ILIKE trim(upper('%' || $1 || '%'))
 			 	AND ($2::float8 IS NULL OR g.left_eye_strength = $2)
 			 	AND ($3::float8 IS NULL OR g.right_eye_strength = $3)
 				ORDER BY
@@ -105,7 +106,7 @@ func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageS
 				END ` + sortBy + `
 			    OFFSET $5 LIMIT $6`
 	offset := (page - 1) * pageSize
-	rows, err := r.pgpool.Query(ctx, query, reference, leftEye, rightEye, orderBy, offset, pageSize)
+	rows, err := r.pgpool.Query(ctx, query, name, leftEye, rightEye, orderBy, offset, pageSize)
 
 	if err != nil {
 		return nil, err
@@ -127,7 +128,7 @@ func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageS
 }
 
 func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, page, pageSize int,
-	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
+	orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
 	var sd []models.SettingsShippingDetails
 	query := `select u.username, u.email as "collaborator_email", c.name, c.card_id_number, c.email, g.reference,
        			g.left_eye_strength, g.right_eye_strength, c.customer_id,
@@ -135,7 +136,7 @@ func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, pag
 				from customer c
 				join glasses g on g.glasses_id = c.glasses_id
 				join "user" u on u.user_id = c.user_id
-				WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $1 || '%'))
+				WHERE Trim(Upper(g.username)) ILIKE trim(upper('%' || $1 || '%'))
 			 	AND ($2::float8 IS NULL OR g.left_eye_strength = $2)
 			 	AND ($3::float8 IS NULL OR g.right_eye_strength = $3)
 				ORDER BY
@@ -150,7 +151,7 @@ func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, pag
 				END ` + sortBy + `
 			    OFFSET $5 LIMIT $6`
 	offset := (page - 1) * pageSize
-	rows, err := r.pgpool.Query(ctx, query, reference, leftEye, rightEye, orderBy, offset, pageSize)
+	rows, err := r.pgpool.Query(ctx, query, username, leftEye, rightEye, orderBy, offset, pageSize)
 
 	if err != nil {
 		return nil, err

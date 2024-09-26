@@ -9,6 +9,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/a-h/templ"
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
+
 	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
@@ -16,9 +20,6 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/view/customer"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/shipping"
-	"github.com/a-h/templ"
-	"github.com/google/uuid"
-	"github.com/gorilla/mux"
 )
 
 func (h *Handler) InsertShippingFormPage(w http.ResponseWriter, r *http.Request) error {
@@ -128,7 +129,7 @@ func (h *Handler) getShipping(w http.ResponseWriter, r *http.Request) (int, []mo
 		page = 1
 	}
 
-	reference := r.FormValue("reference")
+	name := r.FormValue("name")
 
 	leftEyeStr := r.FormValue("left_eye_strength")
 	rightEyeStr := r.FormValue("right_eye_strength")
@@ -166,7 +167,7 @@ func (h *Handler) getShipping(w http.ResponseWriter, r *http.Request) (int, []mo
 		fmt.Println("rightEye is nil")
 	}
 
-	s, err := h.service.GetShippingDetails(context.Background(), page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+	s, err := h.service.GetShippingDetails(context.Background(), page, pageSize, orderBy, sortBy, name, leftEye, rightEye)
 	if err != nil {
 		httperror.ErrNotFound.WriteError(w)
 		return 0, nil, err
