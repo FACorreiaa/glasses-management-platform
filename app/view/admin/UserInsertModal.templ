@@ -48,6 +48,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 					class="relative w-full py-6 bg-white shadow-md px-7 bg-opacity-90 drop-shadow-md backdrop-blur-sm sm:max-w-lg sm:rounded-lg"
 				>
 					<div class="flex items-center justify-between pb-3">
+						<h2 class="mb-8 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Register user</h2>
 						<button @click="modalOpen=false" class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 text-gray-600 rounded-full hover:text-gray-800 hover:bg-gray-50">
 							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
 						</button>
@@ -55,7 +56,6 @@ templ UserInsertModal(form models.RegisterFormValues) {
 					<div class="relative w-auto pb-8" id="form">
 						<section class="w-full bg-white">
 							<div class="mx-auto max-w-7xl">
-								<h2 class="mb-8 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Register user</h2>
 								<div class="flex flex-col lg:flex-row">
 									<form method="post" class="w-full space-y-4" hx-target="#form" hx-post="/collaborators/register/modal">
 										<fieldset>

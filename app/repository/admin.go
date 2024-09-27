@@ -9,7 +9,6 @@ import (
 
 	"context"
 
-	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
@@ -17,27 +16,25 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/go-redis/v9"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
 )
 
 type AdminRepository struct {
-	pgpool      *pgxpool.Pool
-	redisClient *redis.Client
-	validator   *validator.Validate
-	sessions    *sessions.CookieStore
+	pgpool    *pgxpool.Pool
+	validator *validator.Validate
+	sessions  *sessions.CookieStore
 }
 
 func NewAdminRepository(db *pgxpool.Pool,
-	redisClient *redis.Client,
 	validator *validator.Validate,
 	sessions *sessions.CookieStore,
 ) *AdminRepository {
 	return &AdminRepository{
-		pgpool:      db,
-		redisClient: redisClient,
-		validator:   validator,
-		sessions:    sessions,
+		pgpool:    db,
+		validator: validator,
+		sessions:  sessions,
 	}
 }
 
@@ -243,14 +240,23 @@ func (a *AdminRepository) InsertUser(ctx context.Context, form models.RegisterFo
 			return errors.New("error inserting user")
 		}
 
+		// Generate the token
 		tokenBytes := make([]byte, RandSize)
 		if _, err = rand.Read(tokenBytes); err != nil {
 			return errors.New("error generating token")
 		}
 		token = fmt.Sprintf("%x", tokenBytes)
 
-		if err := a.redisClient.Set(ctx, token, user.ID, time.Hour*24*7).Err(); err != nil {
-			return errors.New("error inserting token into Redis")
+		// Insert the token into the user_sessions table
+		_, err = tx.Exec(
+			ctx,
+			`
+			INSERT INTO user_sessions (token, user_id) VALUES ($1, $2)
+			`,
+			token, user.ID,
+		)
+		if err != nil {
+			return errors.New("error inserting token into PostgreSQL")
 		}
 
 		return nil
@@ -305,7 +311,7 @@ func (a *AdminRepository) GetAdminID(ctx context.Context, userID uuid.UUID) (*mo
 	return &u, nil
 }
 
-func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSize int, orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSize int, orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.Glasses, error) {
 	query := `
 		SELECT
 			u.username, u.email, g.left_eye_strength, g.right_eye_strength,
@@ -314,7 +320,7 @@ func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSiz
 		FROM glasses g
 		JOIN "user" u ON g.user_id = u.user_id
 		WHERE
-			Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
+			Trim(Upper(u.username)) ILIKE trim(upper('%' || $4 || '%'))
 			AND ($5::float8 IS NULL OR g.left_eye_strength = $5)
 			AND ($6::float8 IS NULL OR g.right_eye_strength = $6)
 		ORDER BY
@@ -329,7 +335,7 @@ func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSiz
 		OFFSET $2 LIMIT $3`
 	offset := (page - 1) * pageSize
 	slog.Info("Glasses fetched", "offset", offset)
-	return r.fetchGlassesDetails(ctx, query, orderBy, offset, pageSize, reference, leftEye, rightEye)
+	return r.fetchGlassesDetails(ctx, query, orderBy, offset, pageSize, username, leftEye, rightEye)
 }
 
 func (a *AdminRepository) GetEmail(ctx context.Context, email string) error {

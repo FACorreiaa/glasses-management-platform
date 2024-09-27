@@ -8,6 +8,13 @@ compose-up:
 	make delete-container-if-exist
 	docker-compose up -d
 
+compose-dev:
+	docker-compose -f docker-compose.dev.yaml up --build
+
+compose-prod:
+	docker-compose -f docker-compose.prod.yaml up --build
+
+
 compose-down:
 	@docker compose down \
   @docker volume rm postgres_db \

@@ -7,7 +7,7 @@ templ GlassesInsertModal(form models.GlassesForm) {
 		x-data="{ modalOpen: false }"
 		@keydown.escape.window="modalOpen = false"
 		:class="{ 'z-40': modalOpen }"
-		class="relative w-auto h-auto"
+		class="relative w-auto h-6"
 	>
 		<button @click="modalOpen=true" class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none">Insert new item</button>
 		<template x-teleport="body">
@@ -35,6 +35,7 @@ templ GlassesInsertModal(form models.GlassesForm) {
 					class="relative w-full py-6 bg-white shadow-md px-7 bg-opacity-90 drop-shadow-md backdrop-blur-sm sm:max-w-lg sm:rounded-lg"
 				>
 					<div class="flex items-center justify-between pb-3">
+						<h2 class="mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl">Insert Glasses</h2>
 						<button @click="modalOpen=false" class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 text-gray-600 rounded-full hover:text-gray-800 hover:bg-gray-50">
 							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
 						</button>
@@ -42,7 +43,6 @@ templ GlassesInsertModal(form models.GlassesForm) {
 					<div class="relative w-auto pb-8">
 						<section class="w-full bg-white py-8">
 							<div class="mx-auto max-w-7xl px-4 sm:px-4 lg:px-8">
-								<h2 class="mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl">Insert Glasses</h2>
 								<div class="flex flex-col lg:flex-row">
 									<form method="post" class="w-full space-y-4">
 										<div class="flex flex-wrap -mx-4">

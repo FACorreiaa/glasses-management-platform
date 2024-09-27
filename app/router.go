@@ -15,38 +15,36 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/go-redis/v9"
 )
 
 //go:embed static
 var staticFS embed.FS
 
-func setupBusinessComponents(pool *pgxpool.Pool, redisClient *redis.Client, validate *validator.Validate,
+func setupBusinessComponents(pool *pgxpool.Pool, validate *validator.Validate,
 	sessionSecret []byte) (*handlers.Handler, *repository.MiddlewareRepository) {
 	// Business components
 
-	authRepo := repository.NewAccountRepository(pool, redisClient, validate, sessions.NewCookieStore(sessionSecret))
+	authRepo := repository.NewAccountRepository(pool, validate, sessions.NewCookieStore(sessionSecret))
 	glassesRepo := repository.NewGlassesRepository(pool)
-	adminRepo := repository.NewAdminRepository(pool, redisClient, validate, sessions.NewCookieStore(sessionSecret))
+	adminRepo := repository.NewAdminRepository(pool, validate, sessions.NewCookieStore(sessionSecret))
 	customerRepo := repository.NewCustomerRepository(pool)
 	// Middleware
 	middleware := &repository.MiddlewareRepository{
-		Pgpool:      pool,
-		RedisClient: redisClient,
-		Validator:   validate,
-		Sessions:    sessions.NewCookieStore(sessionSecret),
+		Pgpool:    pool,
+		Validator: validate,
+		Sessions:  sessions.NewCookieStore(sessionSecret),
 	}
 
 	// Service
 	service := services.NewService(authRepo, glassesRepo, adminRepo, customerRepo)
 
 	// Handler
-	handler := handlers.NewHandler(service, sessions.NewCookieStore(sessionSecret), pool, redisClient)
+	handler := handlers.NewHandler(service, sessions.NewCookieStore(sessionSecret), pool)
 
 	return handler, middleware
 }
 
-func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client) http.Handler {
+func Router(pool *pgxpool.Pool, sessionSecret []byte) http.Handler {
 	validate := validator.New()
 	translator, _ := ut.New(en.New(), en.New()).GetTranslator("en")
 	if err := enTranslations.RegisterDefaultTranslations(validate, translator); err != nil {
@@ -68,7 +66,7 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte, redisClient *redis.Client)
 		}
 	})
 
-	h, middleware := setupBusinessComponents(pool, redisClient, validate, sessionSecret)
+	h, middleware := setupBusinessComponents(pool, validate, sessionSecret)
 
 	// Public routes, authentication is optional
 	optAuth := r.NewRoute().Subrouter()

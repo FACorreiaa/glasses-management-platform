@@ -8,19 +8,17 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/go-redis/v9"
 )
 
 type MiddlewareRepository struct {
-	Pgpool      *pgxpool.Pool
-	RedisClient *redis.Client
-	Validator   *validator.Validate
-	Sessions    *sessions.CookieStore
+	Pgpool    *pgxpool.Pool
+	Validator *validator.Validate
+	Sessions  *sessions.CookieStore
 }
 
 // middleware
 
-// AuthMiddleware to set the current logged in user in the context.
+// AuthMiddleware to set the current logged-in user in the context.
 // AuthMiddleware See `Handlers.requireAuth` or `Handlers.redirectIfAuth` middleware.
 func (m *MiddlewareRepository) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

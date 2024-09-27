@@ -4,9 +4,10 @@ import (
 	"context"
 	"math"
 
+	"github.com/google/uuid"
+
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/repository"
-	"github.com/google/uuid"
 )
 
 func (s *Service) GetUsers(ctx context.Context, page, pageSize int, orderBy, sortBy, email string) ([]models.UserSession, error) {
@@ -44,8 +45,8 @@ func (s *Service) GetAdminID(ctx context.Context, userID uuid.UUID) (*models.Use
 }
 
 func (s *Service) GetGlassesDetails(ctx context.Context, page, pageSize int,
-	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
-	return s.glassesRepo.GetGlassesDetails(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+	orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+	return s.glassesRepo.GetGlassesDetails(ctx, page, pageSize, orderBy, sortBy, username, leftEye, rightEye)
 }
 
 func (s *Service) GetEmail(ctx context.Context, email string) error {

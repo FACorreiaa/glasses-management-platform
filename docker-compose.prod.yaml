@@ -3,8 +3,8 @@ version: '3.8'
 services:
   postgres:
     env_file:
-      - .env.dev
-    container_name: glasses_postgres_dev
+      - .env
+    container_name: glasses_postgres_prod
     image: postgres:alpine
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -12,25 +12,24 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - "5436:5432"
+      - "5432:5432"
     volumes:
       - ./.data/db/docker-postgres:/var/lib/postgresql/data
     networks:
       - glasses-client
 
-  app-dev:
+  app-prod:
     env_file:
       - .env
     platform: linux/amd64
-    container_name: glasses_dev
-    image: "glasses-dev"
+    container_name: glasses_prod
+    image: "glasses-prod"
     build:
       dockerfile: Dockerfile
-      target: app-dev
+      target: final
       context: ./
     ports:
       - "6968:6968"
-      - "5050:5050"
     volumes:
       - ./:/app
     networks:
