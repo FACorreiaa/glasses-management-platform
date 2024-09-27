@@ -60,7 +60,7 @@ func run(ctx context.Context) error {
 	}
 	slog.SetDefault(slog.New(logHandler))
 
-	pool, err := db.Init(cfg.Database.ConnectionURL)
+	pool, err := db.Init()
 	if err != nil {
 		log.Println(err)
 	}

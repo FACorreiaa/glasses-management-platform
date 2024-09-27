@@ -114,3 +114,9 @@ find-go:
 
 update:
 	go get -u
+
+run-local:
+	docker-compose -f docker-compose.development.yaml up -d
+
+run-production:
+	docker-compose -f docker-compose.production.yaml up -d

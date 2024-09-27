@@ -6,11 +6,13 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"log/slog"
+	"os"
+	"time"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	uuid "github.com/vgarvardt/pgx-google-uuid/v5"
-	"log/slog"
-	"time"
 )
 
 //go:embed migrations/*.sql
@@ -19,7 +21,26 @@ var migrationFS embed.FS
 const retries = 25
 
 // Init Init.
-func Init(connectionURL string) (*pgxpool.Pool, error) {
+func Init() (*pgxpool.Pool, error) {
+	mode := os.Getenv("MODE")
+
+	var connectionURL string
+	switch mode {
+	case "production":
+		// Production connection URL
+		connectionURL = os.Getenv("DB_URL")
+		if connectionURL == "" {
+			return nil, errors.New("production connection URL not found")
+		}
+	default:
+		connectionURL = os.Getenv("DB_URL")
+		if connectionURL == "" {
+			connectionURL = fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",
+				os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST"),
+				os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
+		}
+	}
+
 	cfg, err := pgxpool.ParseConfig(connectionURL)
 	if err != nil {
 		return nil, err

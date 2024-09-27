@@ -49,3 +49,5 @@ tailwindcss
 report.xml
 tmp
 .env.dev
+.env.development
+.env.production
