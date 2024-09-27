@@ -48,3 +48,4 @@ tailwindcss
 .env.docker
 report.xml
 tmp
+.env.dev
