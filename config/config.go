@@ -155,6 +155,9 @@ func NewServerConfig() (*ServerConfig, error) {
 	}
 	sessionKey := os.Getenv("SESSION_KEY")
 
+	fmt.Printf("addr %s", os.Getenv("SERVER_ADDR"))
+	fmt.Printf("port %s", os.Getenv("SERVER_PORT"))
+
 	return &ServerConfig{
 		Addr:            fmt.Sprintf("%s:%s", os.Getenv("SERVER_ADDR"), os.Getenv("SERVER_PORT")),
 		GracefulTimeout: gracefulTimeout,
