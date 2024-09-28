@@ -160,7 +160,7 @@ func NewServerConfig() (*ServerConfig, error) {
 
 	fmt.Printf("addr %s: ", addr)
 	return &ServerConfig{
-		Addr:            fmt.Sprintf("%s:%s", os.Getenv("SERVER_ADDR"), os.Getenv("SERVER_PORT")),
+		Addr:            addr,
 		GracefulTimeout: gracefulTimeout,
 		WriteTimeout:    writeTimeout,
 		ReadTimeout:     readTimeout,
