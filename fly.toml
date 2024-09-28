@@ -11,12 +11,12 @@ primary_region = 'lhr'
   build-target = "app"
 
 [env]
-   MODE="production"
+  MODE="production"
   SERVER_PORT = 6968
-  SERVER_WRITE_TIMEOUT="15s"
-  SERVER_READ_TIMEOUT="15s"
-  SERVER_IDLE_TIMEOUT="150s"
-  SERVER_GRACEFUL_TIMEOUT="15s"
+  SERVER_WRITE_TIMEOUT=15s
+  SERVER_READ_TIMEOUT=15s
+  SERVER_IDLE_TIMEOUT=150s
+  SERVER_GRACEFUL_TIMEOUT=15s
 
 [build.args]
   MODE="production"
