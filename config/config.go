@@ -137,25 +137,33 @@ func NewDatabaseConfig() (*DatabaseConfig, error) {
 }
 
 func NewServerConfig() (*ServerConfig, error) {
-	writeTimeout, err := time.ParseDuration(os.Getenv("SERVER_WRITE_TIMEOUT"))
+	timeoutInt, err := strconv.Atoi(os.Getenv("SERVER_WRITE_TIMEOUT"))
+	if err != nil {
+		return nil, fmt.Errorf("invalid SERVER_WRITE_TIMEOUT: %s", os.Getenv("SERVER_WRITE_TIMEOUT"))
+	}
+
+	writeTimeout := time.Duration(timeoutInt) * time.Second
 	fmt.Println("SERVER_WRITE_TIMEOUT:", os.Getenv("SERVER_WRITE_TIMEOUT"))
 	fmt.Println("SERVER_WRITE_TIMEOUT:", writeTimeout)
 
+	readoutInt, err := strconv.Atoi(os.Getenv("SERVER_READ_TIMEOUT"))
 	if err != nil {
-		return nil, errors.New("invalid SERVER_WRITE_TIMEOUT")
+		return nil, fmt.Errorf("invalid SERVER_WRITE_TIMEOUT: %s", os.Getenv("SERVER_READ_TIMEOUT"))
 	}
-	readTimeout, err := time.ParseDuration(os.Getenv("SERVER_READ_TIMEOUT"))
+	readTimeout := time.Duration(readoutInt) * time.Second
+
+	iddleTimeoutStr, err := strconv.Atoi(os.Getenv("SERVER_IDLE_TIMEOUT"))
 	if err != nil {
-		return nil, errors.New("invalid SERVER_READ_TIMEOUT")
+		return nil, fmt.Errorf("invalid SERVER_IDLE_TIMEOUT: %s", os.Getenv("SERVER_IDLE_TIMEOUT"))
 	}
-	idleTimeout, err := time.ParseDuration(os.Getenv("SERVER_IDLE_TIMEOUT"))
+	idleTimeout := time.Duration(iddleTimeoutStr) * time.Second
+
+	gracefulTimeoutInt, err := strconv.Atoi(os.Getenv("SERVER_GRACEFUL_TIMEOUT"))
 	if err != nil {
-		return nil, errors.New("invalid SERVER_IDLE_TIMEOUT")
+		return nil, fmt.Errorf("invalid SERVER_GRACEFUL_TIMEOUT: %s", os.Getenv("SERVER_GRACEFUL_TIMEOUT"))
 	}
-	gracefulTimeout, err := time.ParseDuration(os.Getenv("SERVER_GRACEFUL_TIMEOUT"))
-	if err != nil {
-		return nil, errors.New("invalid SERVER_GRACEFUL_TIMEOUT")
-	}
+	gracefulTimeout := time.Duration(gracefulTimeoutInt) * time.Second
+
 	sessionKey := os.Getenv("SESSION_KEY")
 
 	fmt.Printf("addr %s", os.Getenv("SERVER_ADDR"))
