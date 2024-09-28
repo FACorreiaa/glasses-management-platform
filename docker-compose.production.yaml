@@ -18,7 +18,7 @@ services:
 #    networks:
 #      - glasses-client
 
-  app-prod:
+  app:
     env_file:
       - .env.production
     platform: linux/amd64
@@ -26,7 +26,7 @@ services:
     image: "glasses-prod"
     build:
       dockerfile: Dockerfile
-      target: final
+      target: app
       context: ./
     ports:
       - "6968:6968"

@@ -2,12 +2,12 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"log/slog"
 	"net/url"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -62,17 +62,9 @@ func NewConfig() (*Config, error) {
 	}, nil
 }
 
-func GetEnv(key, defaultVal string) string {
-	key = strings.ToUpper(key)
-	if val, ok := os.LookupEnv(key); ok {
-		return val
-	}
-	return defaultVal
-}
-
 func NewLogConfig() *LogConfig {
 	var level slog.Level
-	levelStr := GetEnv("LOG_LEVEL", "info")
+	levelStr := os.Getenv("LOG_LEVEL")
 	switch levelStr {
 	case "debug":
 		level = slog.LevelDebug
@@ -86,7 +78,7 @@ func NewLogConfig() *LogConfig {
 		level = slog.LevelInfo
 	}
 
-	format := GetEnv("LOG_FORMAT", "text")
+	format := os.Getenv("LOG_FORMAT")
 	if format != "json" {
 		format = "text"
 	}
@@ -98,28 +90,32 @@ func NewLogConfig() *LogConfig {
 }
 
 func NewDatabaseConfig() (*DatabaseConfig, error) {
-	err := godotenv.Load(".env")
+	mode := os.Getenv("MODE")
+	if mode == "" {
+		log.Fatal("MODE environment variable not set")
+	}
+	var envFile string
+	if mode == "production" {
+		envFile = ".env.production"
+	} else {
+		envFile = ".env.development"
+	}
+	err := godotenv.Load(envFile)
+
 	if err != nil {
 		log.Println(err)
 		log.Fatal(" loading .env file")
 	}
 
-	if os.Getenv("APP_ENV") == "dev" {
-		if err != nil {
-			log.Println(err)
-			log.Fatal(" loading .env file")
-		}
-	}
-
-	host := GetEnv("DB_HOST", "localhost")
-	port, err := strconv.Atoi(GetEnv("DB_PORT", "5436"))
+	host := os.Getenv("DB_HOST")
+	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		return nil, errors.New("invalid DB_PORT")
 	}
-	user := GetEnv("DB_USER", "postgres")
-	pass := GetEnv("DB_PASS", "postgres")
-	dbname := GetEnv("DB_NAME", "go-glasses-dev")
-	schema := GetEnv("DB_SCHEMA", "")
+	user := os.Getenv("DB_USER")
+	pass := os.Getenv("DB_PASS")
+	dbname := os.Getenv("DB_NAME")
+	schema := os.Getenv("DB_SCHEMA")
 
 	query := url.Values{
 		"sslmode":  []string{"disable"},
@@ -141,25 +137,26 @@ func NewDatabaseConfig() (*DatabaseConfig, error) {
 }
 
 func NewServerConfig() (*ServerConfig, error) {
-	addr := GetEnv("ADDR", "0.0.0.0:6968")
-	writeTimeout, err := time.ParseDuration(GetEnv("write_timeout", "15s"))
+	addr := os.Getenv("ADDR")
+	writeTimeout, err := time.ParseDuration(os.Getenv("SERVER_WRITE_TIMEOUT"))
 	if err != nil {
-		return nil, errors.New("invalid WRITE_TIMEOUT")
+		return nil, errors.New("invalid SERVER_WRITE_TIMEOUT")
 	}
-	readTimeout, err := time.ParseDuration(GetEnv("read_timeout", "15s"))
+	readTimeout, err := time.ParseDuration(os.Getenv("SERVER_READ_TIMEOUT"))
 	if err != nil {
-		return nil, errors.New("invalid READ_TIMEOUT")
+		return nil, errors.New("invalid SERVER_READ_TIMEOUT")
 	}
-	idleTimeout, err := time.ParseDuration(GetEnv("idle_timeout", "60s"))
+	idleTimeout, err := time.ParseDuration(os.Getenv("SERVER_IDLE_TIMEOUT"))
 	if err != nil {
-		return nil, errors.New("invalid IDLE_TIMEOUT")
+		return nil, errors.New("invalid SERVER_IDLE_TIMEOUT")
 	}
-	gracefulTimeout, err := time.ParseDuration(GetEnv("graceful_timeout", "5s"))
+	gracefulTimeout, err := time.ParseDuration(os.Getenv("SERVER_GRACEFUL_TIMEOUT"))
 	if err != nil {
-		return nil, errors.New("invalid GRACEFUL_TIMEOUT")
+		return nil, errors.New("invalid SERVER_GRACEFUL_TIMEOUT")
 	}
-	sessionKey := GetEnv("session_key", "super-secret")
+	sessionKey := os.Getenv("SESSION_KEY")
 
+	fmt.Printf("addr %s: ", addr)
 	return &ServerConfig{
 		Addr:            addr,
 		GracefulTimeout: gracefulTimeout,

@@ -18,7 +18,7 @@ services:
     networks:
       - glasses-client
 
-  app-dev:
+  app:
     env_file:
       - .env.development
     platform: linux/amd64
