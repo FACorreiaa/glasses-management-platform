@@ -138,6 +138,9 @@ func NewDatabaseConfig() (*DatabaseConfig, error) {
 
 func NewServerConfig() (*ServerConfig, error) {
 	writeTimeout, err := time.ParseDuration(os.Getenv("SERVER_WRITE_TIMEOUT"))
+	fmt.Println("SERVER_WRITE_TIMEOUT:", os.Getenv("SERVER_WRITE_TIMEOUT"))
+	fmt.Println("SERVER_WRITE_TIMEOUT:", writeTimeout)
+
 	if err != nil {
 		return nil, errors.New("invalid SERVER_WRITE_TIMEOUT")
 	}
