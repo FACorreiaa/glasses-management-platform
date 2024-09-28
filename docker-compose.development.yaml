@@ -26,7 +26,7 @@ services:
     image: "glasses-dev"
     build:
       dockerfile: Dockerfile
-      target: app-dev
+      target: app
       context: ./
     ports:
       - "6968:6968"

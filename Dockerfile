@@ -4,10 +4,15 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY postcss.config.cjs ./
 COPY fonts.css ./
+COPY tailwind.css ./
 RUN mkdir -p app/static/css app/static/fonts
 RUN npm install --ci
 RUN npm run fonts
 RUN npm run tailwind-build
+
+
+
+  # List files to verify output.css exists
 
 # Define the "base" stage
 FROM golang:latest as base
@@ -27,8 +32,8 @@ CMD ["air"]
 
 # Define the final stage
 FROM base as final
-COPY --from=assets /app/controller/static/css/* ./controller/static/css/
-COPY --from=assets /app/controller/static/fonts/* ./controller/static/fonts/
+COPY --from=assets /app/static/css/output.css ./controller/static/css/
+COPY --from=assets /app/static/fonts/* ./controller/static/fonts/
 RUN CGO_ENABLED=0 go build -o /app/server
 EXPOSE 6968
 ENTRYPOINT ["/app/server"]
