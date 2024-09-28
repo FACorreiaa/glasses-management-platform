@@ -137,9 +137,6 @@ func NewDatabaseConfig() (*DatabaseConfig, error) {
 }
 
 func NewServerConfig() (*ServerConfig, error) {
-	addr := os.Getenv("ADDR")
-
-	fmt.Printf("ADDR: %s", addr)
 	writeTimeout, err := time.ParseDuration(os.Getenv("SERVER_WRITE_TIMEOUT"))
 	if err != nil {
 		return nil, errors.New("invalid SERVER_WRITE_TIMEOUT")
@@ -158,9 +155,8 @@ func NewServerConfig() (*ServerConfig, error) {
 	}
 	sessionKey := os.Getenv("SESSION_KEY")
 
-	fmt.Printf("addr %s: ", addr)
 	return &ServerConfig{
-		Addr:            addr,
+		Addr:            fmt.Sprintf("%s:%s", os.Getenv("SERVER_ADDR"), os.Getenv("SERVER_PORT")),
 		GracefulTimeout: gracefulTimeout,
 		WriteTimeout:    writeTimeout,
 		ReadTimeout:     readTimeout,
