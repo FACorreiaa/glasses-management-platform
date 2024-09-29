@@ -1,4 +1,4 @@
-FROM node:latest as assets
+FROM node:alpine as assets
 WORKDIR /app
 COPY package.json ./
 COPY package-lock.json ./
@@ -11,25 +11,18 @@ RUN npm run fonts
 RUN npm run tailwind-build
 
 # Define the "base" stage
-FROM golang:latest as base
+FROM golang:alpine as base
 WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 COPY . .
 
-# Define the "dev" stage
-#FROM base as app
-#RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
-#WORKDIR /app
-#RUN go install github.com/a-h/templ/cmd/templ@latest
-#RUN templ generate
-#CMD ["air"]
-
 # Define the final stage
-FROM base as final
-COPY --from=assets /app/static/css/output.css ./controller/static/css/
-COPY --from=assets /app/static/fonts/* ./controller/static/fonts/
-RUN CGO_ENABLED=0 go build -o /app/server
+FROM base as production
+WORKDIR /app
+COPY --from=base /app/app/static/css/output.css ./controller/static/css/
+COPY --from=base /app/app/static/fonts/* ./controller/static/fonts/
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /app/server
 EXPOSE 6968
 ENTRYPOINT ["/app/server"]
