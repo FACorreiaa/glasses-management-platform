@@ -18,23 +18,23 @@ services:
     networks:
       - glasses-client
 
-  app:
-    env_file:
-      - .env.development
-    platform: linux/amd64
-    container_name: glasses_dev
-    image: "glasses-dev"
-    build:
-      dockerfile: Dockerfile
-      target: app
-      context: ./
-    ports:
-      - "6968:6968"
-      - "5050:5050"
-    volumes:
-      - ./:/app
-    networks:
-      - glasses-client
+#  app:
+#    env_file:
+#      - .env.development
+#    platform: linux/amd64
+#    container_name: glasses_dev
+#    image: "glasses-dev"
+#    build:
+#      dockerfile: Dockerfile
+#      target: app
+#      context: ./
+#    ports:
+#      - "6968:6968"
+#      - "5050:5050"
+#    volumes:
+#      - ./:/app
+#    networks:
+#      - glasses-client
 
 networks:
   glasses-client:

@@ -10,10 +10,6 @@ RUN npm install --ci
 RUN npm run fonts
 RUN npm run tailwind-build
 
-
-
-  # List files to verify output.css exists
-
 # Define the "base" stage
 FROM golang:latest as base
 WORKDIR /app
@@ -23,12 +19,12 @@ RUN go mod download
 COPY . .
 
 # Define the "dev" stage
-FROM base as app
-RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
-WORKDIR /app
-RUN go install github.com/a-h/templ/cmd/templ@latest
-RUN templ generate
-CMD ["air"]
+#FROM base as app
+#RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+#WORKDIR /app
+#RUN go install github.com/a-h/templ/cmd/templ@latest
+#RUN templ generate
+#CMD ["air"]
 
 # Define the final stage
 FROM base as final
