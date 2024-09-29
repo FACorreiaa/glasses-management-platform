@@ -1,14 +1,9 @@
-FROM node:alpine as assets
+FROM node:alpine-slim as assets
 WORKDIR /app
-COPY package.json ./
-COPY package-lock.json ./
-COPY postcss.config.cjs ./
-COPY fonts.css ./
-COPY tailwind.css ./
+COPY package.json package-lock.json postcss.config.cjs fonts.css tailwind.css ./
 RUN mkdir -p app/static/css app/static/fonts
-RUN npm install --ci
-RUN npm run fonts
-RUN npm run tailwind-build
+RUN npm install --only=production --ci
+RUN npm run fonts && npm run tailwind-build
 
 # Define the "base" stage
 FROM golang:alpine as base
@@ -24,5 +19,6 @@ WORKDIR /app
 COPY --from=base /app/app/static/css/output.css ./controller/static/css/
 COPY --from=base /app/app/static/fonts/* ./controller/static/fonts/
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /app/server
+#RUN upx --best --lzma /app/server
 EXPOSE 6968
 ENTRYPOINT ["/app/server"]
