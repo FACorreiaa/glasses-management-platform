@@ -9,10 +9,10 @@ compose-up:
 	docker-compose up -d
 
 compose-dev:
-	docker-compose -f docker-compose.dev.yaml up --build
+	docker-compose -f docker-compose.development.yaml up --build
 
 compose-prod:
-	docker-compose -f docker-compose.prod.yaml up --build
+	docker-compose -f docker-compose.production.yaml up --build
 
 
 compose-down:
