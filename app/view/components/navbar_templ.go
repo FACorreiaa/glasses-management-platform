@@ -31,7 +31,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full px-3 antialiased bg-gradient-to-br from-gray-900 via-black to-gray-800 lg:px-4 dark:bg-black\"><div class=\"mx-auto max-w-7xl\"><nav class=\"flex items-center w-full h-24 select-none\" x-data=\"{ showMenu: false }\"><div class=\"relative flex flex-wrap items-start justify-between w-full mx-auto font-medium md:items-center md:h-24 md:justify-between\"><a href=\"/\" class=\"flex items-center space-x-3 justify-center\"><img src=\"/static/icons/PAMOZI.png\" class=\"pt-4 h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-20 lg:w-20\" alt=\"Pamozi Optical Aid\"> <span class=\"self-center text-2xl font-semibold whitespace-nowrap dark:text-white\">Pam<span id=\"logo\">o</span>zi <span>Optical Aid</span></span></a><div :class=\"{&#39;flex&#39;: showMenu, &#39;hidden md:flex&#39;: !showMenu }\" class=\"absolute z-50 flex-col items-center justify-center w-full h-auto px-2 text-center text-gray-400 -translate-x-1/2 md:w-auto md:h-10 left-1/2 md:flex-row md:items-center\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full px-3 antialiased bg-linear-to-br from-gray-900 via-black to-gray-800 lg:px-4 dark:bg-black\"><div class=\"mx-auto max-w-7xl\"><nav class=\"flex items-center w-full h-24 select-none\" x-data=\"{ showMenu: false }\"><div class=\"relative flex flex-wrap items-start justify-between w-full mx-auto font-medium md:items-center md:h-24 md:justify-between\"><a href=\"/\" class=\"flex items-center space-x-3 justify-center\"><img src=\"/static/icons/PAMOZI.png\" class=\"pt-4 h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-20 lg:w-20\" alt=\"Pamozi Optical Aid\"> <span class=\"self-center text-2xl font-semibold whitespace-nowrap dark:text-white\">Pam<span id=\"logo\">o</span>zi <span>Optical Aid</span></span></a><div :class=\"{&#39;flex&#39;: showMenu, &#39;hidden md:flex&#39;: !showMenu }\" class=\"absolute z-50 flex-col items-center justify-center w-full h-auto px-2 text-center text-gray-400 -translate-x-1/2 md:w-auto md:h-10 left-1/2 md:flex-row md:items-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -100,7 +100,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</span> <span class=\"absolute bottom-0 left-0 w-full h-px duration-300 ease-out translate-y-px bg-gradient-to-r md:from-gray-700 md:via-gray-400 md:to-gray-700 from-gray-900 via-gray-600 to-gray-900\"></span></a></span>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</span> <span class=\"absolute bottom-0 left-0 w-full h-px duration-300 ease-out translate-y-px bg-linear-to-r md:from-gray-700 md:via-gray-400 md:to-gray-700 from-gray-900 via-gray-600 to-gray-900\"></span></a></span>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -138,7 +138,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<a href=\"#_\" class=\"inline-flex items-center justify-center w-full px-4 py-2 md:py-1.5 font-medium leading-6 text-center whitespace-no-wrap transition duration-150 ease-in-out border border-transparent md:mr-1 text-gray-600 md:w-auto bg-white rounded-lg md:rounded-full hover:bg-white focus:outline-none focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<a href=\"#_\" class=\"inline-flex items-center justify-center w-full px-4 py-2 md:py-1.5 font-medium leading-6 text-center whitespace-no-wrap transition duration-150 ease-in-out border border-transparent md:mr-1 text-gray-600 md:w-auto bg-white rounded-lg md:rounded-full hover:bg-white focus:outline-hidden focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

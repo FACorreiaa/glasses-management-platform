@@ -42,7 +42,7 @@ func MainLayoutPage(title, description string, sidebar []models.SidebarItem, com
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"flex flex-grow justify-center items-start\"><!-- Adjusted to items-start to align items at the start --><div class=\"container flex flex-row pt-10 mx-auto px-4\"><!-- Adjusted to px-4 for consistent padding --><div class=\"w-2/12\"><!-- Sidebar fixed width -->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"flex grow justify-center items-start\"><!-- Adjusted to items-start to align items at the start --><div class=\"container flex flex-row pt-10 mx-auto px-4\"><!-- Adjusted to px-4 for consistent padding --><div class=\"w-2/12\"><!-- Sidebar fixed width -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

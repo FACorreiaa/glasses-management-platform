@@ -27,7 +27,7 @@ templ SidebarComponent(sidebar []models.SidebarItem) {
 								</span>
 							</a>
 						} else {
-							<details class="focus:outline-none">
+							<details class="focus:outline-hidden">
 								<summary class="flex items-center text-gray-900 rounded-lg space-between dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
 									<button
 										onClick={ toggleDropdown(fmt.Sprintf("%d", index)) }
@@ -38,7 +38,7 @@ templ SidebarComponent(sidebar []models.SidebarItem) {
 										</span>
 									</button>
 								</summary>
-								<ul class="ml-2 space-y-2 focus:outline-none" id={ fmt.Sprintf("%d", index) }>
+								<ul class="ml-2 space-y-2 focus:outline-hidden" id={ fmt.Sprintf("%d", index) }>
 									for _, subItem := range item.SubItems {
 										<li
 											hx-boost="true"

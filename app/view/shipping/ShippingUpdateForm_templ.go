@@ -35,7 +35,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full bg-white\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update transactions details</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update customer name\" name=\"name\" autocomplete=\"name\" id=\"name\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full bg-white\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update transactions details</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Name</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update customer name\" name=\"name\" autocomplete=\"name\" id=\"name\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -48,7 +48,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Card ID</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update card id number\" name=\"card_id_number\" autocomplete=\"card_id_number\" id=\"card_id_number\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Card ID</label> <input type=\"text\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update card id number\" name=\"card_id_number\" autocomplete=\"card_id_number\" id=\"card_id_number\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -84,7 +84,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label for=\"email\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Email</label> <input class=\"block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"email\" placeholder=\"Update email\" name=\"email\" autocomplete=\"email\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label for=\"email\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Email</label> <input class=\"block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"email\" placeholder=\"Update email\" name=\"email\" autocomplete=\"email\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -97,7 +97,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label for=\"reference\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Reference</label> <input class=\"block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"text\" placeholder=\"Update glasses ref\" name=\"reference\" autocomplete=\"reference\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-8\"><label for=\"reference\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Reference</label> <input class=\"block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"text\" placeholder=\"Update glasses ref\" name=\"reference\" autocomplete=\"reference\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -133,7 +133,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Left eye strength</label> <input type=\"number\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"left_eye_strength\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Left eye strength</label> <input type=\"number\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"left_eye_strength\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -146,7 +146,7 @@ func ShippingUpdateForm(form models.ShippingDetailsForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Right eye strength</label> <input type=\"number\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"right_eye_strength\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-8\"><label class=\"font-medium text-slate-900\">Right eye strength</label> <input type=\"number\" class=\"block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden\" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"right_eye_strength\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

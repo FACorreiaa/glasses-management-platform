@@ -35,7 +35,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full bg-white flex flex-col items-center justify-center\" id=\"form\"><div class=\"mx-auto max-w-7xl\"><h2 class=\"px-4 mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"form\" hx-target=\"#form\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Reference</label> <input type=\"text\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert reference\" name=\"reference\" autocomplete=\"reference\" id=\"reference\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full bg-white flex flex-col items-center justify-center\" id=\"form\"><div class=\"mx-auto max-w-7xl\"><h2 class=\"px-4 mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"form\" hx-target=\"#form\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Reference</label> <input type=\"text\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert reference\" name=\"reference\" autocomplete=\"reference\" id=\"reference\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -71,7 +71,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Brand</label> <input type=\"text\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert brand\" name=\"brand\" autocomplete=\"brand\" id=\"brand\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Brand</label> <input type=\"text\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert brand\" name=\"brand\" autocomplete=\"brand\" id=\"brand\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -84,7 +84,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Left eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"left_eye_strength\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Left eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"left_eye_strength\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -97,7 +97,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Right eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"right_eye_strength\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Right eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"right_eye_strength\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -110,7 +110,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Color</label> <input type=\"text\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert color\" name=\"color\" autocomplete=\"color\" id=\"color\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Color</label> <input type=\"text\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert color\" name=\"color\" autocomplete=\"color\" id=\"color\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -123,7 +123,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Type</label> <select class=\"select w-60 border block w-full max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" name=\"type\" id=\"type\"><option value=\"adult\">Adult</option> <option value=\"children\">Children</option></select></div></div><div class=\"relative px-4 w-full mb-4\"><label class=\"font-medium text-slate-900\">Features</label> <textarea type=\"text\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Type</label> <select class=\"select w-60 border block w-full max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" name=\"type\" id=\"type\"><option value=\"adult\">Adult</option> <option value=\"children\">Children</option></select></div></div><div class=\"relative px-4 w-full mb-4\"><label class=\"font-medium text-slate-900\">Features</label> <textarea type=\"text\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -136,7 +136,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" name=\"features\" value=\"features\" placeholder=\"Glasses features\" class=\"mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50\"></textarea><div class=\"absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0\"></div></div><div class=\"flex flex-row mt-2 justify-center\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" name=\"features\" value=\"features\" placeholder=\"Glasses features\" class=\"mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50\"></textarea><div class=\"absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0\"></div></div><div class=\"flex flex-row mt-2 justify-center\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -6,7 +6,7 @@ templ RegisterPage(register models.RegisterFormValues) {
 	<section class="w-full bg-white">
 		<div class="mx-auto max-w-7xl">
 			<div class="flex flex-col lg:flex-row">
-				<div class="relative w-full bg-cover lg:w-6/12 xl:w-7/12 bg-gradient-to-r from-white via-white to-gray-100">
+				<div class="relative w-full bg-cover lg:w-6/12 xl:w-7/12 bg-linear-to-r from-white via-white to-gray-100">
 					<div class="relative flex flex-col items-center justify-center w-full h-full px-10 my-20 lg:px-16 lg:my-0">
 						<div class="flex flex-col items-start space-y-8 tracking-tight lg:max-w-3xl">
 							<div class="relative">
@@ -35,7 +35,7 @@ templ RegisterPage(register models.RegisterFormValues) {
 									<fieldset class="max-w-lg mx-auto mt-2">
 										<label for="username" class="block text-sm font-medium text-gray-900 dark:text-white">Username</label>
 										<input
-											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
 											data-primary="blue-600"
 											data-rounded="rounded-lg"
 											type="text"
@@ -50,7 +50,7 @@ templ RegisterPage(register models.RegisterFormValues) {
 									<fieldset class="max-w-lg mx-auto mt-2">
 										<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
 										<input
-											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
 											data-primary="blue-600"
 											data-rounded="rounded-lg"
 											type="email"
@@ -64,7 +64,7 @@ templ RegisterPage(register models.RegisterFormValues) {
 									<fieldset class="max-w-lg mx-auto mt-2">
 										<label for="passoword" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
 										<input
-											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
 											data-primary="blue-600"
 											data-rounded="rounded-lg"
 											type="password"
@@ -77,7 +77,7 @@ templ RegisterPage(register models.RegisterFormValues) {
 									<fieldset class="max-w-lg mx-auto mt-2">
 										<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
 										<input
-											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+											class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
 											data-primary="blue-600"
 											data-rounded="rounded-lg"
 											type="password"
@@ -89,7 +89,7 @@ templ RegisterPage(register models.RegisterFormValues) {
 									</fieldset>
 								</fieldset>
 								<div class="flex items-center justify-center max-w-lg mx-auto mt-2">
-									<button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Signup</button>
+									<button type="submit" class="focus:outline-hidden text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Signup</button>
 								</div>
 							</form>
 						</div>
