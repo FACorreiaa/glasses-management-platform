@@ -35,7 +35,7 @@ func UserUpdateForm(form models.UpdateUserForm, id string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full bg-white flex flex-col items-center justify-center\" id=\"form\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update user</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\" hx-target=\"#form\"><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Username</label> <input type=\"text\" class=\"block w-60\tpx-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update username\" name=\"username\" autocomplete=\"username\" id=\"username\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"w-full bg-white flex flex-col items-center justify-center\" id=\"form\"><div class=\"mx-auto max-w-7xl justify-center\"><h2 class=\"mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10\">Update user</h2><div class=\"flex flex-col lg:flex-row\"><form method=\"post\" hx-target=\"#form\"><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Username</label> <input type=\"text\" class=\"block w-60\tpx-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update username\" name=\"username\" autocomplete=\"username\" id=\"username\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -71,7 +71,7 @@ func UserUpdateForm(form models.UpdateUserForm, id string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Email</label> <input type=\"email\" class=\"block w-60\t px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update email\" name=\"email\" autocomplete=\"email\" id=\"email\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Email</label> <input type=\"email\" class=\"block w-60\t px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Update email\" name=\"email\" autocomplete=\"email\" id=\"email\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -107,7 +107,7 @@ func UserUpdateForm(form models.UpdateUserForm, id string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label for=\"passoword\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Password</label> <input class=\"block w-60\t px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"password\" placeholder=\"Password\" name=\"password\" autocomplete=\"new-password\"> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label for=\"passoword\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Password</label> <input class=\"block w-60\t px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"password\" placeholder=\"Password\" name=\"password\" autocomplete=\"new-password\"> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -130,7 +130,7 @@ func UserUpdateForm(form models.UpdateUserForm, id string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label for=\"password\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Confirm Password</label> <input class=\"block w-60\t px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"password\" placeholder=\"Confirm Password\" name=\"password_confirm\" autocomplete=\"new-password\"> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label for=\"password\" class=\"block text-sm font-medium text-gray-900 dark:text-white\">Confirm Password</label> <input class=\"block w-60\t px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" type=\"password\" placeholder=\"Confirm Password\" name=\"password_confirm\" autocomplete=\"new-password\"> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -153,7 +153,7 @@ func UserUpdateForm(form models.UpdateUserForm, id string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Type</label> <select class=\"select block w-60 max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" name=\"role\" id=\"role\"><option value=\"employee\">Employee</option> <option value=\"admin\">Admin</option></select></fieldset><div class=\"flex flex-row mt-2 justify-center\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</fieldset><fieldset class=\"max-w-lg mx-auto mt-2 text-left\"><label class=\"font-medium text-slate-900\">Type</label> <select class=\"select block w-60 max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" name=\"role\" id=\"role\"><option value=\"employee\">Employee</option> <option value=\"admin\">Admin</option></select></fieldset><div class=\"flex flex-row mt-2 justify-center\"><div class=\"w-full md:w-1/2 px-4 mb-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -42,7 +42,7 @@ func AdminSettingsLayoutPage(title, description string, sidebar []models.Sidebar
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"flex items-center justify-center flex-grow\"><div class=\"container flex flex-col pt-10 mx-auto mr:px-4 lg:flex-row justify-center\"><div class=\"w-2/12\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"flex items-center justify-center grow\"><div class=\"container flex flex-col pt-10 mx-auto mr:px-4 lg:flex-row justify-center\"><div class=\"w-2/12\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

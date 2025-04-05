@@ -22,9 +22,9 @@ templ UserInsertModal(form models.RegisterFormValues) {
 		:class="{ 'z-40': modalOpen }"
 		class="relative w-auto h-auto"
 	>
-		<button @click="modalOpen=true" class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none">Insert collaborator</button>
+		<button @click="modalOpen=true" class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden">Insert collaborator</button>
 		<template x-teleport="body">
-			<div x-show="modalOpen" class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen" x-cloak>
+			<div x-show="modalOpen" class="fixed top-0 left-0 z-99 flex items-center justify-center w-screen h-screen" x-cloak>
 				<div
 					x-show="modalOpen"
 					x-transition:enter="ease-out duration-300"
@@ -34,7 +34,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 					x-transition:leave-start="opacity-100"
 					x-transition:leave-end="opacity-0"
 					@click="modalOpen=false"
-					class="absolute inset-0 w-full h-full bg-gray-900 bg-opacity-50 backdrop-blur-sm"
+					class="absolute inset-0 w-full h-full bg-gray-900 bg-opacity-50 backdrop-blur-xs"
 				></div>
 				<div
 					x-show="modalOpen"
@@ -45,7 +45,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 					x-transition:leave="ease-in duration-200"
 					x-transition:leave-start="opacity-100 scale-100"
 					x-transition:leave-end="opacity-0 scale-90"
-					class="relative w-full py-6 bg-white shadow-md px-7 bg-opacity-90 drop-shadow-md backdrop-blur-sm sm:max-w-lg sm:rounded-lg"
+					class="relative w-full py-6 bg-white shadow-md px-7 bg-opacity-90 drop-shadow-md backdrop-blur-xs sm:max-w-lg sm:rounded-lg"
 				>
 					<div class="flex items-center justify-between pb-3">
 						<h2 class="mb-8 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Register user</h2>
@@ -61,7 +61,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 										<fieldset>
 											<label for="username" class="block text-sm font-medium text-gray-900 dark:text-white">Username</label>
 											<input
-												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
 												data-primary="blue-600"
 												data-rounded="rounded-lg"
 												type="text"
@@ -79,7 +79,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 										<fieldset class="max-w-lg mx-auto mt-2">
 											<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
 											<input
-												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
 												data-primary="blue-600"
 												data-rounded="rounded-lg"
 												type="email"
@@ -93,7 +93,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 										<fieldset class="max-w-lg mx-auto mt-2">
 											<label for="passoword" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
 											<input
-												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none "
+												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
 												data-primary="blue-600"
 												data-rounded="rounded-lg"
 												type="password"
@@ -110,7 +110,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 										<fieldset class="max-w-lg mx-auto mt-2">
 											<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
 											<input
-												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none"
+												class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
 												data-primary="blue-600"
 												data-rounded="rounded-lg"
 												type="password"
@@ -131,7 +131,7 @@ templ UserInsertModal(form models.RegisterFormValues) {
 											<div class="w-full md:w-1/2 px-4 mb-4">
 												<button
 													type="submit"
-													class="btn w-full btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none mr-2"
+													class="btn w-full btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden mr-2"
 													name="action"
 													value="submit"
 												>Insert</button>
