@@ -1,0 +1,94 @@
+package settings
+
+import (
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+	"github.com/google/uuid"
+)
+
+templ AdminUpdateForm(form models.UpdateUserForm, id uuid.UUID) {
+	<section class="w-full bg-white flex flex-col items-center justify-center" id="form">
+		<div class="mx-auto max-w-7xl justify-center">
+			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update user</h2>
+			<div class="flex flex-col lg:flex-row">
+				<form
+					method="post"
+					hx-target="#form"
+				>
+					<input type="hidden" name="_method" value="PUT"/>
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
+						<label class="font-medium text-slate-900">Username</label>
+						<input
+							type="text"
+							class="block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+							data-primary="blue-600"
+							data-rounded="rounded-lg"
+							placeholder="Update username"
+							name="username"
+							autocomplete="username"
+							id="username"
+							value={ form.Values["Username"] }
+						/>
+						if form.FieldErrors["username"] != "" {
+							<p class="text-error  w-60">{ form.FieldErrors["username"] }</p>
+						}
+					</fieldset>
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
+						<label class="font-medium text-slate-900">Email</label>
+						<input
+							type="email"
+							class="block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+							data-primary="blue-600"
+							data-rounded="rounded-lg"
+							placeholder="Update email"
+							name="email"
+							autocomplete="email"
+							id="email"
+							value={ form.Values["Email"] }
+						/>
+						if form.FieldErrors["email"] != "" {
+							<p class="text-error  w-60">{ form.FieldErrors["email"] }</p>
+						}
+					</fieldset>
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
+						<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+						<input
+							class="block w-60 px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+							data-primary="blue-600"
+							data-rounded="rounded-lg"
+							type="password"
+							placeholder="Password"
+							name="password"
+							autocomplete="new-password"
+							value={ form.Values["Password"] }
+						/>
+						if form.FieldErrors["password"] != "" {
+							<p class="text-error w-60">{ form.FieldErrors["password"] }</p>
+						}
+					</fieldset>
+					<fieldset class="max-w-lg mx-auto mt-2 text-left">
+						<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+						<input
+							class="block w-60 px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+							data-primary="blue-600"
+							data-rounded="rounded-lg"
+							type="password"
+							placeholder="Confirm Password"
+							name="password_confirm"
+							autocomplete="new-password"
+							value={ form.Values["PasswordConfirm"] }
+						/>
+						if form.FieldErrors["password_confirm"] != "" {
+							<p class="text-error w-60">{ form.FieldErrors["password_confirm"] }</p>
+						}
+					</fieldset>
+					<div class="flex flex-row mt-2 justify-center">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							@components.ButtonUpdateComponent(string(templ.URL("/settings/admin/update")), "Update")
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+}

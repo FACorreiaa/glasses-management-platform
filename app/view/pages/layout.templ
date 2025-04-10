@@ -1,0 +1,42 @@
+package pages
+
+import (
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+)
+
+templ LayoutPage(l models.LayoutTempl) {
+	<!DOCTYPE html>
+	<html lang="en" hx-logging="true">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>{ l.Title } - Glasses Management</title>
+			<link rel="stylesheet" href="../../static/css/fonts.css"/>
+			<link rel="stylesheet" href="../../static/css/output.css"/>
+			<link rel="stylesheet" href="../../static/css/ionicons.min.css"/>
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+			<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet"/>
+			<script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js"></script>
+			<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
+			<script>
+        document.addEventListener('alpine:init', () => {
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        });
+      </script>
+			<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+			<script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js"></script>
+		</head>
+		<body hx-boost="true" x-data="{theme: 'light'}" :class="theme" lang="en">
+			<div class="flex flex-col h-screen font-lato" id="contents">
+				@components.NavbarComponent(l.Nav, l.User, l.ActiveNav)
+				<div class="h-full overflow-auto">
+					@l.Content
+				</div>
+				@components.FooterComponent()
+			</div>
+		</body>
+	</html>
+}

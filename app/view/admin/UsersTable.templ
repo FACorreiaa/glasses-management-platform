@@ -1,0 +1,92 @@
+package admin
+
+import (
+	"fmt"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+	"strconv"
+)
+
+templ UsersTable(user models.UsersTable, register models.RegisterFormValues) {
+	<div class="flex flex-col items-left shadow-xl overflow-hidden">
+		@components.InputGroupContainer() {
+			<div class="mr-2">
+				@components.InputSearch("Filter email", "/collaborators", "email", "#searchResults")
+			</div>
+		}
+		<div class="flex flex-col">
+			<div class="overflow-x-auto">
+				<div class="inline-block min-w-full">
+					<div class="overflow-hidden border-b border-neutral-200 shadow-sm sm:rounded-lg">
+						<div class="pb-8">
+							@UserInsertModal(register)
+						</div>
+						<table class="table table-xs min-w-full divide-y divide-neutral-200">
+							<!-- head -->
+							<thead class="bg-neutral-100 dark:bg-neutral-600">
+								<tr>
+									for _, col := range user.Column {
+										<th class="px-4 py-2 text-left text-xs font-medium text-neutral-800 uppercase tracking-wider">
+											<div class="flex items-center">
+												{ col.Title }
+												<form class="ml-2" method="get">
+													<a
+														class="text-neutral-400 hover:text-neutral-900"
+														href={ templ.URL(fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.Page, col.Title, col.SortParam)) }
+													>
+														@col.Icon
+													</a>
+												</form>
+											</div>
+										</th>
+									}
+								</tr>
+							</thead>
+							<!-- rows -->
+							<tbody class="bg-white divide-y divide-neutral-200">
+								for _, us := range user.Users {
+									<tr class="hover:bg-neutral-100">
+										<td class="px-4 py-4 whitespace-nowrap" hx-boost="true">
+											<a
+												class="text-sm text-neutral-900"
+												hx-trigger="load delay:50ms"
+												href={ templ.URL(fmt.Sprintf("/collaborators/%s/edit", us.ID)) }
+											>
+												{ us.Username }
+											</a>
+										</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.Email }</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.Role }</td>
+										if us.CreatedAt != nil {
+											<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.CreatedAt.Format("02-01-2006") }</td>
+										} else {
+											<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">"N/A"</td>
+										}
+										if us.UpdatedAt != nil {
+											<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ us.UpdatedAt.Format("02-01-2006") }</td>
+										} else {
+											<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">"N/A"</td>
+										}
+										<td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+											@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/collaborators/%s/edit", us.ID)))
+											@components.ButtonDeleteComponent(fmt.Sprintf("/collaborators/%s", us.ID))
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		@components.PaginatorComponent("/collaborators",
+			fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.PrevPage, user.OrderParam, user.SortParam),
+			strconv.Itoa(user.Page),
+			fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.NextPage, user.OrderParam, user.SortParam),
+			fmt.Sprintf("/collaborators?page=%d&orderBy=%s&sortBy=%s", user.LastPage, user.OrderParam, user.SortParam),
+			strconv.Itoa(user.LastPage),
+			user.OrderParam,
+			user.SortParam)
+		<div id="detailsSpace"></div>
+	</div>
+}

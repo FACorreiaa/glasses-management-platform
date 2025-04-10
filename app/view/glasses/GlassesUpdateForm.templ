@@ -1,0 +1,138 @@
+package glasses
+
+import (
+	"fmt"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+)
+
+templ GlassesUpdateForm(form models.GlassesForm, id string) {
+	<section class="w-full bg-white flex flex-col items-center justify-center" id="form">
+		<div class="mx-auto max-w-7xl">
+			<h2 class="px-4 mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update</h2>
+			<div class="flex flex-col lg:flex-row">
+				<form
+					method="form"
+					hx-target="#form"
+				>
+					<input type="hidden" name="_method" value="PUT"/>
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="font-medium text-slate-900">Reference</label>
+							<input
+								type="text"
+								class="block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Insert reference"
+								name="reference"
+								autocomplete="reference"
+								id="reference"
+								value={ form.Values["Reference"] }
+							/>
+							if form.FieldErrors["reference"] != "" {
+								<p class="text-error  w-60">{ form.FieldErrors["reference"] }</p>
+							}
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="font-medium text-slate-900">Brand</label>
+							<input
+								type="text"
+								class="block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Insert brand"
+								name="brand"
+								autocomplete="brand"
+								id="brand"
+								value={ form.Values["Brand"] }
+							/>
+						</div>
+					</div>
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="font-medium text-slate-900">Left eye strength</label>
+							<input
+								type="number"
+								class="block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Insert graduation"
+								name="left_eye_strength"
+								autocomplete="left-eye"
+								id="left-eye"
+								min="-99"
+								max="99"
+								step="0.1"
+								value={ form.Values["LeftEye"] }
+							/>
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="font-medium text-slate-900">Right eye strength</label>
+							<input
+								type="number"
+								class="block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Insert graduation"
+								name="right_eye_strength"
+								autocomplete="right-eye"
+								id="right-eye"
+								min="-99"
+								max="99"
+								step="0.1"
+								value={ form.Values["RightEye"] }
+							/>
+						</div>
+					</div>
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="font-medium text-slate-900">Color</label>
+							<input
+								type="text"
+								class="block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Insert color"
+								name="color"
+								autocomplete="color"
+								id="color"
+								value={ form.Values["Color"] }
+							/>
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							<label class="font-medium text-slate-900">Type</label>
+							<select
+								class="select w-60 border block w-full max-w-xs mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden "
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								name="type"
+								id="type"
+							>
+								<option value="adult">Adult</option>
+								<option value="children">Children</option>
+							</select>
+						</div>
+					</div>
+					<div class="relative px-4 w-full mb-4">
+						<label class="font-medium text-slate-900">Features</label>
+						<textarea
+							type="text"
+							value={ form.Values["Feature"] }
+							name="features"
+							value="features"
+							placeholder="Glasses features"
+							class="mt-1 flex relative z-20 peer w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border-2 border-neutral-900 placeholder:text-neutral-500 focus:text-neutral-800 focus:border-neutral-900 focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
+						></textarea>
+						<div class="absolute inset-0 z-10 w-full h-full -m-1 duration-300 ease-out translate-x-2 translate-y-2 bg-black peer-focus:m-0 peer-focus:translate-x-0 peer-focus:translate-y-0"></div>
+					</div>
+					<div class="flex flex-row mt-2 justify-center">
+						<div class="w-full md:w-1/2 px-4 mb-4">
+							@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/glasses/%s/update", id))), "Update")
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+}

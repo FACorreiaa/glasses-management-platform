@@ -1,0 +1,121 @@
+package shipping
+
+import (
+	"fmt"
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+)
+
+templ ShippingUpdateForm(form models.ShippingDetailsForm) {
+	<section class="w-full bg-white">
+		<div class="mx-auto max-w-7xl justify-center">
+			<h2 class="mb-4 text-5xl font-bold text-gray-900 xl:text-6xl mb-10">Update transactions details</h2>
+			<div class="flex flex-col lg:flex-row">
+				<form method="post">
+					<input type="hidden" name="_method" value="PUT"/>
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-8">
+							<label class="font-medium text-slate-900">Name</label>
+							<input
+								type="text"
+								class="block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Update customer name"
+								name="name"
+								autocomplete="name"
+								id="name"
+								value={ form.Values["Name"] }
+							/>
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-8">
+							<label class="font-medium text-slate-900">Card ID</label>
+							<input
+								type="text"
+								class="block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Update card id number"
+								name="card_id_number"
+								autocomplete="card_id_number"
+								id="card_id_number"
+								value={ form.Values["CardID"] }
+							/>
+							if form.FieldErrors["card_id_number"] != "" {
+								<p class="text-error">{ form.FieldErrors["card_id_number"] }</p>
+							}
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-8">
+							<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
+							<input
+								class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								type="email"
+								placeholder="Update email"
+								name="email"
+								autocomplete="email"
+								value={ form.Values["Email"] }
+							/>
+						</div>
+					</div>
+					<div class="flex flex-wrap mb-10">
+						<div class="w-full md:w-1/2 px-4 mb-8">
+							<label for="reference" class="block text-sm font-medium text-gray-900 dark:text-white">Reference</label>
+							<input
+								class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								type="text"
+								placeholder="Update glasses ref"
+								name="reference"
+								autocomplete="reference"
+								value={ form.Values["Reference"] }
+							/>
+							if form.FieldErrors["reference"] != "" {
+								<p class="text-error">{ form.FieldErrors["reference"] }</p>
+							}
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-8">
+							<label class="font-medium text-slate-900">Left eye strength</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Insert graduation"
+								name="left_eye_strength"
+								autocomplete="left-eye"
+								id="left-eye"
+								min="-99"
+								max="99"
+								step="0.1"
+								value={ form.Values["LeftEye"] }
+							/>
+						</div>
+						<div class="w-full md:w-1/2 px-4 mb-8">
+							<label class="font-medium text-slate-900">Right eye strength</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+								data-primary="blue-600"
+								data-rounded="rounded-lg"
+								placeholder="Insert graduation"
+								name="right_eye_strength"
+								autocomplete="right-eye"
+								id="right-eye"
+								min="-99"
+								max="99"
+								step="0.1"
+								value={ form.Values["RightEye"] }
+							/>
+						</div>
+					</div>
+					<div class="flex items-center justify-center max-w-lg mx-auto mt-2 px-4">
+						@components.ButtonUpdateComponent(string(templ.URL(fmt.Sprintf("/settings/shipping/%s/update", form.CustomerID))), "Update")
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+}

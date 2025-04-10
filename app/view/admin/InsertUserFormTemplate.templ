@@ -1,0 +1,89 @@
+package admin
+
+import (
+	"github.com/FACorreiaa/glasses-management-platform/app/models"
+	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
+)
+
+templ InsertUserFormTemplate(form models.RegisterFormValues, className string) {
+	<form method="post" class={ className }>
+		<fieldset>
+			<label for="username" class="block text-sm font-medium text-gray-900 dark:text-white">Username</label>
+			<input
+				class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+				data-primary="blue-600"
+				data-rounded="rounded-lg"
+				type="text"
+				placeholder="Username"
+				name="username"
+				autocomplete="username"
+				id="username"
+				value={ form.Values["username"] }
+			/>
+			if form.FieldErrors["username"] != "" {
+				<p class="text-error">{ form.FieldErrors["username"] }</p>
+			}
+		</fieldset>
+		<fieldset class="max-w-lg mx-auto mt-2">
+			<label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
+			<input
+				class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+				data-primary="blue-600"
+				data-rounded="rounded-lg"
+				type="email"
+				placeholder="Email"
+				name="email"
+				id="email"
+				value={ form.Values["email"] }
+			/>
+		</fieldset>
+		<fieldset class="max-w-lg mx-auto mt-2">
+			<label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+			<input
+				class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+				data-primary="blue-600"
+				data-rounded="rounded-lg"
+				type="password"
+				placeholder="Password"
+				name="password"
+				autocomplete="new-password"
+				value={ form.Values["password"] }
+			/>
+			if form.FieldErrors["password"] != "" {
+				<p class="text-error">{ form.FieldErrors["password"] }</p>
+			}
+		</fieldset>
+		<fieldset class="max-w-lg mx-auto mt-2">
+			<label for="password_confirm" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+			<input
+				class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden"
+				data-primary="blue-600"
+				data-rounded="rounded-lg"
+				type="password"
+				placeholder="Confirm Password"
+				name="password_confirm"
+				autocomplete="new-password"
+				value={ form.Values["password_confirm"] }
+			/>
+			if form.FieldErrors["password_confirm"] != "" {
+				<p class="text-error">{ form.FieldErrors["password_confirm"] }</p>
+			}
+		</fieldset>
+		<div class="flex flex-wrap mt-2">
+			<div class="w-full md:w-1/2 px-4 mb-4">
+				@components.ButtonReturnComponent(templ.SafeURL("/"))
+			</div>
+			<div class="w-full md:w-1/2 px-4 mb-4">
+				<button
+					type="submit"
+					name="action"
+					value="submit"
+					class="btn btn-xs btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden mr-2"
+				>
+					Insert
+					<ion-icon name="checkmark-outline"></ion-icon>
+				</button>
+			</div>
+		</div>
+	</form>
+}
