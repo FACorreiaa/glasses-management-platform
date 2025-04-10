@@ -187,19 +187,19 @@ type GlassesForm struct {
 	Reference string    `json:"reference" schema:"reference"`
 	Brand     string    `json:"brand" schema:"brand"`
 
-	LeftSph   string `json:"left_sph" schema:"left_sph"`
-	LeftCyl   string `json:"left_cyl" schema:"left_cyl"`
-	LeftAxis  string `json:"left_axis" schema:"left_axis"`
-	LeftAdd   string `json:"left_add" schema:"left_add"`
-	LeftPrism string `json:"left_prism" schema:"left_prism"`
-	LeftBase  string `json:"left_base" schema:"left_base"`
+	LeftSph   float64 `json:"left_sph" schema:"left_sph"`
+	LeftCyl   float64 `json:"left_cyl" schema:"left_cyl"`
+	LeftAxis  float64 `json:"left_axis" schema:"left_axis"`
+	LeftAdd   float64 `json:"left_add" schema:"left_add"`
+	LeftPrism float64 `json:"left_prism" schema:"left_prism"`
+	LeftBase  float64 `json:"left_base" schema:"left_base"`
 
-	RightSph   string `json:"right_sph" schema:"right_sph"`
-	RightCyl   string `json:"right_cyl" schema:"right_cyl"`
-	RightAxis  string `json:"right_axis" schema:"right_axis"`
-	RightAdd   string `json:"right_add" schema:"right_add"`
-	RightPrism string `json:"right_prism" schema:"right_prism"`
-	RightBase  string `json:"right_base" schema:"right_base"`
+	RightSph   float64 `json:"right_sph" schema:"right_sph"`
+	RightCyl   float64 `json:"right_cyl" schema:"right_cyl"`
+	RightAxis  float64 `json:"right_axis" schema:"right_axis"`
+	RightAdd   float64 `json:"right_add" schema:"right_add"`
+	RightPrism float64 `json:"right_prism" schema:"right_prism"`
+	RightBase  float64 `json:"right_base" schema:"right_base"`
 
 	Color       string `json:"color" schema:"color"`
 	Type        string `json:"type" schema:"type"`

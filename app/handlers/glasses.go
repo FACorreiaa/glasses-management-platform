@@ -193,21 +193,62 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	leftVal, err := strconv.ParseFloat(r.FormValue("left_eye_strength"), 64)
+	leftSph, err := strconv.ParseFloat(r.FormValue("left_sph"), 64)
 	if err != nil {
-		fieldError["left_eye_strength"] = "invalid left eye strength"
+		fieldError["left_sph"] = "invalid left eye strength"
 	}
 
-	rightVal, err := strconv.ParseFloat(r.FormValue("right_eye_strength"), 64)
+	rightSph, err := strconv.ParseFloat(r.FormValue("left_sph"), 64)
 	if err != nil {
-		fieldError["left_eye_strength"] = "invalid left eye strength"
+		fieldError["left_eye_strength"] = "invalid lerightft eye strength"
+	}
+
+	leftCyl, err := strconv.ParseFloat(r.FormValue("left_cyl"), 64)
+	if err != nil {
+		fieldError["left_cyl"] = "invalid left eye cylinder"
+	}
+	rightCyl, err := strconv.ParseFloat(r.FormValue("right_cyl"), 64)
+	if err != nil {
+		fieldError["right_cyl"] = "invalid right eye cylinder"
+	}
+	leftAxis, err := strconv.ParseFloat(r.FormValue("left_axis"), 64)
+	if err != nil {
+		fieldError["left_axis"] = "invalid left eye axis"
+	}
+	rightAxis, err := strconv.ParseFloat(r.FormValue("right_axis"), 64)
+	if err != nil {
+		fieldError["right_axis"] = "invalid right eye axis"
+	}
+	leftAdd, err := strconv.ParseFloat(r.FormValue("left_add"), 64)
+	if err != nil {
+		fieldError["left_add"] = "invalid left eye add"
+	}
+	rightAdd, err := strconv.ParseFloat(r.FormValue("right_add"), 64)
+	if err != nil {
+		fieldError["right_add"] = "invalid right eye add"
+	}
+	leftBase, err := strconv.ParseFloat(r.FormValue("left_base"), 64)
+	if err != nil {
+		fieldError["left_base"] = "invalid left eye base"
+	}
+	rightBase, err := strconv.ParseFloat(r.FormValue("right_base"), 64)
+	if err != nil {
+		fieldError["right_base"] = "invalid right eye base"
 	}
 
 	g := models.GlassesForm{
 		Reference:   r.FormValue("reference"),
 		Brand:       r.FormValue("brand"),
-		LeftEye:     leftVal,
-		RightEye:    rightVal,
+		LeftSph:     leftSph,
+		LeftCyl:     leftCyl,
+		LeftAxis:    leftAxis,
+		LeftAdd:     leftAdd,
+		LeftBase:    leftBase,
+		RightSph:    rightSph,
+		RightCyl:    rightCyl,
+		RightAxis:   rightAxis,
+		RightAdd:    rightAdd,
+		RightBase:   rightBase,
 		Color:       r.FormValue("color"),
 		Type:        r.FormValue("type"),
 		Feature:     r.FormValue("features"),
@@ -217,14 +258,6 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 
 	if len(g.Reference) == 0 {
 		g.FieldErrors["reference"] = "reference cannot be empty"
-	}
-
-	if (g.RightEye) == 0 {
-		g.FieldErrors["right_eye_strength"] = "right eye strength cannot be empty"
-	}
-
-	if (g.LeftEye) == 0 {
-		g.FieldErrors["left_eye_strength"] = "left eye strength cannot be empty"
 	}
 
 	if len(g.Type) == 0 {
@@ -282,14 +315,14 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 		return err
 	}
 
-	le := strconv.FormatFloat(g.LeftEye, 'f', 2, 64)
-	re := strconv.FormatFloat(g.RightEye, 'f', 2, 64)
+	ls := strconv.FormatFloat(*g.LeftPrescription.Sph, 'f', 2, 64)
+	rs := strconv.FormatFloat(*g.RightPrescription.Sph, 'f', 2, 64)
 	form := models.GlassesForm{
 		Values: map[string]string{
 			"Reference": g.Reference,
 			"Brand":     g.Brand,
-			"LeftEye":   le,
-			"RightEye":  re,
+			"LeftSph":   ls,
+			"RightSph":  rs,
 			"Color":     g.Color,
 			"Type":      g.Type,
 			"Features":  g.Feature,
@@ -320,8 +353,16 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		GlassesID:   glassesID,
 		Reference:   r.FormValue("reference"),
 		Brand:       r.FormValue("brand"),
-		LeftEye:     parseFloat(r.FormValue("left_eye_strength")),
-		RightEye:    parseFloat(r.FormValue("right_eye_strength")),
+		LeftSph:     parseFloat(r.FormValue("left_sph")),
+		LeftCyl:     parseFloat(r.FormValue("left_cyl")),
+		LeftAxis:    parseFloat(r.FormValue("left_axis")),
+		LeftAdd:     parseFloat(r.FormValue("left_add")),
+		LeftBase:    parseFloat(r.FormValue("left_base")),
+		RightSph:    parseFloat(r.FormValue("right_sph")),
+		RightCyl:    parseFloat(r.FormValue("right_cyl")),
+		RightAxis:   parseFloat(r.FormValue("right_axis")),
+		RightAdd:    parseFloat(r.FormValue("right_add")),
+		RightBase:   parseFloat(r.FormValue("right_base")),
 		Color:       r.FormValue("color"),
 		Type:        r.FormValue("type"),
 		Feature:     r.FormValue("features"),
