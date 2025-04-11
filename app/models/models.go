@@ -273,8 +273,8 @@ type ShippingDetails struct {
 	CardID     string    `json:"card_id_number"`
 	Email      string    `json:"email"`
 	Reference  string    `json:"reference"`
-	LeftEye    float64   `json:"left_eye_strength"`
-	RightEye   float64   `json:"right_eye_strength"`
+	LeftEye    float64   `json:"left_sph"`
+	RightEye   float64   `json:"right_sph"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
@@ -299,8 +299,8 @@ type SettingsShippingDetails struct {
 	CardID            string    `json:"card_id_number"`
 	Email             string    `json:"email"`
 	Reference         string    `json:"reference"`
-	LeftEye           float64   `json:"left_eye_strength"`
-	RightEye          float64   `json:"right_eye_strength"`
+	LeftEye           float64   `json:"left_sph"`
+	RightEye          float64   `json:"right_sph"`
 	CreatedAt         time.Time `json:"created_at"`
 	UpdatedAt         time.Time `json:"updated_at"`
 }
@@ -323,8 +323,8 @@ type ShippingDetailsForm struct {
 	CardID     string    `json:"card_id_number" schema:"card_id_number"`
 	Email      string    `json:"email" schema:"email"`
 	Reference  string    `json:"reference" schema:"reference"`
-	LeftEye    float64   `json:"left_eye_strength" schema:"left_eye_strength"`
-	RightEye   float64   `json:"right_eye_strength" schema:"right_eye_strength"`
+	LeftEye    float64   `json:"left_sph" schema:"left_sph"`
+	RightEye   float64   `json:"right_sph" schema:"right_sph"`
 	// CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 	Updated     bool

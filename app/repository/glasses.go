@@ -32,8 +32,14 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 	for rows.Next() {
 		var a models.Glasses
 		if err := rows.Scan(
-			&a.GlassesID, &a.Color, &a.Brand, &a.RightEye,
-			&a.LeftEye, &a.Reference, &a.Type, &a.IsInStock,
+			&a.GlassesID, &a.Color, &a.Brand, &a.LeftPrescription.Cyl,
+			&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
+			&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
+			&a.LeftPrescription.Prism, &a.LeftPrescription.Base,
+			&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
+			&a.RightPrescription.Axis, &a.RightPrescription.Add,
+			&a.RightPrescription.Prism, &a.RightPrescription.Base,
+			&a.Reference, &a.Type, &a.IsInStock,
 			&a.Feature, &a.UpdatedAt, &a.CreatedAt,
 		); err != nil {
 			slog.Error(" scanning glasses", "err", err)
@@ -63,7 +69,13 @@ func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query strin
 	for rows.Next() {
 		var a models.Glasses
 		if err := rows.Scan(
-			&a.UserName, &a.UserEmail, &a.LeftEye, &a.RightEye,
+			&a.UserName, &a.UserEmail,
+			&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
+			&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
+			&a.LeftPrescription.Prism, &a.LeftPrescription.Base,
+			&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
+			&a.RightPrescription.Axis, &a.RightPrescription.Add,
+			&a.RightPrescription.Prism, &a.RightPrescription.Base,
 			&a.Reference, &a.IsInStock, &a.UpdatedAt, &a.CreatedAt,
 		); err != nil {
 			slog.Error(" scanning glasses", "err", err)
@@ -84,13 +96,13 @@ func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query strin
 func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, 
-					 right_eye_strength, left_eye_strength, type,
+					 right_sph, left_sph, type,
        				 reference, is_in_stock, features, 
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
-			 	AND ($5::float8 IS NULL OR g.left_eye_strength = $5)
-			 	AND ($6::float8 IS NULL OR g.right_eye_strength = $6)
+			 	AND ($5::float8 IS NULL OR g.left_sph = $5)
+			 	AND ($6::float8 IS NULL OR g.right_sph = $6)
 			 	ORDER BY
 				CASE
 					WHEN $1 = 'Brand' THEN g.brand
@@ -109,15 +121,21 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 
 func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, 
-	 				right_eye_strength, left_eye_strength, type,
+	 				right_sph, left_sph, type,
        				reference, is_in_stock, features, updated_at, created_at
 				FROM glasses
 				WHERE glasses_id = $1`
 	var a models.Glasses
 
 	if err := r.pgpool.QueryRow(ctx, query, glassesID).Scan(
-		&a.GlassesID, &a.Color, &a.Brand, &a.RightEye,
-		&a.LeftEye, &a.Reference, &a.Type, &a.IsInStock,
+		&a.GlassesID, &a.Color, &a.Brand,
+		&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
+		&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
+		&a.LeftPrescription.Prism, &a.LeftPrescription.Base,
+		&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
+		&a.RightPrescription.Axis, &a.RightPrescription.Add,
+		&a.RightPrescription.Prism, &a.RightPrescription.Base,
+		&a.Reference, &a.Type, &a.IsInStock,
 		&a.Feature, &a.UpdatedAt, &a.CreatedAt,
 	); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -145,12 +163,13 @@ func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID uuid.UU
 func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
 		UPDATE glasses
-		SET color = $1, brand = $2, right_eye_strength = $3, 
-			left_eye_strength = $4, reference = $5, type =$6,
+		SET color = $1, brand = $2, right_sph = $3, 
+			left_sph = $4, reference = $5, type =$6,
 		    features = $7, updated_at = NOW()
 		WHERE glasses_id = $8
 	`
-	_, err := r.pgpool.Exec(ctx, query, g.Color, g.Brand, g.RightEye, g.LeftEye, g.Reference, g.Type, g.Feature, g.GlassesID)
+	_, err := r.pgpool.Exec(ctx, query, g.Color, g.Brand,
+		g.RightSph, g.LeftSph, g.Reference, g.Type, g.Feature, g.GlassesID)
 	if err != nil {
 		slog.Error(" updating glasses", "err", err)
 		return errors.New("internal server error")
@@ -161,13 +180,13 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesF
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
-		INSERT INTO glasses (reference, brand, right_eye_strength, left_eye_strength, 
+		INSERT INTO glasses (reference, brand, right_sph, left_sph, 
 							color, type, features,
 		                     is_in_stock, created_at, updated_at, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, true, NOW(), NOW(), $8)
 		RETURNING glasses_id
 	`
-	err := r.pgpool.QueryRow(ctx, query, g.Reference, g.Brand, g.RightEye, g.LeftEye,
+	err := r.pgpool.QueryRow(ctx, query, g.Reference, g.Brand, g.RightSph, g.LeftSph,
 		g.Color, g.Type, g.Feature, g.UserID).Scan(&g.GlassesID)
 
 	if err != nil {
@@ -191,7 +210,7 @@ func (r *GlassesRepository) GetSum(ctx context.Context) (int, error) {
 func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 	page, pageSize int, orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, 
-					 right_eye_strength, left_eye_strength, type,
+					 right_sph, left_sph, type,
        				 reference, is_in_stock, features,  
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
@@ -212,7 +231,7 @@ func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 func (r *GlassesRepository) GetGlassesByStock(ctx context.Context,
 	page, pageSize int, orderBy, sortBy string, isInStock bool) ([]models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, 
-					 right_eye_strength, left_eye_strength, type,
+					 right_sph, left_sph, type,
                      reference, is_in_stock, features,  
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
                  FROM glasses g

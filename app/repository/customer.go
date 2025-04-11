@@ -87,13 +87,13 @@ func (r *CustomerRepository) GetShippingDetails(ctx context.Context, page, pageS
 	orderBy, sortBy, name string, leftEye, rightEye *float64) ([]models.ShippingDetails, error) {
 	var sd []models.ShippingDetails
 	query := `select c.customer_id, c.name, card_id_number, email, g.reference,
-       			g.left_eye_strength, g.right_eye_strength,
+       			g.left_sph, g.right_sph,
        			c.created_at, c.updated_at
 				from customer c
 				join glasses g on g.glasses_id = c.glasses_id
 				WHERE Trim(Upper(c.name)) ILIKE trim(upper('%' || $1 || '%'))
-			 	AND ($2::float8 IS NULL OR g.left_eye_strength = $2)
-			 	AND ($3::float8 IS NULL OR g.right_eye_strength = $3)
+			 	AND ($2::float8 IS NULL OR g.left_sph = $2)
+			 	AND ($3::float8 IS NULL OR g.right_sph = $3)
 				ORDER BY
 				CASE
 					WHEN $4 = 'Brand' THEN g.brand
@@ -131,14 +131,14 @@ func (r *CustomerRepository) GetShippingExpandedDetails(ctx context.Context, pag
 	orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.SettingsShippingDetails, error) {
 	var sd []models.SettingsShippingDetails
 	query := `select u.username, u.email as "collaborator_email", c.name, c.card_id_number, c.email, g.reference,
-       			g.left_eye_strength, g.right_eye_strength, c.customer_id,
+       			g.left_sph, g.right_sph, c.customer_id,
        			c.created_at, c.updated_at
 				from customer c
 				join glasses g on g.glasses_id = c.glasses_id
 				join "user" u on u.user_id = c.user_id
 				WHERE Trim(Upper(u.username)) ILIKE trim(upper('%' || $1 || '%'))
-			 	AND ($2::float8 IS NULL OR g.left_eye_strength = $2)
-			 	AND ($3::float8 IS NULL OR g.right_eye_strength = $3)
+			 	AND ($2::float8 IS NULL OR g.left_sph = $2)
+			 	AND ($3::float8 IS NULL OR g.right_sph = $3)
 				ORDER BY
 				CASE
 					WHEN $4 = 'Brand' THEN g.brand
@@ -211,7 +211,7 @@ func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form mod
 
 	glassesUpdateQuery := `
         UPDATE glasses
-        SET reference = $1, left_eye_strength = $2, right_eye_strength = $3, updated_at = NOW()
+        SET reference = $1, left_sph = $2, right_sph = $3, updated_at = NOW()
         WHERE glasses_id = (
             SELECT glasses_id
             FROM customer
@@ -235,7 +235,7 @@ func (r *CustomerRepository) UpdateShippingDetails(ctx context.Context, form mod
 }
 
 func (r *CustomerRepository) GetCustomerGlassesID(ctx context.Context, customerID uuid.UUID) (*models.ShippingDetails, error) {
-	query := `SELECT c.customer_id, g.right_eye_strength, g.left_eye_strength
+	query := `SELECT c.customer_id, g.right_sph, g.left_sph
 				FROM glasses g
 				JOIN customer c ON c.glasses_id = g.glasses_id
 				WHERE c.customer_id = $1`

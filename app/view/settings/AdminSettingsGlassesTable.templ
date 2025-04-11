@@ -14,7 +14,7 @@ templ GlassesTable(a models.GlassesTable) {
 				@components.InputSearch("Filter username", "/glasses", "user_name", "#searchResults")
 			</div>
 			<div class="mr-2">
-				@components.InputComboComponent("Filter left eye", "Filter right eye", "/glasses", "left_eye_strength", "#searchResults", "right_eye_strength")
+				@components.InputComboComponent("Filter left eye", "Filter right eye", "/glasses", "left_sph", "#searchResults", "right_sph")
 			</div>
 		}
 		<div class="flex flex-col">

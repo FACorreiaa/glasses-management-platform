@@ -51,8 +51,8 @@ func (h *Handler) getGlasses(w http.ResponseWriter, r *http.Request) (int, []mod
 
 	reference := r.FormValue("reference")
 
-	leftEyeStr := r.FormValue("left_eye_strength")
-	rightEyeStr := r.FormValue("right_eye_strength")
+	leftEyeStr := r.FormValue("left_sph")
+	rightEyeStr := r.FormValue("right_sph")
 
 	var leftEye, rightEye *float64
 
@@ -200,7 +200,7 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 
 	rightSph, err := strconv.ParseFloat(r.FormValue("left_sph"), 64)
 	if err != nil {
-		fieldError["left_eye_strength"] = "invalid lerightft eye strength"
+		fieldError["left_sph"] = "invalid lerightft eye strength"
 	}
 
 	leftCyl, err := strconv.ParseFloat(r.FormValue("left_cyl"), 64)

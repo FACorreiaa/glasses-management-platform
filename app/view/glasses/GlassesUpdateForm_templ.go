@@ -84,7 +84,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Left eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"left_eye_strength\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"></div></div><div class=\"flex flex-wrap mb-10\"><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Left eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"left_sph\" autocomplete=\"left-eye\" id=\"left-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -97,7 +97,7 @@ func GlassesUpdateForm(form models.GlassesForm, id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Right eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"right_eye_strength\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"></div><div class=\"w-full md:w-1/2 px-4 mb-4\"><label class=\"font-medium text-slate-900\">Right eye strength</label> <input type=\"number\" class=\"block w-60 px-4 py-4 mt-1 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-hidden \" data-primary=\"blue-600\" data-rounded=\"rounded-lg\" placeholder=\"Insert graduation\" name=\"right_sph\" autocomplete=\"right-eye\" id=\"right-eye\" min=\"-99\" max=\"99\" step=\"0.1\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

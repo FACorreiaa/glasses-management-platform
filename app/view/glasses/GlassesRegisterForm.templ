@@ -7,121 +7,329 @@ import (
 
 templ GlassesRegisterForm(form models.GlassesForm) {
 	<section class="w-full bg-white py-8">
-		<div class="mx-auto max-w-7xl px-4 sm:px-4 lg:px-8">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"> // Adjusted padding consistency
 			<h2 class="mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl">Insert Glasses</h2>
-			<div class="flex flex-col lg:flex-row">
-				<form method="post" class="w-full space-y-4">
-					<div class="flex flex-wrap mx-4">
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							<label class="block font-medium text-gray-900 mb-1" for="reference">Reference</label>
-							<input
-								type="text"
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-								placeholder="Insert reference"
-								name="reference"
-								autocomplete="reference"
-								id="reference"
-								required
-								value={ form.Values["Reference"] }
-							/>
-						</div>
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							<label class="block font-medium text-gray-900 mb-1" for="brand">Brand</label>
-							<input
-								type="text"
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-								placeholder="Insert brand"
-								name="brand"
-								autocomplete="brand"
-								id="brand"
-								value={ form.Values["Brand"] }
-							/>
-						</div>
+			<form method="post" class="w-full space-y-6"> // Increased space between sections
+
+				// Section 1: General Info (Reference, Brand, Color, Type)
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4"> // Use grid for better alignment
+					<div>
+						<label class="block font-medium text-gray-900 mb-1" for="reference">Reference</label>
+						<input
+							type="text"
+							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							placeholder="Insert reference"
+							name="reference"
+							autocomplete="off"
+							id="reference"
+							required
+							value={ form.Values["reference"] } 
+						/>
+						if form.FieldErrors["reference"] != "" {
+							<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["reference"] }</p>
+						}
 					</div>
-					<div class="flex flex-wrap mx-4">
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							<label class="block font-medium text-gray-900 mb-1" for="left-eye">Left Eye Strength</label>
+					<div>
+						<label class="block font-medium text-gray-900 mb-1" for="brand">Brand</label>
+						<input
+							type="text"
+							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							placeholder="Insert brand"
+							name="brand"
+							autocomplete="off"
+							id="brand"
+							value={ form.Values["brand"] }
+						/>
+						if form.FieldErrors["brand"] != "" {
+							<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["brand"] }</p>
+						}
+					</div>
+					<div>
+						<label class="block font-medium text-gray-900 mb-1" for="color">Color</label>
+						<input
+							type="text"
+							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							placeholder="Insert color"
+							name="color"
+							autocomplete="off"
+							id="color"
+							value={ form.Values["color"] }
+						/>
+						if form.FieldErrors["color"] != "" {
+							<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["color"] }</p>
+						}
+					</div>
+					<div>
+						<label class="block font-medium text-gray-900 mb-1" for="type">Type</label>
+						<select
+							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+							name="type"
+							id="type"
+							required
+						>
+							// Handle selected value properly
+							// <option value="" disabled selected={ form.Values["type"] == "" }>Select type</option>
+							// <option value="adult" selected={ form.Values["type"] == "adult" }>Adult</option>
+							// <option value="children" selected={ form.Values["type"] == "children" }>Children</option>
+							<option disabled selected>Select type</option>
+							<option value="adult">Adult</option>
+							<option value="children">Children</option>
+						</select>
+						if form.FieldErrors["type"] != "" {
+							<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["type"] }</p>
+						}
+					</div>
+				</div>
+
+				// Section 2: Left Eye Prescription
+				<div class="border-t border-gray-200 pt-6">
+					<h3 class="text-xl font-semibold mb-4 text-gray-800">Left Eye Prescription (L)</h3>
+					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4">
+						// Left Sph
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="left_sph">Sphere (Sph)</label>
 							<input
 								type="number"
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-								placeholder="Insert graduation"
-								name="left_eye_strength"
-								autocomplete="left-eye"
-								id="left-eye"
-								min="-99"
-								max="99"
-								step="0.1"
-								required
-								value={ form.Values["LeftEye"] }
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="+/- 0.00"
+								name="left_sph"
+								id="left_sph"
+								min="-25" 
+								max="25"
+								step="0.05"
+								value={ form.Values["left_sph"] }
 							/>
+							if form.FieldErrors["left_sph"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_sph"] }</p>
+							}
 						</div>
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							<label class="block font-medium text-gray-900 mb-1" for="right-eye">Right Eye Strength</label>
+						// Left Cyl
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="left_cyl">Cylinder (Cyl)</label>
 							<input
 								type="number"
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-								placeholder="Insert graduation"
-								name="right_eye_strength"
-								autocomplete="right-eye"
-								id="right-eye"
-								min="-99"
-								max="99"
-								step="0.1"
-								required
-								value={ form.Values["RightEye"] }
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="- 0.00"
+								name="left_cyl"
+								id="left_cyl"
+								min="-10" 
+								max="0"    
+								step="0.05"
+								value={ form.Values["left_cyl"] }
 							/>
+							if form.FieldErrors["left_cyl"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_cyl"] }</p>
+							}
 						</div>
-					</div>
-					<div class="flex flex-wrap mx-4">
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							<label class="block font-medium text-gray-900 mb-1" for="color">Color</label>
+						// Left Axis
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="left_axis">Axis (A)</label>
 							<input
-								type="text"
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-								placeholder="Insert color"
-								name="color"
-								autocomplete="color"
-								id="color"
-								value={ form.Values["Color"] }
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="0 - 180"
+								name="left_axis"
+								id="left_axis"
+								min="0"
+								max="180"
+								step="1"
+								value={ form.Values["left_axis"] }
 							/>
+							if form.FieldErrors["left_axis"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_axis"] }</p>
+							}
 						</div>
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							<label class="block font-medium text-gray-900 mb-1" for="type">Type</label>
-							<select
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-								name="type"
-								id="type"
-								required
-								value={ form.Values["Type"] }
-							>
-								<option disabled selected>Select type</option>
-								<option value="adult">Adult</option>
-								<option value="children">Children</option>
-							</select>
+						// Left Add
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="left_add">Addition (Add)</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="+ 0.00"
+								name="left_add"
+								id="left_add"
+								min="0" 
+								max="5" 
+								step="0.05"
+								value={ form.Values["left_add"] }
+							/>
+							if form.FieldErrors["left_add"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_add"] }</p>
+							}
 						</div>
-						<div class="relative w-full mb-4">
-							<div class="w-full md:w-full px-4 mb-4">
-								<label class="block font-medium text-gray-900 mb-1" for="features">Features</label>
-								<textarea
-									class="w-full block px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-									name="features"
-									placeholder="Glasses features"
-									id="features"
-									value={ form.Values["Feature"] }
-								></textarea>
-							</div>
+						// Left Prism
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="left_prism">Prism (Pris)</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="0.00 Δ"
+								name="left_prism"
+								id="left_prism"
+								min="0" 
+								max="15" 
+								step="0.05"
+								value={ form.Values["left_prism"] }
+							/>
+							if form.FieldErrors["left_prism"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_prism"] }</p>
+							}
+						</div>
+						// Left Base
+						<div>
+							<div>
+							<label class="block font-medium text-gray-900 mb-1" for="left_base">Base</label>
+							<input
+							type="text"
+							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							placeholder="Insert color"
+							name="left_base"
+							autocomplete="off"
+							id="color"
+							value={ form.Values["left_base"] }
+						/>
+							if form.FieldErrors["left_base"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_base"] }</p>
+							}
+						</div>
 						</div>
 					</div>
-					<div class="flex flex-wrap mx-4">
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							@components.ButtonReturnComponent(templ.SafeURL("/"))
+				</div>
+
+				// Section 3: Right Eye Prescription
+				<div class="border-t border-gray-200 pt-6">
+					<h3 class="text-xl font-semibold mb-4 text-gray-800">Right Eye Prescription (R)</h3>
+					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4">
+						// Right Sph
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="right_sph">Sphere (Sph)</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="+/- 0.00"
+								name="right_sph"
+								id="right_sph"
+								min="-25"
+								max="25"
+								step="0.05"
+								value={ form.Values["right_sph"] }
+							/>
+							if form.FieldErrors["right_sph"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_sph"] }</p>
+							}
 						</div>
-						<div class="w-full md:w-1/2 px-4 mb-4">
-							@components.ButtonInsertComponent("Insert")
+						// Right Cyl
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="right_cyl">Cylinder (Cyl)</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="- 0.00"
+								name="right_cyl"
+								id="right_cyl"
+								min="-10"
+								max="0" 
+								step="0.05"
+								value={ form.Values["right_cyl"] }
+							/>
+							if form.FieldErrors["right_cyl"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_cyl"] }</p>
+							}
+						</div>
+						// Right Axis
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="right_axis">Axis (A)</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="0 - 180"
+								name="right_axis"
+								id="right_axis"
+								min="0"
+								max="180"
+								step="1"
+								value={ form.Values["right_axis"] }
+							/>
+							if form.FieldErrors["right_axis"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_axis"] }</p>
+							}
+						</div>
+						// Right Add
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="right_add">Addition (Add)</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="+ 0.00"
+								name="right_add"
+								id="right_add"
+								min="0"
+								max="5"
+								step="0.05"
+								value={ form.Values["right_add"] }
+							/>
+							if form.FieldErrors["right_add"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_add"] }</p>
+							}
+						</div>
+						// Right Prism
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="right_prism">Prism (Pris)</label>
+							<input
+								type="number"
+								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								placeholder="0.00 Δ"
+								name="right_prism"
+								id="right_prism"
+								min="0"
+								max="15"
+								step="0.05"
+								value={ form.Values["right_prism"] }
+							/>
+							if form.FieldErrors["right_prism"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_prism"] }</p>
+							}
+						</div>
+						// Right Base
+						<div>
+							<label class="block font-medium text-gray-900 mb-1" for="right_base">Base</label>
+							<input
+							type="text"
+							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							placeholder="Insert color"
+							name="right_base"
+							autocomplete="off"
+							id="color"
+							value={ form.Values["right_base"] }
+						/>
+							if form.FieldErrors["right_base"] != "" {
+								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_base"] }</p>
+							}
 						</div>
 					</div>
-				</form>
-			</div>
+				</div>
+
+				// Section 4: Features
+				<div class="border-t border-gray-200 pt-6">
+					<label class="block font-medium text-gray-900 mb-1" for="features">Features</label>
+					<textarea
+						class="w-full block px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						name="features"
+						placeholder="e.g., Anti-reflective coating, Blue light filter, Photochromic"
+						id="features"
+						rows="3" 
+					>{ form.Values["features"] }</textarea> // Textarea value goes between tags
+					if form.FieldErrors["features"] != "" {
+						<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["features"] }</p>
+					}
+				</div>
+
+				// Section 5: Actions
+				<div class="border-t border-gray-200 pt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4"> // Improved button layout
+					@components.ButtonReturnComponent(templ.SafeURL("/")) // Assuming this takes a URL
+					@components.ButtonInsertComponent("Insert Glasses") // More specific button text
+				</div>
+			</form>
 		</div>
 	</section>
 }

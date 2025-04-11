@@ -45,8 +45,8 @@ func (h *Handler) getGlassesDetails(w http.ResponseWriter, r *http.Request) (int
 
 	username := r.FormValue("user_name")
 
-	leftEyeStr := r.FormValue("left_eye_strength")
-	rightEyeStr := r.FormValue("right_eye_strength")
+	leftEyeStr := r.FormValue("left_sph")
+	rightEyeStr := r.FormValue("right_sph")
 
 	var leftEye, rightEye *float64
 
@@ -285,8 +285,8 @@ func (h *Handler) getSettingsShipping(w http.ResponseWriter, r *http.Request) (i
 	}
 
 	name := r.FormValue("name")
-	leftEyeStr := r.FormValue("left_eye_strength")
-	rightEyeStr := r.FormValue("right_eye_strength")
+	leftEyeStr := r.FormValue("left_sph")
+	rightEyeStr := r.FormValue("right_sph")
 
 	var leftEye, rightEye *float64
 

@@ -64,7 +64,7 @@ func ShippingDetailsSimple(a models.ShippingDetailsTable, form models.ShippingDe
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.InputComboComponent("Filter left eye", "Filter right eye", "/shipping", "left_eye_strength", "#searchResults", "right_eye_strength").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.InputComboComponent("Filter left eye", "Filter right eye", "/shipping", "left_sph", "#searchResults", "right_sph").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

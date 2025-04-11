@@ -131,8 +131,8 @@ func (h *Handler) getShipping(w http.ResponseWriter, r *http.Request) (int, []mo
 
 	name := r.FormValue("name")
 
-	leftEyeStr := r.FormValue("left_eye_strength")
-	rightEyeStr := r.FormValue("right_eye_strength")
+	leftEyeStr := r.FormValue("left_sph")
+	rightEyeStr := r.FormValue("right_sph")
 
 	var leftEye, rightEye *float64
 
@@ -310,8 +310,8 @@ func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 		CardID:      r.FormValue("card_id_number"),
 		Email:       r.FormValue("email"),
 		Reference:   r.FormValue("reference"),
-		LeftEye:     parseFloat(r.FormValue("left_eye_strength")),
-		RightEye:    parseFloat(r.FormValue("right_eye_strength")),
+		LeftEye:     parseFloat(r.FormValue("left_sph")),
+		RightEye:    parseFloat(r.FormValue("right_sph")),
 		FieldErrors: make(map[string]string),
 	}
 

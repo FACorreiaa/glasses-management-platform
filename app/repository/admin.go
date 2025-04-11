@@ -314,15 +314,15 @@ func (a *AdminRepository) GetAdminID(ctx context.Context, userID uuid.UUID) (*mo
 func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSize int, orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.Glasses, error) {
 	query := `
 		SELECT
-			u.username, u.email, g.left_eye_strength, g.right_eye_strength,
+			u.username, u.email, g.left_sph, g.right_sph,
 			g.reference, g.is_in_stock,
 			COALESCE(g.updated_at, '1970-01-01 00:00:00') AS updated_at, g.created_at
 		FROM glasses g
 		JOIN "user" u ON g.user_id = u.user_id
 		WHERE
 			Trim(Upper(u.username)) ILIKE trim(upper('%' || $4 || '%'))
-			AND ($5::float8 IS NULL OR g.left_eye_strength = $5)
-			AND ($6::float8 IS NULL OR g.right_eye_strength = $6)
+			AND ($5::float8 IS NULL OR g.left_sph = $5)
+			AND ($6::float8 IS NULL OR g.right_sph = $6)
 		ORDER BY
 			CASE
 				WHEN $1 = 'Brand' THEN g.brand
