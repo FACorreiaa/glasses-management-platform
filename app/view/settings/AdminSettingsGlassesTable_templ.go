@@ -154,15 +154,9 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.2f", glasses.LeftEye))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 51, Col: 114}
-=======
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Sph))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 51, Col: 128}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -173,15 +167,9 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var8 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.2f", glasses.RightEye))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 52, Col: 115}
-=======
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Cyl))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 52, Col: 128}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -192,15 +180,9 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var9 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Reference)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 53, Col: 94}
-=======
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", glasses.LeftPrescription.Axis))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 53, Col: 125}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -211,15 +193,9 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var10 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%v", glasses.IsInStock))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 54, Col: 113}
-=======
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Add))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 54, Col: 128}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
@@ -230,15 +206,9 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var11 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.CreatedAt.Format("02-01-2006"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 55, Col: 115}
-=======
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Prism))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 55, Col: 130}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
@@ -249,23 +219,14 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var12 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.UpdatedAt.Format("02-01-2006"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 56, Col: 115}
-=======
 			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s", *glasses.LeftPrescription.Base))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 56, Col: 126}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-<<<<<<< HEAD
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><td class=\"px-4 py-4 whitespace-nowrap text-right text-sm font-medium\">")
-=======
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><td class=\"px-4 py-4 whitespace-nowrap text-sm text-neutral-500\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -397,7 +358,6 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "</td><td class=\"px-4 py-4 whitespace-nowrap text-right text-sm font-medium\">")
->>>>>>> master
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -407,22 +367,6 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-<<<<<<< HEAD
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<button hx-delete=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var13 string
-			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/glasses/%s", glasses.GlassesID))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/settings/AdminSettingsGlassesTable.templ`, Line: 62, Col: 69}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\" type=\"button\" hx-confirm=\"Are you sure?\" hx-target=\"closest tr\" hx-swap=\"outerHTML swap:1s\" class=\"btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden\"><span>Delete</span> <ion-icon name=\"trash-outline\"></ion-icon></button></td></tr>")
-=======
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<button hx-delete=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -437,16 +381,11 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "\" type=\"button\" hx-confirm=\"Are you sure?\" hx-target=\"closest tr\" hx-swap=\"outerHTML swap:1s\" class=\"btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden\"><span>Delete</span> <ion-icon name=\"trash-outline\"></ion-icon></button></td></tr>")
->>>>>>> master
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-<<<<<<< HEAD
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</tbody></table></div></div></div></div>")
-=======
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</tbody></table></div></div></div></div>")
->>>>>>> master
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -461,11 +400,7 @@ func GlassesTable(a models.GlassesTable) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-<<<<<<< HEAD
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<div id=\"detailsSpace\"></div></div>")
-=======
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div id=\"detailsSpace\"></div></div>")
->>>>>>> master
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

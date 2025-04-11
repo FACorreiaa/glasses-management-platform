@@ -1,11 +1,8 @@
 package models
 
 import (
-<<<<<<< HEAD
-=======
 	"fmt"
 	"strings"
->>>>>>> master
 	"time"
 
 	"github.com/a-h/templ"

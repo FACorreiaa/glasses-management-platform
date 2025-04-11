@@ -184,15 +184,9 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var9 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.2f", glasses.LeftEye))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 63, Col: 114}
-=======
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Sph))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 63, Col: 128}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -203,15 +197,9 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var10 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.2f", glasses.RightEye))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 64, Col: 115}
-=======
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Cyl))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 64, Col: 128}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
@@ -222,47 +210,14 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var11 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Reference)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 65, Col: 94}
-=======
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", glasses.LeftPrescription.Axis))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 65, Col: 125}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-<<<<<<< HEAD
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><div><td class=\"px-4 py-4 whitespace-nowrap text-sm text-neutral-500\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			if glasses.IsInStock == true {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<span>Yes</span> <a href=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var12 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/customer/glasses/%s/send", glasses.GlassesID))
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var12)))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\" class=\"btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden\"><span>Send</span> <ion-icon name=\"send-outline\"></ion-icon></a>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<span>No</span>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "</td></div><td class=\"px-4 py-4 whitespace-nowrap text-sm text-neutral-500\">")
-=======
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</td><td class=\"px-4 py-4 whitespace-nowrap text-sm text-neutral-500\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -277,27 +232,18 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</td><td class=\"px-4 py-4 whitespace-nowrap text-sm text-neutral-500\">")
->>>>>>> master
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var13 string
-<<<<<<< HEAD
-			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.Feature)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 82, Col: 92}
-=======
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Prism))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 67, Col: 130}
->>>>>>> master
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-<<<<<<< HEAD
-=======
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</td><td class=\"px-4 py-4 whitespace-nowrap text-sm text-neutral-500\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -337,26 +283,16 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
->>>>>>> master
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "</td><td class=\"px-4 py-4 whitespace-nowrap text-sm text-neutral-500\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-<<<<<<< HEAD
-			var templ_7745c5c3_Var14 string
-			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.CreatedAt.Format("02-01-2006"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 83, Col: 115}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
-=======
 			var templ_7745c5c3_Var17 string
 			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%df", glasses.RightPrescription.Axis))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 72, Col: 127}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
->>>>>>> master
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -364,18 +300,6 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-<<<<<<< HEAD
-			var templ_7745c5c3_Var15 string
-			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(glasses.UpdatedAt.Format("02-01-2006"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesTable.templ`, Line: 84, Col: 115}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "</td><td class=\"px-4 py-4 whitespace-nowrap text-right text-sm font-medium\">")
-=======
 			var templ_7745c5c3_Var18 string
 			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%0.3f", *glasses.RightPrescription.Add))
 			if templ_7745c5c3_Err != nil {
@@ -488,7 +412,6 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "</td><td class=\"px-4 py-4 whitespace-nowrap text-right text-sm font-medium\">")
->>>>>>> master
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -497,11 +420,7 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-<<<<<<< HEAD
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, " ")
-=======
 				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, " ")
->>>>>>> master
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -510,20 +429,12 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 					return templ_7745c5c3_Err
 				}
 			}
-<<<<<<< HEAD
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</td></tr>")
-=======
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "</td></tr>")
->>>>>>> master
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-<<<<<<< HEAD
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "</tbody></table></div></div></div></div>")
-=======
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "</tbody></table></div></div></div></div>")
->>>>>>> master
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -538,11 +449,7 @@ func GlassesTable(a models.GlassesTable, form models.GlassesForm) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-<<<<<<< HEAD
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div id=\"detailsSpace\"></div></div>")
-=======
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "<div id=\"detailsSpace\"></div></div>")
->>>>>>> master
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
