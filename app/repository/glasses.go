@@ -83,8 +83,10 @@ func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query strin
 
 func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
-       				reference, is_in_stock, features, COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+	query := `SELECT glasses_id, color, brand, 
+					 right_eye_strength, left_eye_strength, type,
+       				 reference, is_in_stock, features, 
+					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
 			 	AND ($5::float8 IS NULL OR g.left_eye_strength = $5)
@@ -106,7 +108,8 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 }
 
 func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
+	query := `SELECT glasses_id, color, brand, 
+	 				right_eye_strength, left_eye_strength, type,
        				reference, is_in_stock, features, updated_at, created_at
 				FROM glasses
 				WHERE glasses_id = $1`
@@ -142,7 +145,8 @@ func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID uuid.UU
 func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
 		UPDATE glasses
-		SET color = $1, brand = $2, right_eye_strength = $3, left_eye_strength = $4, reference = $5, type =$6,
+		SET color = $1, brand = $2, right_eye_strength = $3, 
+			left_eye_strength = $4, reference = $5, type =$6,
 		    features = $7, updated_at = NOW()
 		WHERE glasses_id = $8
 	`
@@ -157,7 +161,8 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesF
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
-		INSERT INTO glasses (reference, brand, right_eye_strength, left_eye_strength, color, type, features,
+		INSERT INTO glasses (reference, brand, right_eye_strength, left_eye_strength, 
+							color, type, features,
 		                     is_in_stock, created_at, updated_at, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, true, NOW(), NOW(), $8)
 		RETURNING glasses_id
@@ -185,8 +190,10 @@ func (r *GlassesRepository) GetSum(ctx context.Context) (int, error) {
 
 func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 	page, pageSize int, orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
-       				reference, is_in_stock, features,  COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+	query := `SELECT glasses_id, color, brand, 
+					 right_eye_strength, left_eye_strength, type,
+       				 reference, is_in_stock, features,  
+					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	where type = $5
 			 	ORDER BY
@@ -204,8 +211,10 @@ func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 
 func (r *GlassesRepository) GetGlassesByStock(ctx context.Context,
 	page, pageSize int, orderBy, sortBy string, isInStock bool) ([]models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, right_eye_strength, left_eye_strength, type,
-                     reference, is_in_stock, features,  COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+	query := `SELECT glasses_id, color, brand, 
+					 right_eye_strength, left_eye_strength, type,
+                     reference, is_in_stock, features,  
+					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
                  FROM glasses g
                  WHERE is_in_stock = $5
                  ORDER BY
