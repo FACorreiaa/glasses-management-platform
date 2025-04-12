@@ -9,15 +9,11 @@ create table glasses
   left_cyl         numeric,
   left_axis        numeric,
   left_add         numeric,
-  left_prism       numeric,
-  left_base        VARCHAR(10),
   
   right_sph        numeric,
   right_cyl       numeric,
   right_axis      numeric,
   right_add       numeric,
-  right_prism     numeric,
-  right_base      VARCHAR(10),
   type               text CHECK (
     type IN (
              'adult',

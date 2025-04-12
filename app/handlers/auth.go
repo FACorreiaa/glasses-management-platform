@@ -45,11 +45,17 @@ func (h *Handler) formErrors(err error) []string {
 // login
 
 func (h *Handler) LoginPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "LoginPageHandler")
+	defer span.End()
+
 	login := user.LoginPage(models.LoginPage{})
-	return h.CreateLayout(w, r, "Login", login).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Login", login).Render(context.Background(), w)
 }
 
 func (h *Handler) LoginPost(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "LoginPostHandler")
+	defer span.End()
+
 	if err := r.ParseForm(); err != nil {
 		return err
 	}
@@ -65,7 +71,7 @@ func (h *Handler) LoginPost(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		login := user.LoginPage(models.LoginPage{Errors: h.formErrors(err)})
 
-		return h.CreateLayout(w, r, "Sign In", login).Render(context.Background(), w)
+		return h.CreateLayout(ctx, w, r, "Sign In", login).Render(context.Background(), w)
 	}
 
 	s, _ := h.sessions.Get(r, "auth")

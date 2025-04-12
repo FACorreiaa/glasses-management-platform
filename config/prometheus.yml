@@ -1,0 +1,11 @@
+# prometheus.yml
+global:
+  scrape_interval: 15s # How frequently to scrape targets
+
+scrape_configs:
+  - job_name: "go-glasses-app" # Name for your application job
+    static_configs:
+      - targets: ["localhost:8080"] # <-- IMPORTANT
+        # 'host.docker.internal' lets the Docker container reach your host machine.
+        # Assumes your Go app runs on port 8080 on your local machine.
+        # Change 8080 if your app uses a different port locally.

@@ -1,0 +1,35 @@
+# fly.toml for Prometheus deployment
+
+app = 'glasses-management-platform-prometheus'
+primary_region = 'lhr'
+
+# NO [build] section needed here - Fly will use the local Dockerfile
+
+# NO [[files]] section needed here - Dockerfile handles copying
+
+# Define how to run Prometheus
+[processes]
+  app = "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.enable-lifecycle"
+
+
+# Expose the Prometheus UI/API
+[http_service]
+  internal_port = 9090 # Prometheus default port
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+
+# Define the machine resources
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512 # Start with 512MB, monitor usage
+
+
+# Mount a persistent volume to store metrics data
+[mounts]
+  source = "prometheus_data" # Name of the volume
+  destination = "/prometheus" # Prometheus data directory

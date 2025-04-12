@@ -1,0 +1,17 @@
+# prometheus.yml
+
+global:
+  scrape_interval: 15s # How often to scrape
+
+scrape_configs:
+  # Job to scrape your Go application
+  - job_name: "go-glasses-app"
+    metrics_path: /metrics # The path your Go app exposes metrics on
+    static_configs:
+      # Use Fly's internal DNS to find your Go app
+      - targets: ["glasses-management-platform.internal:8080"] # Port Go app listens on (usually 8080 on Fly)
+
+  # Job to scrape Prometheus itself (optional but good practice)
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"] # Prometheus listens on 9090 internally

@@ -23,14 +23,19 @@ import (
 )
 
 func (h *Handler) InsertShippingFormPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "InsertShippingFormPageHandler")
+	defer span.End()
 	sidebar := h.renderSidebar()
 
 	form := customer.CustomerShipingDetailsForm(models.CustomerShippingForm{})
 	home := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, form)
-	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Insert Shipping Form", home).Render(context.Background(), w)
 }
 
 func (h *Handler) InsertShippingForm(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "InsertShippingFormHandler")
+	defer span.End()
+
 	var user *models.UserSession
 	fieldErrors := make(map[string]string)
 
@@ -96,7 +101,7 @@ func (h *Handler) InsertShippingForm(w http.ResponseWriter, r *http.Request) err
 		sidebar := h.renderSidebar()
 		f := customer.CustomerShipingDetailsForm(form)
 		register := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, f)
-		return h.CreateLayout(w, r, "Insert Shipping Form", register).Render(context.Background(), w)
+		return h.CreateLayout(ctx, w, r, "Insert Shipping Form", register).Render(context.Background(), w)
 	}
 
 	if err = h.service.InsertShippingDetails(r.Context(), glassesID, user.ID, customerForm, shipping); err != nil {
@@ -235,16 +240,22 @@ func (h *Handler) renderShippingDetailsTable(w http.ResponseWriter, r *http.Requ
 }
 
 func (h *Handler) GetShippingDetailsPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "GetShippingDetailsPageHandler")
+	defer span.End()
+
 	sidebar := h.renderShippingSidebar()
 	renderTable, err := h.renderShippingDetailsTable(w, r)
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 	}
 	home := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, renderTable)
-	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Insert Shipping Form", home).Render(context.Background(), w)
 }
 
 func (h *Handler) UpdateCustomerPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UpdateCustomerPageHandler")
+	defer span.End()
+
 	sidebar := h.renderSettingsSidebar()
 
 	vars := mux.Vars(r)
@@ -284,10 +295,13 @@ func (h *Handler) UpdateCustomerPage(w http.ResponseWriter, r *http.Request) err
 
 	f := shipping.ShippingUpdateForm(form)
 	home := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, f)
-	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Insert Shipping Form", home).Render(context.Background(), w)
 }
 
 func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UpdateCustomerHandler")
+	defer span.End()
+
 	vars := mux.Vars(r)
 	id := vars["customer_id"]
 	println("Received customer_id from URL UpdateCustomer:", id)
@@ -341,7 +355,7 @@ func (h *Handler) UpdateCustomer(w http.ResponseWriter, r *http.Request) error {
 		sidebar := h.renderSidebar()
 		f := shipping.ShippingUpdateForm(form)
 		register := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, f)
-		return h.CreateLayout(w, r, "Insert Shipping Form", register).Render(context.Background(), w)
+		return h.CreateLayout(ctx, w, r, "Insert Shipping Form", register).Render(context.Background(), w)
 	}
 
 	if err := h.service.UpdateShippingDetails(context.Background(), form, customerID); err != nil {

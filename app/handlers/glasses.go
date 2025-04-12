@@ -7,15 +7,22 @@ import (
 	"net/http"
 	"strconv"
 
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+
 	httperror "github.com/FACorreiaa/glasses-management-platform/app/errors"
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/glasses"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/pages"
+
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
+
+var tracer = otel.Tracer("github.com/FACorreiaa/glasses-management-platform/services")
 
 func (h *Handler) renderSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
@@ -41,6 +48,9 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 }
 
 func (h *Handler) getGlasses(w http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
+	ctx, span := tracer.Start(r.Context(), "getGlassesHandler") // Use request context!
+	defer span.End()
+
 	pageSize := 10
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
@@ -87,11 +97,22 @@ func (h *Handler) getGlasses(w http.ResponseWriter, r *http.Request) (int, []mod
 		fmt.Println("rightEye is nil")
 	}
 
-	g, err := h.service.GetGlasses(context.Background(), page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
+	span.SetAttributes(
+		attribute.Int("page", page),
+		attribute.Int("pageSize", pageSize),
+		attribute.String("orderBy", orderBy),
+		attribute.String("sortBy", sortBy),
+	)
+
+	g, err := h.service.GetGlasses(ctx, page, pageSize, orderBy, sortBy, reference, leftEye, rightEye)
 	if err != nil {
+		span.RecordError(err) // Record errors on the span
+		span.SetStatus(codes.Error, err.Error())
 		httperror.ErrNotFound.WriteError(w)
 		return 0, nil, err
 	}
+
+	span.SetAttributes(attribute.Int("glasses.count", len(g)))
 
 	return page, g, nil
 }
@@ -158,20 +179,33 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 }
 
 func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "GlassesPageHandler")
+	defer span.End()
+
 	sidebar := h.renderSidebar()
 	renderTable, err := h.renderGlassesTable(w, r)
+	//errorPage := error.ErrorPage() // Example
+
 	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
 		HandleError(err, "rendering glasses table")
+		// Decide how to handle the error response (e.g., render an error page)
+		// You might want to render an error component instead of just logging
+		//return h.CreateLayout(ctx, w, r, "Error", errorPage).Render(ctx, w) // Render error page
 	}
 	home := pages.MainLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
-	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }
 
 func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "GlassesRegisterPageHandler")
+	defer span.End()
+
 	form := glasses.GlassesRegisterForm(models.GlassesForm{})
 	sidebar := h.renderSidebar()
 	insertPagePage := pages.MainLayoutPage("Insert glasses", "form to insert new glasses", sidebar, form)
-	return h.CreateLayout(w, r, "Insert glasses", insertPagePage).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Insert glasses", insertPagePage).Render(context.Background(), w)
 }
 
 func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
@@ -227,14 +261,6 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		fieldError["right_add"] = "invalid right eye add"
 	}
-	leftBase, err := strconv.ParseFloat(r.FormValue("left_base"), 64)
-	if err != nil {
-		fieldError["left_base"] = "invalid left eye base"
-	}
-	rightBase, err := strconv.ParseFloat(r.FormValue("right_base"), 64)
-	if err != nil {
-		fieldError["right_base"] = "invalid right eye base"
-	}
 
 	g := models.GlassesForm{
 		Reference:   r.FormValue("reference"),
@@ -243,12 +269,10 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		LeftCyl:     leftCyl,
 		LeftAxis:    leftAxis,
 		LeftAdd:     leftAdd,
-		LeftBase:    leftBase,
 		RightSph:    rightSph,
 		RightCyl:    rightCyl,
 		RightAxis:   rightAxis,
 		RightAdd:    rightAdd,
-		RightBase:   rightBase,
 		Color:       r.FormValue("color"),
 		Type:        r.FormValue("type"),
 		Feature:     r.FormValue("features"),
@@ -301,6 +325,9 @@ func (h *Handler) DeleteGlasses(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UpdateGlassesPageHandler")
+	defer span.End()
+
 	vars := mux.Vars(r)
 	glassesIDStr := vars["glasses_id"]
 	glassesID, err := uuid.Parse(glassesIDStr)
@@ -332,7 +359,7 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 	f := glasses.GlassesUpdateForm(form, glassesIDStr)
 	sidebar := h.renderSidebar()
 	updatePage := pages.MainLayoutPage("Update Glasses", "form to update glasses", sidebar, f)
-	return h.CreateLayout(w, r, "Update Glasses", updatePage).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Update Glasses", updatePage).Render(context.Background(), w)
 }
 
 func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
@@ -357,12 +384,10 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		LeftCyl:     parseFloat(r.FormValue("left_cyl")),
 		LeftAxis:    parseFloat(r.FormValue("left_axis")),
 		LeftAdd:     parseFloat(r.FormValue("left_add")),
-		LeftBase:    parseFloat(r.FormValue("left_base")),
 		RightSph:    parseFloat(r.FormValue("right_sph")),
 		RightCyl:    parseFloat(r.FormValue("right_cyl")),
 		RightAxis:   parseFloat(r.FormValue("right_axis")),
 		RightAdd:    parseFloat(r.FormValue("right_add")),
-		RightBase:   parseFloat(r.FormValue("right_base")),
 		Color:       r.FormValue("color"),
 		Type:        r.FormValue("type"),
 		Feature:     r.FormValue("features"),
@@ -489,13 +514,16 @@ func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ
 }
 
 func (h *Handler) GlassesTypePage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "GlassesTypePageHandler")
+	defer span.End()
+
 	sidebar := h.renderSidebar()
 	renderTable, err := h.renderTypeTable(w, r)
 	if err != nil {
 		HandleError(err, " rendering glasses table")
 	}
 	home := pages.MainLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
-	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }
 
 // Filter by stock
@@ -568,6 +596,9 @@ func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, h
 }
 
 func (h *Handler) GlassesStockPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "GlassesStockPageHandler")
+	defer span.End()
+
 	sidebar := h.renderSidebar()
 	var hasStock bool
 	vars := mux.Vars(r)
@@ -587,5 +618,5 @@ func (h *Handler) GlassesStockPage(w http.ResponseWriter, r *http.Request) error
 	}
 
 	home := pages.MainLayoutPage("Glasses Inventory Management", "Glasses Inventory Management", sidebar, renderTable)
-	return h.CreateLayout(w, r, "Glasses Inventory Management", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Glasses Inventory Management", home).Render(context.Background(), w)
 }

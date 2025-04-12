@@ -51,7 +51,7 @@ func HandleError(err error, message string) {
 	}
 }
 
-func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title string, data templ.Component) templ.Component {
+func (h *Handler) CreateLayout(ctx context.Context, w http.ResponseWriter, r *http.Request, title string, data templ.Component) templ.Component {
 	var user *models.UserSession
 	userCtx := r.Context().Value(models.CtxKeyAuthUser)
 	if userCtx != nil {
@@ -102,5 +102,5 @@ func (h *Handler) CreateLayout(w http.ResponseWriter, r *http.Request, title str
 
 func (h *Handler) Homepage(w http.ResponseWriter, r *http.Request) error {
 	home := pages.HomePage()
-	return h.CreateLayout(w, r, "Home Page", home).Render(context.Background(), w)
+	return h.CreateLayout(r.Context(), w, r, "Home Page", home).Render(context.Background(), w)
 }

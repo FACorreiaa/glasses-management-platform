@@ -99,21 +99,27 @@ func (h *Handler) renderCollaboratorsTable(w http.ResponseWriter, r *http.Reques
 
 // UsersPage users page for admin to manage views TODO
 func (h *Handler) UsersPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UserPageHandler")
+	defer span.End()
+
 	table, err := h.renderCollaboratorsTable(w, r)
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 	}
 	sidebar := h.renderSettingsSidebar()
 	users := pages.MainLayoutPage("List of collaborators", "List of collaborators", sidebar, table)
-	data := h.CreateLayout(w, r, "Users", users).Render(context.Background(), w)
+	data := h.CreateLayout(ctx, w, r, "Users", users).Render(context.Background(), w)
 	return data
 }
 
 func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UserInsertPageHandler")
+	defer span.End()
+
 	register := admin.RegisterPage(models.RegisterFormValues{})
 	sidebar := h.renderSettingsSidebar()
 	u := pages.MainLayoutPage("List of collaborators", "List of collaborators", sidebar, register)
-	return h.CreateLayout(w, r, "Insert new collaborator", u).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Insert new collaborator", u).Render(context.Background(), w)
 }
 
 // UserRegisterPostModal TODO FIX HAVING TO REFRESH
@@ -170,6 +176,9 @@ func (h *Handler) UserRegisterPostModal(w http.ResponseWriter, r *http.Request) 
 
 // UserRegisterPost register new user
 func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "USerRegisterPostHandler")
+	defer span.End()
+
 	if err := r.ParseForm(); err != nil {
 		HandleError(err, "parsing form")
 		return err
@@ -203,7 +212,7 @@ func (h *Handler) UserRegisterPost(w http.ResponseWriter, r *http.Request) error
 		sidebar := h.renderSettingsSidebar()
 		form := admin.RegisterPage(f)
 		register := pages.MainLayoutPage("Insert user Form", "Insert user Form", sidebar, form)
-		return h.CreateLayout(w, r, "Register collaborator", register).Render(context.Background(), w)
+		return h.CreateLayout(ctx, w, r, "Register collaborator", register).Render(context.Background(), w)
 	}
 
 	if _, err := h.service.InsertUser(context.Background(), f); err != nil {
@@ -242,6 +251,9 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) UpdateUserPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UpdateUserPageHandler")
+	defer span.End()
+
 	vars := mux.Vars(r)
 	userID := vars["user_id"]
 	u, err := uuid.Parse(userID)
@@ -268,7 +280,7 @@ func (h *Handler) UpdateUserPage(w http.ResponseWriter, r *http.Request) error {
 	sidebar := h.renderSettingsSidebar()
 
 	updatePage := pages.MainLayoutPage("Update users", "form to update users", sidebar, f)
-	return h.CreateLayout(w, r, "Update Glasses", updatePage).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Update Glasses", updatePage).Render(context.Background(), w)
 }
 
 func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {

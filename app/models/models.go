@@ -101,12 +101,10 @@ type Columns struct {
 
 // EyePrescription holds the optical details for a single eye
 type EyePrescription struct {
-	Sph   *float64 // Sphere
-	Cyl   *float64 // Cylinder
-	Axis  *int     // Axis (degrees)
-	Add   *float64 // Addition (for progressives/bifocals)
-	Prism *float64 // Prism power
-	Base  *string  // Prism base direction (UP, DOWN, IN, OUT)
+	Sph  *float64 // Sphere
+	Cyl  *float64 // Cylinder
+	Axis *int     // Axis (degrees)
+	Add  *float64 // Addition (for progressives/bifocals)
 }
 
 // Helper method to format the prescription for display
@@ -118,13 +116,6 @@ func (ep EyePrescription) String() string {
 	if ep.Cyl != nil && ep.Axis != nil { // Cyl and Axis go together
 		parts = append(parts, fmt.Sprintf("Cyl: %+0.2f", *ep.Cyl))
 		parts = append(parts, fmt.Sprintf("Ax: %d°", *ep.Axis))
-	}
-	if ep.Add != nil {
-		parts = append(parts, fmt.Sprintf("Add: %+0.2f", *ep.Add))
-	}
-	if ep.Prism != nil && ep.Base != nil { // Prism and Base go together
-		parts = append(parts, fmt.Sprintf("Prism: %0.2f", *ep.Prism))
-		parts = append(parts, fmt.Sprintf("Base: %s", *ep.Base))
 	}
 	if len(parts) == 0 {
 		return "N/A" // Or empty string
@@ -187,19 +178,15 @@ type GlassesForm struct {
 	Reference string    `json:"reference" schema:"reference"`
 	Brand     string    `json:"brand" schema:"brand"`
 
-	LeftSph   float64 `json:"left_sph" schema:"left_sph"`
-	LeftCyl   float64 `json:"left_cyl" schema:"left_cyl"`
-	LeftAxis  float64 `json:"left_axis" schema:"left_axis"`
-	LeftAdd   float64 `json:"left_add" schema:"left_add"`
-	LeftPrism float64 `json:"left_prism" schema:"left_prism"`
-	LeftBase  float64 `json:"left_base" schema:"left_base"`
+	LeftSph  float64 `json:"left_sph" schema:"left_sph"`
+	LeftCyl  float64 `json:"left_cyl" schema:"left_cyl"`
+	LeftAxis float64 `json:"left_axis" schema:"left_axis"`
+	LeftAdd  float64 `json:"left_add" schema:"left_add"`
 
-	RightSph   float64 `json:"right_sph" schema:"right_sph"`
-	RightCyl   float64 `json:"right_cyl" schema:"right_cyl"`
-	RightAxis  float64 `json:"right_axis" schema:"right_axis"`
-	RightAdd   float64 `json:"right_add" schema:"right_add"`
-	RightPrism float64 `json:"right_prism" schema:"right_prism"`
-	RightBase  float64 `json:"right_base" schema:"right_base"`
+	RightSph  float64 `json:"right_sph" schema:"right_sph"`
+	RightCyl  float64 `json:"right_cyl" schema:"right_cyl"`
+	RightAxis float64 `json:"right_axis" schema:"right_axis"`
+	RightAdd  float64 `json:"right_add" schema:"right_add"`
 
 	Color       string `json:"color" schema:"color"`
 	Type        string `json:"type" schema:"type"`

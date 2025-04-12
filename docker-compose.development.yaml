@@ -17,6 +17,28 @@ services:
       - ./.data/db/docker-postgres:/var/lib/postgresql/data
     networks:
       - glasses-client
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus_local
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml # Mount config file
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090" # Expose Prometheus UI on http://localhost:9090
+    extra_hosts:
+      # Required on Linux/Windows to map host.docker.internal
+      # May not be needed on Docker Desktop for Mac
+      - "host.docker.internal:host-gateway"
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo_local
+    command: ["-target=all", "-storage.trace.backend=local", "-storage.trace.local.path=/tmp/tempo", "-auth.enabled=false"]
+    ports:
+      - "3200:3200"   # Tempo UI/API endpoint (if you want to access its UI directly)
+      - "4317:4317"   # OTLP gRPC endpoint
+      - "4318:4318"
 
 #  app:
 #    env_file:

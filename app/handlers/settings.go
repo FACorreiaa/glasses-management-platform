@@ -216,6 +216,9 @@ func (h *Handler) UpdateAdmin(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) UpdateAdminPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UpdateAdminPageHandler")
+	defer span.End()
+
 	var user *models.UserSession
 	userCtx := r.Context().Value(models.CtxKeyAuthUser)
 	if userCtx != nil {
@@ -253,24 +256,30 @@ func (h *Handler) UpdateAdminPage(w http.ResponseWriter, r *http.Request) error 
 	sidebar := h.renderSettingsSidebar()
 
 	updatePage := pages.MainLayoutPage("Update users", "form to update users", sidebar, f)
-	return h.CreateLayout(w, r, "Update Glasses", updatePage).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Update Glasses", updatePage).Render(context.Background(), w)
 }
 
 func (h *Handler) SettingsPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "SettingsPageHandler")
+	defer span.End()
+
 	s := settings.AdminSettingsPage(models.SettingsPage{})
 	page := settings.AdminSettingsLayoutPage("Settings Page", "Admin settings main page", h.renderSettingsSidebar(), s)
-	data := h.CreateLayout(w, r, "Settings", page).Render(context.Background(), w)
+	data := h.CreateLayout(ctx, w, r, "Settings", page).Render(context.Background(), w)
 	return data
 }
 
 func (h *Handler) SettingsGlassesPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "SettingsGlassesPageHandler")
+	defer span.End()
+
 	sidebar := h.renderSettingsSidebar()
 	renderTable, err := h.renderGlassesTableDetails(w, r)
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 	}
 	home := pages.MainLayoutPage("Glasses Management Page", "Check glasses stock details", sidebar, renderTable)
-	return h.CreateLayout(w, r, "Glasses Management Page", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }
 
 // SETTINGS
@@ -391,13 +400,16 @@ func (h *Handler) renderSettingsShippingTable(w http.ResponseWriter, r *http.Req
 }
 
 func (h *Handler) SettingsShippingPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "SettingsShippingPageHandler")
+	defer span.End()
+
 	sidebar := h.renderSettingsSidebar()
 	renderTable, err := h.renderSettingsShippingTable(w, r)
 	if err != nil {
 		HandleError(err, "rendering glasses table")
 	}
 	home := pages.MainLayoutPage("Insert Shipping Form", "Insert Shipping Form", sidebar, renderTable)
-	return h.CreateLayout(w, r, "Insert Shipping Form", home).Render(context.Background(), w)
+	return h.CreateLayout(ctx, w, r, "Insert Shipping Form", home).Render(context.Background(), w)
 }
 
 func (h *Handler) DeleteCustomer(w http.ResponseWriter, r *http.Request) error {

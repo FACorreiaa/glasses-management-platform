@@ -309,14 +309,14 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"left_prism\">Prism (Pris)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"0.00 Δ\" name=\"left_prism\" id=\"left_prism\" min=\"0\" max=\"15\" step=\"0.05\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</div></div></div><div class=\"border-t border-gray-200 pt-6\"><h3 class=\"text-xl font-semibold mb-4 text-gray-800\">Right Eye Prescription (R)</h3><div class=\"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4\"><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_sph\">Sphere (Sph)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"+/- 0.00\" name=\"right_sph\" id=\"right_sph\" min=\"-25\" max=\"25\" step=\"0.05\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var17 string
-		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["left_prism"])
+		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_sph"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 172, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 215, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
@@ -326,15 +326,15 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if form.FieldErrors["left_prism"] != "" {
+		if form.FieldErrors["right_sph"] != "" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<p class=\"text-red-500 text-xs mt-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var18 string
-			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["left_prism"])
+			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_sph"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 175, Col: 77}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 218, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 			if templ_7745c5c3_Err != nil {
@@ -345,14 +345,14 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "</div><div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"left_base\">Base</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"Insert color\" name=\"left_base\" autocomplete=\"off\" id=\"color\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_cyl\">Cylinder (Cyl)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"- 0.00\" name=\"right_cyl\" id=\"right_cyl\" min=\"-10\" max=\"0\" step=\"0.05\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var19 string
-		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["left_base"])
+		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_cyl"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 189, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 233, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
@@ -362,15 +362,15 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if form.FieldErrors["left_base"] != "" {
+		if form.FieldErrors["right_cyl"] != "" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<p class=\"text-red-500 text-xs mt-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var20 string
-			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["left_base"])
+			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_cyl"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 192, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 236, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 			if templ_7745c5c3_Err != nil {
@@ -381,14 +381,14 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "</div></div></div></div><div class=\"border-t border-gray-200 pt-6\"><h3 class=\"text-xl font-semibold mb-4 text-gray-800\">Right Eye Prescription (R)</h3><div class=\"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4\"><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_sph\">Sphere (Sph)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"+/- 0.00\" name=\"right_sph\" id=\"right_sph\" min=\"-25\" max=\"25\" step=\"0.05\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_axis\">Axis (A)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"0 - 180\" name=\"right_axis\" id=\"right_axis\" min=\"0\" max=\"180\" step=\"1\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var21 string
-		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_sph"])
+		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_axis"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 215, Col: 40}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 251, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 		if templ_7745c5c3_Err != nil {
@@ -398,15 +398,15 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if form.FieldErrors["right_sph"] != "" {
+		if form.FieldErrors["right_axis"] != "" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "<p class=\"text-red-500 text-xs mt-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var22 string
-			templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_sph"])
+			templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_axis"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 218, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 254, Col: 77}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 			if templ_7745c5c3_Err != nil {
@@ -417,14 +417,14 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_cyl\">Cylinder (Cyl)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"- 0.00\" name=\"right_cyl\" id=\"right_cyl\" min=\"-10\" max=\"0\" step=\"0.05\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_add\">Addition (Add)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"+ 0.00\" name=\"right_add\" id=\"right_add\" min=\"0\" max=\"5\" step=\"0.05\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var23 string
-		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_cyl"])
+		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_add"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 233, Col: 40}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 269, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 		if templ_7745c5c3_Err != nil {
@@ -434,15 +434,15 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if form.FieldErrors["right_cyl"] != "" {
+		if form.FieldErrors["right_add"] != "" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<p class=\"text-red-500 text-xs mt-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var24 string
-			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_cyl"])
+			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_add"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 236, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 272, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 			if templ_7745c5c3_Err != nil {
@@ -453,32 +453,32 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_axis\">Axis (A)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"0 - 180\" name=\"right_axis\" id=\"right_axis\" min=\"0\" max=\"180\" step=\"1\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, "</div></div></div><div class=\"border-t border-gray-200 pt-6\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"features\">Features</label> <textarea class=\"w-full block px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" name=\"features\" placeholder=\"e.g., Anti-reflective coating, Blue light filter, Photochromic\" id=\"features\" rows=\"3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var25 string
-		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_axis"])
+		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["features"])
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 251, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 321, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 49, "\"> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 49, "</textarea>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if form.FieldErrors["right_axis"] != "" {
+		if form.FieldErrors["features"] != "" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "<p class=\"text-red-500 text-xs mt-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var26 string
-			templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_axis"])
+			templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["features"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 254, Col: 77}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 323, Col: 73}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 			if templ_7745c5c3_Err != nil {
@@ -489,151 +489,7 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_add\">Addition (Add)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"+ 0.00\" name=\"right_add\" id=\"right_add\" min=\"0\" max=\"5\" step=\"0.05\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var27 string
-		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_add"])
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 269, Col: 40}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 53, "\"> ")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if form.FieldErrors["right_add"] != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<p class=\"text-red-500 text-xs mt-1\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var28 string
-			templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_add"])
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 272, Col: 76}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "</p>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_prism\">Prism (Pris)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"0.00 Δ\" name=\"right_prism\" id=\"right_prism\" min=\"0\" max=\"15\" step=\"0.05\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var29 string
-		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_prism"])
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 287, Col: 42}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "\"> ")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if form.FieldErrors["right_prism"] != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "<p class=\"text-red-500 text-xs mt-1\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var30 string
-			templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_prism"])
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 290, Col: 78}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "</p>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_base\">Base</label> <input type=\"text\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"Insert color\" name=\"right_base\" autocomplete=\"off\" id=\"color\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var31 string
-		templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["right_base"])
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 303, Col: 40}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "\"> ")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if form.FieldErrors["right_base"] != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "<p class=\"text-red-500 text-xs mt-1\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var32 string
-			templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["right_base"])
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 306, Col: 77}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "</p>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "</div></div></div><div class=\"border-t border-gray-200 pt-6\"><label class=\"block font-medium text-gray-900 mb-1\" for=\"features\">Features</label> <textarea class=\"w-full block px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" name=\"features\" placeholder=\"e.g., Anti-reflective coating, Blue light filter, Photochromic\" id=\"features\" rows=\"3\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var33 string
-		templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(form.Values["features"])
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 321, Col: 31}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "</textarea>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if form.FieldErrors["features"] != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "<p class=\"text-red-500 text-xs mt-1\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var34 string
-			templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(form.FieldErrors["features"])
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/glasses/GlassesRegisterForm.templ`, Line: 323, Col: 73}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "</p>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "</div><div class=\"border-t border-gray-200 pt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "</div><div class=\"border-t border-gray-200 pt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -645,7 +501,7 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, "</div></form></div></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 53, "</div></form></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

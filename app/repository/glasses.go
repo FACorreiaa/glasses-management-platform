@@ -8,9 +8,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"go.opentelemetry.io/otel"
+	semconv "go.opentelemetry.io/otel/semconv/v1.21.0"
 
 	"context"
 )
+
+var tracer = otel.Tracer("github.com/FACorreiaa/glasses-management-platform/services")
 
 type GlassesRepository struct {
 	pgpool *pgxpool.Pool
@@ -35,10 +39,8 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 			&a.GlassesID, &a.Color, &a.Brand, &a.LeftPrescription.Cyl,
 			&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
 			&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
-			&a.LeftPrescription.Prism, &a.LeftPrescription.Base,
 			&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
 			&a.RightPrescription.Axis, &a.RightPrescription.Add,
-			&a.RightPrescription.Prism, &a.RightPrescription.Base,
 			&a.Reference, &a.Type, &a.IsInStock,
 			&a.Feature, &a.UpdatedAt, &a.CreatedAt,
 		); err != nil {
@@ -72,10 +74,8 @@ func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query strin
 			&a.UserName, &a.UserEmail,
 			&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
 			&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
-			&a.LeftPrescription.Prism, &a.LeftPrescription.Base,
 			&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
 			&a.RightPrescription.Axis, &a.RightPrescription.Add,
-			&a.RightPrescription.Prism, &a.RightPrescription.Base,
 			&a.Reference, &a.IsInStock, &a.UpdatedAt, &a.CreatedAt,
 		); err != nil {
 			slog.Error(" scanning glasses", "err", err)
@@ -95,6 +95,15 @@ func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query strin
 
 func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, reference string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+	dbCtx, dbSpan := tracer.Start(ctx, "db.GetGlasses")
+	defer dbSpan.End()
+
+	dbSpan.SetAttributes(
+		semconv.DBSystemKey.String("postgresql"),
+		semconv.DBNameKey.String("glasses"),
+		semconv.DBStatementKey.String("SELECT glasses_id, color, brand, right_sph, left_sph, type, reference, is_in_stock, features, COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at FROM glasses g WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%')) AND ($5::float8 IS NULL OR g.left_sph = $5) AND ($6::float8 IS NULL OR g.right_sph = $6) ORDER BY CASE WHEN $1 = 'Brand' THEN g.brand WHEN $1 = 'Color' THEN g.color WHEN $1 = 'Reference' THEN g.reference WHEN $1 = 'Type' THEN g.type WHEN $1 = 'Features' THEN g.features ELSE g.brand END OFFSET $2 LIMIT $3"),
+		semconv.DBOperationKey.String("query"),
+	)
 	query := `SELECT glasses_id, color, brand, 
 					 right_sph, left_sph, type,
        				 reference, is_in_stock, features, 
@@ -116,7 +125,7 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 			    OFFSET $2 LIMIT $3`
 	offset := (page - 1) * pageSize
 	slog.Info("Glasses fetched", "offset", offset)
-	return r.fetchGlasses(ctx, query, orderBy, offset, pageSize, reference, leftEye, rightEye)
+	return r.fetchGlasses(dbCtx, query, orderBy, offset, pageSize, reference, leftEye, rightEye)
 }
 
 func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {
@@ -131,10 +140,8 @@ func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.U
 		&a.GlassesID, &a.Color, &a.Brand,
 		&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
 		&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
-		&a.LeftPrescription.Prism, &a.LeftPrescription.Base,
 		&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
 		&a.RightPrescription.Axis, &a.RightPrescription.Add,
-		&a.RightPrescription.Prism, &a.RightPrescription.Base,
 		&a.Reference, &a.Type, &a.IsInStock,
 		&a.Feature, &a.UpdatedAt, &a.CreatedAt,
 	); err != nil {

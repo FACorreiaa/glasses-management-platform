@@ -61,15 +61,11 @@ templ GlassesByFilter(a models.GlassesTable) {
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Cyl) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%d", glasses.LeftPrescription.Axis) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Add) }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.3f", *glasses.LeftPrescription.Prism) }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%s", *glasses.LeftPrescription.Base) }</td>
 										
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.3f", *glasses.RightPrescription.Sph) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.3f", *glasses.RightPrescription.Cyl) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%df", glasses.RightPrescription.Axis) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.3f", *glasses.RightPrescription.Add) }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%0.3f", *glasses.RightPrescription.Prism) }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%s", *glasses.RightPrescription.Base) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Reference }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%v", glasses.IsInStock) }</td>
 										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Feature }</td>

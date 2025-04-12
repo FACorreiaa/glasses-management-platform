@@ -158,41 +158,41 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 							}
 						</div>
 						// Left Prism
-						<div>
-							<label class="block font-medium text-gray-900 mb-1" for="left_prism">Prism (Pris)</label>
-							<input
-								type="number"
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-								placeholder="0.00 Δ"
-								name="left_prism"
-								id="left_prism"
-								min="0" 
-								max="15" 
-								step="0.05"
-								value={ form.Values["left_prism"] }
-							/>
-							if form.FieldErrors["left_prism"] != "" {
-								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_prism"] }</p>
-							}
-						</div>
+						// <div>
+						// 	<label class="block font-medium text-gray-900 mb-1" for="left_prism">Prism (Pris)</label>
+						// 	<input
+						// 		type="number"
+						// 		class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						// 		placeholder="0.00 Δ"
+						// 		name="left_prism"
+						// 		id="left_prism"
+						// 		min="0" 
+						// 		max="15" 
+						// 		step="0.05"
+						// 		value={ form.Values["left_prism"] }
+						// 	/>
+						// 	if form.FieldErrors["left_prism"] != "" {
+						// 		<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_prism"] }</p>
+						// 	}
+						// </div>
 						// Left Base
-						<div>
-							<div>
-							<label class="block font-medium text-gray-900 mb-1" for="left_base">Base</label>
-							<input
-							type="text"
-							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-							placeholder="Insert color"
-							name="left_base"
-							autocomplete="off"
-							id="color"
-							value={ form.Values["left_base"] }
-						/>
-							if form.FieldErrors["left_base"] != "" {
-								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_base"] }</p>
-							}
-						</div>
-						</div>
+						// <div>
+						// 	<div>
+						// 	<label class="block font-medium text-gray-900 mb-1" for="left_base">Base</label>
+						// 	<input
+						// 	type="text"
+						// 	class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						// 	placeholder="Insert color"
+						// 	name="left_base"
+						// 	autocomplete="off"
+						// 	id="color"
+						// 	value={ form.Values["left_base"] }
+						// />
+						// 	if form.FieldErrors["left_base"] != "" {
+						// 		<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_base"] }</p>
+						// 	}
+						// </div>
+						//</div>
 					</div>
 				</div>
 
@@ -273,39 +273,39 @@ templ GlassesRegisterForm(form models.GlassesForm) {
 							}
 						</div>
 						// Right Prism
-						<div>
-							<label class="block font-medium text-gray-900 mb-1" for="right_prism">Prism (Pris)</label>
-							<input
-								type="number"
-								class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-								placeholder="0.00 Δ"
-								name="right_prism"
-								id="right_prism"
-								min="0"
-								max="15"
-								step="0.05"
-								value={ form.Values["right_prism"] }
-							/>
-							if form.FieldErrors["right_prism"] != "" {
-								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_prism"] }</p>
-							}
-						</div>
+						// <div>
+						// 	<label class="block font-medium text-gray-900 mb-1" for="right_prism">Prism (Pris)</label>
+						// 	<input
+						// 		type="number"
+						// 		class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						// 		placeholder="0.00 Δ"
+						// 		name="right_prism"
+						// 		id="right_prism"
+						// 		min="0"
+						// 		max="15"
+						// 		step="0.05"
+						// 		value={ form.Values["right_prism"] }
+						// 	/>
+						// 	if form.FieldErrors["right_prism"] != "" {
+						// 		<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_prism"] }</p>
+						// 	}
+						// </div>
 						// Right Base
-						<div>
-							<label class="block font-medium text-gray-900 mb-1" for="right_base">Base</label>
-							<input
-							type="text"
-							class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-							placeholder="Insert color"
-							name="right_base"
-							autocomplete="off"
-							id="color"
-							value={ form.Values["right_base"] }
-						/>
-							if form.FieldErrors["right_base"] != "" {
-								<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_base"] }</p>
-							}
-						</div>
+						// <div>
+						// 	<label class="block font-medium text-gray-900 mb-1" for="right_base">Base</label>
+						// 	<input
+						// 	type="text"
+						// 	class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+						// 	placeholder="Insert color"
+						// 	name="right_base"
+						// 	autocomplete="off"
+						// 	id="color"
+						// 	value={ form.Values["right_base"] }
+						// />
+						// 	if form.FieldErrors["right_base"] != "" {
+						// 		<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_base"] }</p>
+						// 	}
+						// </div>
 					</div>
 				</div>
 
