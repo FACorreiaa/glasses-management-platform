@@ -103,7 +103,7 @@ type Columns struct {
 type EyePrescription struct {
 	Sph  *float64 // Sphere
 	Cyl  *float64 // Cylinder
-	Axis *int     // Axis (degrees)
+	Axis *float64 // Axis (degrees)
 	Add  *float64 // Addition (for progressives/bifocals)
 }
 
@@ -115,7 +115,7 @@ func (ep EyePrescription) String() string {
 	}
 	if ep.Cyl != nil && ep.Axis != nil { // Cyl and Axis go together
 		parts = append(parts, fmt.Sprintf("Cyl: %+0.2f", *ep.Cyl))
-		parts = append(parts, fmt.Sprintf("Ax: %d°", *ep.Axis))
+		parts = append(parts, fmt.Sprintf("Ax: %+0.2f°", *ep.Axis))
 	}
 	if len(parts) == 0 {
 		return "N/A" // Or empty string

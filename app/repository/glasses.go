@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"log/slog"
+	"time"
 
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/google/uuid"
@@ -187,14 +188,24 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesF
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
-		INSERT INTO glasses (reference, brand, right_sph, left_sph, 
+		INSERT INTO glasses (reference, brand, 
+							right_sph, right_cyl, right_axis, right_add,
+							left_sph, left_cyl, left_axis, left_add, 
 							color, type, features,
 		                     is_in_stock, created_at, updated_at, user_id)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, true, NOW(), NOW(), $8)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
 		RETURNING glasses_id
 	`
-	err := r.pgpool.QueryRow(ctx, query, g.Reference, g.Brand, g.RightSph, g.LeftSph,
-		g.Color, g.Type, g.Feature, g.UserID).Scan(&g.GlassesID)
+	err := r.pgpool.QueryRow(ctx, query,
+		g.Reference, g.Brand,
+		g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd,
+		g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd,
+		g.Color, g.Type, g.Feature,
+		true,
+		time.Now(),
+		time.Now(),
+		g.UserID,
+	).Scan(&g.GlassesID)
 
 	if err != nil {
 		slog.Error(" inserting glasses", "err", err)

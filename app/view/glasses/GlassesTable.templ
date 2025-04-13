@@ -11,8 +11,11 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 	<div class="flex flex-col items-stretch shadow-lg overflow-hidden bg-white rounded-lg border border-gray-200">
 		<div class="p-4 border-b border-gray-200">
 			@components.InputGroupContainer() {
-				<div class="flex-grow mr-2">
+				<div class="flex items-center space-x-2 flex-grow mr-2">
 					@components.InputSearch("Filter reference", "/glasses", "reference", "#searchResults")
+					@components.InputSearch("Filter left sph", "/glasses", "left_sph", "#searchResults")
+					@components.InputSearch("Filter right sph", "/glasses", "right_sph", "#searchResults")
+
 				</div>
 				// Add specific filters for prescription if needed, or a more generic search
 				// Example: Simple combined text search
@@ -87,7 +90,7 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 									</td>
 									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
 										if glasses.LeftPrescription.Axis != nil {
-											{ fmt.Sprintf("%d", *glasses.LeftPrescription.Axis) }
+        									{ fmt.Sprintf("%.0f", *glasses.LeftPrescription.Axis) }
 										} else {
 											<span class="text-gray-400">-</span>
 										}
@@ -117,7 +120,7 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 									</td>
 									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
 										if glasses.RightPrescription.Axis != nil {
-											{ fmt.Sprintf("%d", *glasses.RightPrescription.Axis) }
+											{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Axis) }
 										} else {
 											<span class="text-gray-400">-</span>
 										}
