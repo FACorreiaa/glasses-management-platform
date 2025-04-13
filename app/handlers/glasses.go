@@ -49,7 +49,11 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 
 func (h *Handler) getGlasses(w http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
 	ctx, span := tracer.Start(r.Context(), "getGlassesHandler") // Use request context!
-	defer span.End()
+	defer func() {
+		if span != nil {
+			span.End()
+		}
+	}()
 
 	pageSize := 10
 	orderBy := r.FormValue("orderBy")
@@ -117,7 +121,14 @@ func (h *Handler) getGlasses(w http.ResponseWriter, r *http.Request) (int, []mod
 	return page, g, nil
 }
 
-func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (templ.Component, error) {
+func (h *Handler) renderGlassesTable(ctx context.Context, w http.ResponseWriter, r *http.Request) (templ.Component, error) {
+	ctx, span := tracer.Start(r.Context(), "renderGlassesTable")
+	defer func() {
+		if span != nil {
+			span.End()
+		}
+	}()
+
 	var page int
 	var sortAux string
 	orderBy := r.FormValue("orderBy")
@@ -130,16 +141,31 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 	}
 
 	columnNames := []models.ColumnItems{
-		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		// General Info
+		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: "reference"},
+		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: "brand"},
+		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: "type"},
+		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: "color"},
+
+		// Left Eye Prescription
+		{Title: "L Sph", Icon: svg.ArrowOrderIcon(), SortParam: "left_sph"},
+		{Title: "L Cyl", Icon: svg.ArrowOrderIcon(), SortParam: "left_cyl"},
+		{Title: "L Axis", Icon: svg.ArrowOrderIcon(), SortParam: "left_axis"},
+		{Title: "L Add", Icon: svg.ArrowOrderIcon(), SortParam: "left_add"},
+
+		// Right Eye Prescription
+		{Title: "R Sph", Icon: svg.ArrowOrderIcon(), SortParam: "right_sph"},
+		{Title: "R Cyl", Icon: svg.ArrowOrderIcon(), SortParam: "right_cyl"},
+		{Title: "R Axis", Icon: svg.ArrowOrderIcon(), SortParam: "right_axis"},
+		{Title: "R Add", Icon: svg.ArrowOrderIcon(), SortParam: "right_add"},
+
+		// Status & Details
+		{Title: "Stock", Icon: svg.ArrowOrderIcon(), SortParam: "is_in_stock"}, // Renamed from "Has Stock" for brevity
+		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: "feature"},  // Assuming struct field is 'Feature' or db col is 'feature'
+
+		// Timestamps
+		{Title: "Created", Icon: svg.ArrowOrderIcon(), SortParam: "created_at"}, // Shortened title
+		// {Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: "updated_at"}, // Often Updated At isn't shown by default unless needed
 	}
 
 	page, g, _ := h.getGlasses(w, r)
@@ -157,7 +183,7 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 
 	lastPage, err := h.service.GetSum()
 	if err != nil {
-		HandleError(err, " fetching tax")
+		HandleError(err, " fetching glasses")
 		return nil, err
 	}
 	data := models.GlassesTable{
@@ -180,10 +206,14 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 
 func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
 	ctx, span := tracer.Start(r.Context(), "GlassesPageHandler")
-	defer span.End()
+	defer func() {
+		if span != nil {
+			span.End()
+		}
+	}()
 
 	sidebar := h.renderSidebar()
-	renderTable, err := h.renderGlassesTable(w, r)
+	renderTable, err := h.renderGlassesTable(ctx, w, r)
 	//errorPage := error.ErrorPage() // Example
 
 	if err != nil {

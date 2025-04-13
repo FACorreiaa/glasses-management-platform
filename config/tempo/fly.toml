@@ -5,62 +5,48 @@ primary_region = 'lhr'
 
 # Use the official Tempo image
 [build]
-  image = "grafana/tempo:2.4.1" # Pin to a specific version for stability
+  image = "grafana/tempo:2.4.1"
 
-# Define how to run Tempo using command-line arguments
-# This defines the "app" process
+# Define how to run Tempo
 [processes]
-  # Runs Tempo with all components (-target=all)
-  # Uses local file storage backend (-storage.trace.backend=local)
-  # Stores traces inside the mounted volume path (-storage.trace.local.path=/data/traces)
-  # Disables Tempo's built-in auth (-auth.enabled=false) - rely on Fly's network security
-  app = "-target=all -storage.trace.backend=local -storage.trace.local.path=/data/traces -auth.enabled=false"
+  # Add -server.http-listen-address=0.0.0.0:3200
+  app = "-target=all -storage.trace.backend=local -storage.trace.local.path=/data/traces -auth.enabled=false -server.http-listen-address=0.0.0.0:3200"
 
 
 # Define the HTTP service for the Tempo UI/API
-# This service implicitly runs the "app" process defined above
 [http_service]
-  internal_port = 3200 # Tempo's default HTTP port for UI/API
+  internal_port = 3200
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
-  # Associate this service with the 'app' process
   processes = ["app"]
 
 
 # Define necessary raw TCP services for Tempo OTLP receivers
-# These also run the "app" process
 [[services]]
-  internal_port = 4317 # OTLP gRPC port
+  internal_port = 4317
   protocol = "tcp"
-  # Associate this service with the 'app' process
   processes = ["app"]
-
-  # Define the port mapping (even if just internal)
   [[services.ports]]
     port = 4317
 
-
 [[services]]
-  internal_port = 4318 # OTLP HTTP port (the one your Go app uses)
+  internal_port = 4318
   protocol = "tcp"
-  # Associate this service with the 'app' process
   processes = ["app"]
-
-  # Define the port mapping (even if just internal)
   [[services.ports]]
     port = 4318
 
 
-# Define the machine resources (adjust if needed, start small for free tier)
+# Define the machine resources
 [[vm]]
   cpu_kind = "shared"
   cpus = 1
-  memory_mb = 256 # Start small, monitor Tempo's usage
+  memory_mb = 256
 
 
-# Mount a persistent volume to store trace data
+# Mount a persistent volume
 [mounts]
-  source = "tempo_data" # Name of the volume to be created
-  destination = "/data" # Where to mount inside the container
+  source = "tempo_data"
+  destination = "/data"

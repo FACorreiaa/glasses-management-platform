@@ -201,7 +201,7 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"left_cyl\">Cylinder (Cyl)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"- 0.00\" name=\"left_cyl\" id=\"left_cyl\" min=\"-10\" max=\"0\" step=\"0.05\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"left_cyl\">Cylinder (Cyl)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"- 0.00\" name=\"left_cyl\" id=\"left_cyl\" min=\"-10\" max=\"10\" step=\"0.05\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -345,7 +345,7 @@ func GlassesRegisterForm(form models.GlassesForm) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_cyl\">Cylinder (Cyl)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"- 0.00\" name=\"right_cyl\" id=\"right_cyl\" min=\"-10\" max=\"0\" step=\"0.05\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "</div><div><label class=\"block font-medium text-gray-900 mb-1\" for=\"right_cyl\">Cylinder (Cyl)</label> <input type=\"number\" class=\"block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent\" placeholder=\"- 0.00\" name=\"right_cyl\" id=\"right_cyl\" min=\"-10\" max=\"10\" step=\"0.05\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

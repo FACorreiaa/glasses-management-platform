@@ -36,7 +36,7 @@ func (r *GlassesRepository) fetchGlasses(ctx context.Context, query string, args
 	for rows.Next() {
 		var a models.Glasses
 		if err := rows.Scan(
-			&a.GlassesID, &a.Color, &a.Brand, &a.LeftPrescription.Cyl,
+			&a.GlassesID, &a.Color, &a.Brand,
 			&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
 			&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
 			&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
@@ -105,8 +105,9 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 		semconv.DBOperationKey.String("query"),
 	)
 	query := `SELECT glasses_id, color, brand, 
-					 right_sph, left_sph, type,
-       				 reference, is_in_stock, features, 
+					 left_sph, left_cyl, left_axis, left_add,
+					 right_sph, right_cyl, right_axis, right_add,
+       				 reference, type, is_in_stock, features, 
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
@@ -119,7 +120,6 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 					WHEN $1 = 'Reference' THEN g.reference
 					WHEN $1 = 'Type' THEN g.type
 					WHEN $1 = 'Features' THEN g.features
-
 					ELSE g.brand
 				END ` + sortBy + `
 			    OFFSET $2 LIMIT $3`
@@ -217,8 +217,9 @@ func (r *GlassesRepository) GetSum(ctx context.Context) (int, error) {
 func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 	page, pageSize int, orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, 
-					 right_sph, left_sph, type,
-       				 reference, is_in_stock, features,  
+					 left_sph, left_cyl, left_axis, left_add,
+					 right_sph, right_cyl, right_axis, right_add,
+       				 reference, type, is_in_stock, features, 
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	where type = $5

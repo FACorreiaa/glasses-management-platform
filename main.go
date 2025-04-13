@@ -11,8 +11,6 @@ import (
 	"os/signal"
 	"time"
 
-	"go.opentelemetry.io/otel"
-
 	"github.com/FACorreiaa/glasses-management-platform/app"
 	"github.com/FACorreiaa/glasses-management-platform/config"
 	"github.com/FACorreiaa/glasses-management-platform/db"
@@ -20,6 +18,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.opentelemetry.io/otel"
 	"golang.org/x/crypto/bcrypt"
 
 	// Tempo
@@ -74,8 +73,8 @@ func initTracerProvider(ctx context.Context) (*sdktrace.TracerProvider, error) {
 	// Create resource identifier
 	res, err := resource.New(ctx,
 		resource.WithAttributes(
-			semconv.ServiceNameKey.String(os.Getenv("FLY_APP_NAME")), // Use Fly app name if available
-			semconv.ServiceVersionKey.String("1.0.0"),                // TODO: Set your app version
+			semconv.ServiceNameKey.String(os.Getenv("glasses-management-platform")), // Use Fly app name if available
+			semconv.ServiceVersionKey.String("1.0.0"),                               // TODO: Set your app version
 			// Add other relevant resource attributes (deployment env, host, etc.)
 		),
 	)
@@ -84,11 +83,28 @@ func initTracerProvider(ctx context.Context) (*sdktrace.TracerProvider, error) {
 	}
 
 	// Create OTLP Exporter based on protocol
-	exporter, err := otlptracehttp.New(ctx,
-		otlptracehttp.WithEndpoint(endpoint),
-	)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create OTLP HTTP trace exporter: %w", err)
+	var exporter sdktrace.SpanExporter
+	var creationErr error // Use a different name to avoid shadowing the 'err' from resource.New
+
+	// Conditional exporter creation
+	if os.Getenv("MODE") == "development" {
+		slog.Info("Development mode detected, creating insecure OTLP HTTP exporter.")
+		// Use '=' to assign to the outer 'exporter' and 'creationErr'
+		exporter, creationErr = otlptracehttp.New(ctx,
+			otlptracehttp.WithEndpoint(endpoint),
+			otlptracehttp.WithInsecure(), // Use insecure for development
+		)
+	} else {
+		slog.Info("Production/Non-Development mode detected, creating OTLP HTTP exporter (scheme determines security).")
+		// Use '=' to assign to the outer 'exporter' and 'creationErr'
+		// Rely on the scheme (http:// or https://) in the endpoint URL for security
+		exporter, creationErr = otlptracehttp.New(ctx,
+			otlptracehttp.WithEndpoint(endpoint),
+			// No WithInsecure() here
+		)
+	}
+	if creationErr != nil {
+		return nil, fmt.Errorf("failed to create OTLP HTTP trace exporter for endpoint %s: %w", endpoint, creationErr)
 	}
 
 	// Batch Span Processor

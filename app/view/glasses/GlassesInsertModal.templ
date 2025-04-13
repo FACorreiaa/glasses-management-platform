@@ -2,16 +2,20 @@ package glasses
 
 import "github.com/FACorreiaa/glasses-management-platform/app/models"
 
+
 templ GlassesInsertModal(form models.GlassesForm) {
 	<div
 		x-data="{ modalOpen: false }"
 		@keydown.escape.window="modalOpen = false"
-		:class="{ 'z-40': modalOpen }"
+		:class="{ 'z-40': modalOpen }" 
 		class="relative w-auto h-6"
 	>
-		<button @click="modalOpen=true" class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden">Insert new item</button>
+		// Trigger Button - Styling can be adjusted as needed
+		<button @click="modalOpen=true" class="btn btn-sm btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-focus">Insert New Glasses</button> 
+
 		<template x-teleport="body">
 			<div x-show="modalOpen" class="fixed top-0 left-0 z-99 flex items-center justify-center w-screen h-screen" x-cloak>
+				// Backdrop
 				<div
 					x-show="modalOpen"
 					x-transition:enter="ease-out duration-300"
@@ -23,7 +27,10 @@ templ GlassesInsertModal(form models.GlassesForm) {
 					@click="modalOpen=false"
 					class="absolute inset-0 w-full h-full bg-gray-900 bg-opacity-50 backdrop-blur-xs"
 				></div>
+
+				// Modal Dialog
 				<div
+					class="fixed inset-0 z-[100] flex items-center justify-center p-4" 
 					x-show="modalOpen"
 					x-trap.inert.noscroll="modalOpen"
 					x-transition:enter="ease-out duration-300"
@@ -32,140 +39,275 @@ templ GlassesInsertModal(form models.GlassesForm) {
 					x-transition:leave="ease-in duration-200"
 					x-transition:leave-start="opacity-100 scale-100"
 					x-transition:leave-end="opacity-0 scale-90"
-					class="relative w-full py-6 bg-white shadow-md px-7 bg-opacity-90 drop-shadow-md backdrop-blur-xs sm:max-w-lg sm:rounded-lg"
 				>
-					<div class="flex items-center justify-between pb-3">
-						<h2 class="mb-6 text-3xl font-extrabold text-gray-900 xl:text-4xl">Insert Glasses</h2>
-						<button @click="modalOpen=false" class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 text-gray-600 rounded-full hover:text-gray-800 hover:bg-gray-50">
-							<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-						</button>
-					</div>
-					<div class="relative w-auto pb-8">
-						<section class="w-full bg-white py-8">
-							<div class="mx-auto max-w-7xl px-4 sm:px-4 lg:px-8">
-								<div class="flex flex-col lg:flex-row">
-									<form method="post" class="w-full space-y-4">
-										<div class="flex flex-wrap -mx-4">
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<label class="block font-medium text-gray-900 mb-1" for="reference">Reference</label>
-												<input
-													type="text"
-													class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-													placeholder="Insert reference"
-													name="reference"
-													autocomplete="reference"
-													id="reference"
-													required
-													value={ form.Values["Reference"] }
-												/>
-											</div>
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<label class="block font-medium text-gray-900 mb-1" for="brand">Brand</label>
-												<input
-													type="text"
-													class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-													placeholder="Insert brand"
-													name="brand"
-													autocomplete="brand"
-													id="brand"
-													value={ form.Values["Brand"] }
-												/>
-											</div>
-										</div>
-										<div class="flex flex-wrap -mx-4">
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<label class="block font-medium text-gray-900 mb-1" for="left-eye">Left Eye Strength</label>
-												<input
-													type="number"
-													class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-													placeholder="Insert graduation"
-													name="left_sph"
-													autocomplete="left-eye"
-													id="left-eye"
-													min="-99"
-													max="99"
-													step="0.1"
-													required
-													value={ form.Values["LeftEye"] }
-												/>
-											</div>
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<label class="block font-medium text-gray-900 mb-1" for="right-eye">Right Eye Strength</label>
-												<input
-													type="number"
-													class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-													placeholder="Insert graduation"
-													name="right_sph"
-													autocomplete="right-eye"
-													id="right-eye"
-													min="-99"
-													max="99"
-													step="0.1"
-													required
-													value={ form.Values["RightEye"] }
-												/>
-											</div>
-										</div>
-										<div class="flex flex-wrap -mx-4">
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<label class="block font-medium text-gray-900 mb-1" for="color">Color</label>
-												<input
-													type="text"
-													class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-													placeholder="Insert color"
-													name="color"
-													autocomplete="color"
-													id="color"
-													value={ form.Values["Color"] }
-												/>
-											</div>
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<label class="block font-medium text-gray-900 mb-1" for="type">Type</label>
-												<select
-													class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-													name="type"
-													id="type"
-													required
-													value={ form.Values["Type"] }
-												>
-													<option disabled selected>Select type</option>
-													<option value="adult">Adult</option>
-													<option value="children">Children</option>
-												</select>
-											</div>
-										</div>
-										<div class="relative w-full mb-4">
-											<label class="block font-medium text-gray-900 mb-1" for="features">Features</label>
-											<textarea
-												class="block w-full px-4 py-2 mt-1 text-base placeholder-gray-400 bg-gray-100 rounded-lg focus:outline-hidden "
-												name="features"
-												placeholder="Glasses features"
-												id="features"
-												value={ form.Values["Feature"] }
-											></textarea>
-										</div>
-										<div class="flex flex-wrap -mx-4">
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<button
-													@click="modalOpen=false"
-													type="button"
-													class="btn w-full btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden mr-2"
-												>Cancel</button>
-											</div>
-											<div class="w-full md:w-1/2 px-4 mb-4">
-												<button
-													hx-post={ "/glasses/register" }
-													type="submit"
-													class="btn w-full btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden mr-2"
-													name="action"
-													value="submit"
-												>Insert</button>
-											</div>
-										</div>
-									</form>
+					// Adjusted modal width for more content
+					<div class="relative w-full max-h-[90vh] overflow-y-auto bg-white shadow-md px-6 py-5 sm:px-8 sm:py-6 rounded-lg sm:max-w-3xl"> // Increased max-width and added padding/scroll
+						// Modal Header
+						<div class="flex items-center justify-between pb-4 border-b border-gray-200">
+							<h2 class="text-2xl font-semibold text-gray-800">Insert New Glasses</h2> // Adjusted title size
+							<button @click="modalOpen=false" class="p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+								<span class="sr-only">Close</span>
+								<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+							</button>
+						</div>
+
+						// Modal Body - Contains the form
+						<div class="relative w-auto pt-5">
+							// Use the form structure from GlassesRegisterForm
+							<form method="post" hx-post={ "/glasses/register" } hx-target="#main-content" hx-swap="innerHTML" class="w-full space-y-6" @submit="if ($event.target.checkValidity()) { modalOpen = false }"> // Close modal on valid submit
+
+								// Section 1: General Info (Reference, Brand, Color, Type)
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+									<div>
+										<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-reference">Reference</label>
+										<input
+											type="text"
+											class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm" 
+											placeholder="Insert reference"
+											name="reference"
+											autocomplete="off"
+											id="modal-reference"  
+											required
+											value={ form.Values["reference"] }
+										/>
+										if form.FieldErrors["reference"] != "" {
+											<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["reference"] }</p>
+										}
+									</div>
+									<div>
+										<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-brand">Brand</label>
+										<input
+											type="text"
+											class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+											placeholder="Insert brand"
+											name="brand"
+											autocomplete="off"
+											id="modal-brand"
+											value={ form.Values["brand"] }
+										/>
+										if form.FieldErrors["brand"] != "" {
+											<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["brand"] }</p>
+										}
+									</div>
+									<div>
+										<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-color">Color</label>
+										<input
+											type="text"
+											class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+											placeholder="Insert color"
+											name="color"
+											autocomplete="off"
+											id="modal-color"
+											value={ form.Values["color"] }
+										/>
+										if form.FieldErrors["color"] != "" {
+											<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["color"] }</p>
+										}
+									</div>
+									<div>
+										<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-type">Type</label>
+										<select
+											class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+											name="type"
+											id="modal-type"
+											required
+										>
+											// <option value="" disabled selected={ form.Values["type"] == "" }>Select type</option>
+											// <option value="adult" selected={ form.Values["type"] == "adult" }>Adult</option>
+											// <option value="children" selected={ form.Values["type"] == "children" }>Children</option>
+											<option disabled selected>Select type</option>
+											<option value="adult">Adult</option>
+											<option value="children">Children</option>
+										</select>
+										if form.FieldErrors["type"] != "" {
+											<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["type"] }</p>
+										}
+									</div>
 								</div>
-							</div>
-						</section>
+
+								// Section 2: Left Eye Prescription
+								<div class="border-t border-gray-200 pt-5">
+									<h3 class="text-lg font-medium mb-3 text-gray-700">Left Eye Prescription (L)</h3>
+									<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4"> // Use 4 cols for prescription if space allows
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-left_sph">Sphere (Sph)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="+/- 0.00"
+												name="left_sph"
+												id="modal-left_sph"
+												min="-25"
+												max="25"
+												step="0.05" 
+												value={ form.Values["left_sph"] }
+											/>
+											if form.FieldErrors["left_sph"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_sph"] }</p>
+											}
+										</div>
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-left_cyl">Cylinder (Cyl)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="- 0.00"
+												name="left_cyl"
+												id="modal-left_cyl"
+												min="-10"
+												max="10"
+												step="0.05" 
+												value={ form.Values["left_cyl"] }
+											/>
+											if form.FieldErrors["left_cyl"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_cyl"] }</p>
+											}
+										</div>
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-left_axis">Axis (A)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="0-180"
+												name="left_axis"
+												id="modal-left_axis"
+												min="0"
+												max="180"
+												step="0.05"
+												value={ form.Values["left_axis"] }
+											/>
+											if form.FieldErrors["left_axis"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_axis"] }</p>
+											}
+										</div>
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-left_add">Addition (Add)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="+ 0.00"
+												name="left_add"
+												id="modal-left_add"
+												min="0"
+												max="5"
+												step="0.05" 
+												value={ form.Values["left_add"] }
+											/>
+											if form.FieldErrors["left_add"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_add"] }</p>
+											}
+										</div>
+										// Add Prism/Base fields here if needed, following the same pattern
+									</div>
+								</div>
+
+								// Section 3: Right Eye Prescription
+								<div class="border-t border-gray-200 pt-5">
+									<h3 class="text-lg font-medium mb-3 text-gray-700">Right Eye Prescription (R)</h3>
+									<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4"> // Use 4 cols
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-right_sph">Sphere (Sph)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="+/- 0.00"
+												name="right_sph"
+												id="modal-right_sph"
+												min="-25"
+												max="25"
+												step="0.05"  
+												value={ form.Values["right_sph"] }
+											/>
+											if form.FieldErrors["right_sph"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_sph"] }</p>
+											}
+										</div>
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-right_cyl">Cylinder (Cyl)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="- 0.00"
+												name="right_cyl"
+												id="modal-right_cyl"
+												min="-10"
+												max="10"
+												step="0.05" 
+												value={ form.Values["right_cyl"] }
+											/>
+											if form.FieldErrors["right_cyl"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_cyl"] }</p>
+											}
+										</div>
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-right_axis">Axis (A)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="0-180"
+												name="right_axis"
+												id="modal-right_axis"
+												min="0"
+												max="180"
+												step="0.05"
+												value={ form.Values["right_axis"] }
+											/>
+											if form.FieldErrors["right_axis"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_axis"] }</p>
+											}
+										</div>
+										<div>
+											<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-right_add">Addition (Add)</label>
+											<input
+												type="number"
+												class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+												placeholder="+ 0.00"
+												name="right_add"
+												id="modal-right_add"
+												min="0"
+												max="5"
+												step="0.05"  
+												value={ form.Values["right_add"] }
+											/>
+											if form.FieldErrors["right_add"] != "" {
+												<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["right_add"] }</p>
+											}
+										</div>
+										// Add Prism/Base fields here if needed
+									</div>
+								</div>
+
+								// Section 4: Features
+								<div class="border-t border-gray-200 pt-5">
+									<label class="block font-medium text-gray-700 text-sm mb-1" for="modal-features">Features</label>
+									<textarea
+										class="w-full block px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+										name="features"
+										placeholder="e.g., Anti-reflective coating, Blue light filter, Photochromic"
+										id="modal-features"
+										rows="3"
+									>{ form.Values["features"] }</textarea>
+									if form.FieldErrors["features"] != "" {
+										<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["features"] }</p>
+									}
+								</div>
+
+								// Section 5: Actions (Modal Footer)
+								<div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-5 border-t border-gray-200">
+									<button
+										@click="modalOpen=false"
+										type="button"
+										class="btn btn-ghost w-full sm:w-auto justify-center"  
+									>Cancel</button>
+									<button
+										type="submit"
+										class="btn btn-primary w-full sm:w-auto justify-center"  
+										name="action"  
+										value="submit"
+									>Insert Glasses</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>

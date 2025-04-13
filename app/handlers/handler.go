@@ -53,7 +53,7 @@ func HandleError(err error, message string) {
 
 func (h *Handler) CreateLayout(ctx context.Context, w http.ResponseWriter, r *http.Request, title string, data templ.Component) templ.Component {
 	var user *models.UserSession
-	userCtx := r.Context().Value(models.CtxKeyAuthUser)
+	userCtx := ctx.Value(models.CtxKeyAuthUser)
 	if userCtx != nil {
 		switch u := userCtx.(type) {
 		case *models.UserSession:
