@@ -54,7 +54,8 @@ templ GlassesInsertModal(form models.GlassesForm) {
 						// Modal Body - Contains the form
 						<div class="relative w-auto pt-5">
 							// Use the form structure from GlassesRegisterForm
-							<form method="post" hx-post={ "/glasses/register" } hx-target="#main-content" hx-swap="innerHTML" class="w-full space-y-6" @submit="if ($event.target.checkValidity()) { modalOpen = false }"> // Close modal on valid submit
+							//<form method="post" hx-post={ "/glasses/register" } hx-target="#main-content" hx-swap="innerHTML" class="w-full space-y-6" @submit="if ($event.target.checkValidity()) { modalOpen = false }"> // Close modal on valid submit
+							<form method="post" class="w-full space-y-4">
 
 								// Section 1: General Info (Reference, Brand, Color, Type)
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -300,6 +301,7 @@ templ GlassesInsertModal(form models.GlassesForm) {
 										class="btn btn-ghost w-full sm:w-auto justify-center"  
 									>Cancel</button>
 									<button
+										hx-post={ "/glasses/register" }
 										type="submit"
 										class="btn btn-primary w-full sm:w-auto justify-center"  
 										name="action"  
