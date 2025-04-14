@@ -6,7 +6,7 @@ RUN npm install --only=production --ci
 RUN npm run fonts && npm run tailwind-build
 
 # Define the "base" stage
-FROM golang:alpine as base
+FROM golang:1.24-alpine as base
 WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
