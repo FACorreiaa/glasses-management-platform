@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -80,7 +81,7 @@ func (h *Handler) getGlassesDetails(w http.ResponseWriter, r *http.Request) (int
 		fmt.Println("rightEye is nil")
 	}
 
-	g, err := h.service.GetGlassesDetails(context.Background(), page, pageSize, orderBy, sortBy, username, leftEye, rightEye)
+	g, err := h.service.GetAdminGlassesDetails(context.Background(), page, pageSize, orderBy, sortBy, username, leftEye, rightEye)
 	if err != nil {
 		httperror.ErrNotFound.WriteError(w)
 		return 0, nil, err
@@ -106,8 +107,8 @@ func (h *Handler) renderGlassesTableDetails(w http.ResponseWriter, r *http.Reque
 	columnNames := []models.ColumnItems{
 		{Title: "Username", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Email", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Left Sph", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Right Sph", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
@@ -270,6 +271,8 @@ func (h *Handler) SettingsPage(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) SettingsGlassesPage(w http.ResponseWriter, r *http.Request) error {
+	slog.Info("***** Entered SettingsGlassesPage handler *****") // <-- ADD THIS
+
 	ctx, span := tracer.Start(r.Context(), "SettingsGlassesPageHandler")
 	defer span.End()
 
@@ -281,6 +284,23 @@ func (h *Handler) SettingsGlassesPage(w http.ResponseWriter, r *http.Request) er
 	home := pages.MainLayoutPage("Glasses Management Page", "Check glasses stock details", sidebar, renderTable)
 	return h.CreateLayout(ctx, w, r, "Glasses Management Page", home).Render(context.Background(), w)
 }
+
+// func (h *Handler) SettingsGlassesPage(w http.ResponseWriter, r *http.Request) error {
+// 	slog.Info("********** ENTERED SettingsGlassesPage HANDLER **********") // Add a very distinct log message
+
+// 	// You can add more specific logs here if needed later
+// 	// slog.Info("SettingsShippingPage: Fetching data...")
+
+// 	w.WriteHeader(http.StatusOK)                                         // Send a basic success code
+// 	_, err := w.Write([]byte("<h1>Settings Shipping Page Reached</h1>")) // Write simple HTML
+// 	if err != nil {
+// 		slog.Error("Error writing basic response in SettingsShippingPage", "error", err)
+// 		// Returning the error might be better, but for now, just log it
+// 	}
+
+// 	slog.Info("********** EXITING SettingsShippingPage HANDLER NORMALLY **********")
+// 	return nil // Return nil indicating success for the handler wrapper
+// }
 
 // SETTINGS
 

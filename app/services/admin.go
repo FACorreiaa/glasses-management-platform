@@ -44,9 +44,9 @@ func (s *Service) GetAdminID(ctx context.Context, userID uuid.UUID) (*models.Use
 	return s.adminRepo.GetAdminID(ctx, userID)
 }
 
-func (s *Service) GetGlassesDetails(ctx context.Context, page, pageSize int,
+func (s *Service) GetAdminGlassesDetails(ctx context.Context, page, pageSize int,
 	orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.Glasses, error) {
-	return s.glassesRepo.GetGlassesDetails(ctx, page, pageSize, orderBy, sortBy, username, leftEye, rightEye)
+	return s.glassesRepo.GetAdminGlassesDetails(ctx, page, pageSize, orderBy, sortBy, username, leftEye, rightEye)
 }
 
 func (s *Service) GetEmail(ctx context.Context, email string) error {

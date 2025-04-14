@@ -71,26 +71,29 @@ func (r *GlassesRepository) fetchGlassesDetails(ctx context.Context, query strin
 
 	for rows.Next() {
 		var a models.Glasses
+		// This Scan expects exactly 8 columns from the query:
 		if err := rows.Scan(
-			&a.UserName, &a.UserEmail,
-			&a.LeftPrescription.Sph, &a.LeftPrescription.Cyl,
-			&a.LeftPrescription.Axis, &a.LeftPrescription.Add,
-			&a.RightPrescription.Sph, &a.RightPrescription.Cyl,
-			&a.RightPrescription.Axis, &a.RightPrescription.Add,
-			&a.Reference, &a.IsInStock, &a.UpdatedAt, &a.CreatedAt,
+			&a.UserName,              // 1
+			&a.UserEmail,             // 2
+			&a.LeftPrescription.Sph,  // 3
+			&a.RightPrescription.Sph, // 4
+			&a.Reference,             // 5
+			&a.IsInStock,             // 6
+			&a.UpdatedAt,             // 7
+			&a.CreatedAt,             // 8
 		); err != nil {
-			slog.Error(" scanning glasses", "err", err)
+			slog.Error(" scanning glasses details", "err", err) // Adjusted log message
 			return nil, errors.New("internal server error")
 		}
 		al = append(al, a)
 	}
 
 	if err := rows.Err(); err != nil {
-		slog.Error(" fetching glasses", "err", err)
+		slog.Error(" fetching glasses details", "err", err) // Adjusted log message
 		return nil, errors.New("internal server error")
 	}
 
-	slog.Info("Glasses fetched", "glasses", al)
+	slog.Info("Glasses details fetched", "glasses", al) // Optional: Log fetched data
 	return al, nil
 }
 
@@ -131,9 +134,11 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 
 func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, 
-	 				right_sph, left_sph, type,
-       				reference, is_in_stock, features, updated_at, created_at
-				FROM glasses
+					 left_sph, left_cyl, left_axis, left_add,
+					 right_sph, right_cyl, right_axis, right_add,
+       				 reference, type, is_in_stock, features, 
+					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+			 	FROM glasses
 				WHERE glasses_id = $1`
 	var a models.Glasses
 
@@ -250,10 +255,11 @@ func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 func (r *GlassesRepository) GetGlassesByStock(ctx context.Context,
 	page, pageSize int, orderBy, sortBy string, isInStock bool) ([]models.Glasses, error) {
 	query := `SELECT glasses_id, color, brand, 
-					 right_sph, left_sph, type,
-                     reference, is_in_stock, features,  
+					 left_sph, left_cyl, left_axis, left_add,
+					 right_sph, right_cyl, right_axis, right_add,
+       				 reference, type, is_in_stock, features, 
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
-                 FROM glasses g
+			 	FROM glasses g
                  WHERE is_in_stock = $5
                  ORDER BY
                  CASE

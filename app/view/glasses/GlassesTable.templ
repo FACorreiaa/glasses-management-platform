@@ -60,11 +60,8 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 								<tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
 									<td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800">
 										<a
-											href={ templ.URL(fmt.Sprintf("/glasses/%s/details", glasses.GlassesID)) } 
-											hx-boost="true"
-											hx-target="#detailsSpace"  
-											hx-swap="innerHTML"
-											hx-trigger="click"
+											href={ templ.URL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)) } 
+											hx-trigger="load delay:50ms"
 										>
 											{ glasses.Reference }
 										</a>
@@ -132,7 +129,22 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 											<span class="text-gray-400">-</span>
 										}
 									</td>
-
+									<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">
+												if glasses.IsInStock == true {
+													<span>Yes</span>
+													<a
+														href={ templ.SafeURL(fmt.Sprintf("/customer/glasses/%s/send", glasses.GlassesID)) }
+														class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
+													>
+														<span>Send</span>
+														<ion-icon name="send-outline"></ion-icon>
+													</a>
+										} else {
+											<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+												Out of Stock
+											</span>
+										}
+									</td>
 									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
 										if glasses.IsInStock {
 											<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -146,43 +158,12 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 									</td>
 									<td class="px-4 py-3 whitespace-normal text-sm text-gray-600 max-w-xs truncate">{ glasses.Feature }</td> // Allow wrapping/truncating for features
 									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{ glasses.CreatedAt.Format("Jan 02, 2006") }</td>
-									<td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium space-x-2">
-										// Action buttons can go here
-										<a href={ templ.URL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)) } class="text-indigo-600 hover:text-indigo-900" title="Edit">
-											<i class="fas fa-pencil-alt"></i> // Example using Font Awesome
-											<span class="sr-only">Edit</span>
-										</a>
+									
+									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
 										if glasses.IsInStock {
-											<button
-												hx-post={ fmt.Sprintf("/customer/glasses/%s/send", glasses.GlassesID) }  
-												hx-confirm="Are you sure you want to mark these glasses as sent?"
-												hx-target="closest tr" 
-												hx-swap="outerHTML"  
-												class="text-green-600 hover:text-green-900"
-												title="Mark as Sent"
-											>
-												<i class="fas fa-paper-plane"></i>
-												<span class="sr-only">Mark as Sent</span>
-											</button>
-										}
-										<button
-											hx-delete={ fmt.Sprintf("/glasses/%s", glasses.GlassesID) }
-											hx-confirm="Are you sure you want to delete these glasses?"
-											hx-target="closest tr"
-											hx-swap="outerHTML"
-											class="text-red-600 hover:text-red-900"
-											title="Delete"
-										>
-											<i class="fas fa-trash-alt"></i>
-											<span class="sr-only">Delete</span>
-										</button>
-									</td>
-								</tr>
-							}
-							if len(a.Glasses) == 0 {
-								<tr>
-    								<td colspan={ strconv.Itoa(len(a.Column) + 1) } class="px-4 py-6 text-center text-sm text-gray-500">
-										No glasses found matching your criteria.
+												@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)))
+												@components.ButtonDeleteComponent(fmt.Sprintf("/glasses/%s", glasses.GlassesID))
+											}
 									</td>
 								</tr>
 							}
@@ -191,7 +172,7 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 				</div>
 			</div>
 		</div>
-
+		
 		if a.LastPage > 1 {
 			<div class="p-4 border-t border-gray-200">
 				@components.PaginatorComponent(

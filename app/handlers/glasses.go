@@ -584,8 +584,16 @@ func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, h
 		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "L Sph", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "L Cyl", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "L Axis", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "L Add", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+
+		// Right Eye Prescription
+		{Title: "R Sph", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "R Cyl", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "R Axis", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "R Add", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},

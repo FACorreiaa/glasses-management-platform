@@ -311,13 +311,54 @@ func (a *AdminRepository) GetAdminID(ctx context.Context, userID uuid.UUID) (*mo
 	return &u, nil
 }
 
-func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSize int, orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+func (r *GlassesRepository) GetAdminGlassesDetails(ctx context.Context, page, pageSize int, orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+	// --- CORRECTED QUERY TO MATCH fetchGlassesDetails SCAN ---
+	// Selects exactly the 8 columns scanned by fetchGlassesDetails in the correct order.
 	query := `
 		SELECT
-			u.username, u.email, g.left_sph, g.right_sph,
-			g.reference, g.is_in_stock,
-			COALESCE(g.updated_at, '1970-01-01 00:00:00') AS updated_at, g.created_at
-		FROM glasses g
+            u.username,         -- 1st Scan arg: &a.UserName
+            u.email,            -- 2nd Scan arg: &a.UserEmail
+            g.left_sph,         -- 3rd Scan arg: &a.LeftPrescription.Sph
+            g.right_sph,        -- 4th Scan arg: &a.RightPrescription.Sph
+            g.reference,        -- 5th Scan arg: &a.Reference
+            g.is_in_stock,      -- 6th Scan arg: &a.IsInStock
+            COALESCE(g.updated_at, '1970-01-01 00:00:00') AS updated_at, -- 7th Scan arg: &a.UpdatedAt (Correct Alias, Qualified Source)
+            g.created_at        -- 8th Scan arg: &a.CreatedAt (Qualified Source)
+        FROM glasses g
+		JOIN "user" u ON g.user_id = u.user_id
+		WHERE
+			Trim(Upper(u.username)) ILIKE trim(upper('%' || $4 || '%'))
+			AND ($5::float8 IS NULL OR g.left_sph = $5)
+			AND ($6::float8 IS NULL OR g.right_sph = $6)
+		ORDER BY
+			CASE
+                -- Note: Ordering by columns not selected (like color, features)
+                -- might still work but isn't ideal. Consider adjusting
+                -- if you only want to sort by selected columns.
+				WHEN $1 = 'Brand' THEN g.brand
+				WHEN $1 = 'Color' THEN g.color
+				WHEN $1 = 'Reference' THEN g.reference
+				WHEN $1 = 'Type' THEN g.type
+				WHEN $1 = 'Features' THEN g.features
+				ELSE g.brand -- Default sort column
+			END ` + sortBy + ` -- Apply ASC/DESC
+		OFFSET $2 LIMIT $3`
+	// --- END CORRECTED QUERY ---
+
+	offset := (page - 1) * pageSize
+	slog.Info("Fetching admin glasses details", "offset", offset) // Adjusted log message
+	// Arguments passed to fetchGlassesDetails should match the placeholders $1-$6 in the query
+	return r.fetchGlassesDetails(ctx, query, orderBy, offset, pageSize, username, leftEye, rightEye)
+}
+
+func (r *GlassesRepository) GetGlassesDetails(ctx context.Context, page, pageSize int, orderBy, sortBy, username string, leftEye, rightEye *float64) ([]models.Glasses, error) {
+	query := `
+		SELECT glasses_id, color, brand, 
+					 left_sph, left_cyl, left_axis, left_add,
+					 right_sph, right_cyl, right_axis, right_add,
+       				 reference, type, is_in_stock, features, 
+					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+			 	FROM glasses g
 		JOIN "user" u ON g.user_id = u.user_id
 		WHERE
 			Trim(Upper(u.username)) ILIKE trim(upper('%' || $4 || '%'))

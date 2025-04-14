@@ -112,11 +112,6 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte) http.Handler {
 
 	// Settings
 
-	auth.HandleFunc("/settings/collaborators", handler(h.UsersPage)).Methods(http.MethodGet)
-	auth.HandleFunc("/settings/admin", handler(h.UpdateAdminPage)).Methods(http.MethodGet)
-	auth.HandleFunc("/settings/admin/update", handler(h.UpdateAdmin)).Methods(http.MethodPut)
-	auth.HandleFunc("/settings/glasses", handler(h.SettingsGlassesPage)).Methods(http.MethodGet)
-	auth.HandleFunc("/settings/shipping", handler(h.SettingsShippingPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/customer/glasses/{glasses_id}/send", handler(h.InsertShippingFormPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/customer/glasses/{glasses_id}/send", handler(h.InsertShippingForm)).Methods(http.MethodPost)
 
@@ -124,6 +119,12 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte) http.Handler {
 	auth.HandleFunc("/settings/shipping/{customer_id}", handler(h.DeleteCustomer)).Methods(http.MethodDelete)
 	auth.HandleFunc("/settings/shipping/{customer_id}/edit", handler(h.UpdateCustomerPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/settings/shipping/{customer_id}/update", handler(h.UpdateCustomer)).Methods(http.MethodPut)
+
+	auth.HandleFunc("/settings/collaborators", handler(h.UsersPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/settings/admin", handler(h.UpdateAdminPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/settings/admin/update", handler(h.UpdateAdmin)).Methods(http.MethodPut)
+	auth.HandleFunc("/settings/glasses", handler(h.SettingsGlassesPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/settings/shipping", handler(h.SettingsShippingPage)).Methods(http.MethodGet)
 	return r
 }
 
