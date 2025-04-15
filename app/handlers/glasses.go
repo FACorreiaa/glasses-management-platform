@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -295,14 +296,14 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	g := models.GlassesForm{
 		Reference:   r.FormValue("reference"),
 		Brand:       r.FormValue("brand"),
-		LeftSph:     leftSph,
-		LeftCyl:     leftCyl,
-		LeftAxis:    leftAxis,
-		LeftAdd:     leftAdd,
-		RightSph:    rightSph,
-		RightCyl:    rightCyl,
-		RightAxis:   rightAxis,
-		RightAdd:    rightAdd,
+		LeftSph:     &leftSph,
+		LeftCyl:     &leftCyl,
+		LeftAxis:    &leftAxis,
+		LeftAdd:     &leftAdd,
+		RightSph:    &rightSph,
+		RightCyl:    &rightCyl,
+		RightAxis:   &rightAxis,
+		RightAdd:    &rightAdd,
 		Color:       r.FormValue("color"),
 		Type:        r.FormValue("type"),
 		Feature:     r.FormValue("features"),
@@ -355,6 +356,7 @@ func (h *Handler) DeleteGlasses(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) error {
+	// Use request context for tracing and potentially database calls
 	ctx, span := tracer.Start(r.Context(), "UpdateGlassesPageHandler")
 	defer span.End()
 
@@ -362,34 +364,90 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 	glassesIDStr := vars["glasses_id"]
 	glassesID, err := uuid.Parse(glassesIDStr)
 	if err != nil {
+		slog.ErrorContext(ctx, "Invalid glasses ID format in URL", "id", glassesIDStr, "err", err)
 		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
-		return err
+		return fmt.Errorf("parsing glasses ID: %w", err) // Return error for handler wrapper
 	}
 
-	g, err := h.service.GetGlassesByID(context.Background(), glassesID)
+	// 1. Fetch the current glasses data
+	// Use ctx from request for service call
+	currentGlasses, err := h.service.GetGlassesByID(ctx, glassesID)
 	if err != nil {
-		http.Error(w, "Failed to retrieve glasses", http.StatusInternalServerError)
-		return err
+		slog.ErrorContext(ctx, "Failed to get glasses by ID for edit page", "err", err, "glasses_id", glassesIDStr)
+		// Handle appropriately - maybe show a "not found" page
+		http.Error(w, "Glasses not found", http.StatusNotFound)
+		return fmt.Errorf("getting glasses by ID: %w", err)
 	}
 
-	ls := strconv.FormatFloat(*g.LeftPrescription.Sph, 'f', 2, 64)
-	rs := strconv.FormatFloat(*g.RightPrescription.Sph, 'f', 2, 64)
+	// 2. Create a new GlassesForm and POPULATE its Values map fully
 	form := models.GlassesForm{
-		Values: map[string]string{
-			"Reference": g.Reference,
-			"Brand":     g.Brand,
-			"LeftSph":   ls,
-			"RightSph":  rs,
-			"Color":     g.Color,
-			"Type":      g.Type,
-			"Features":  g.Feature,
-		},
+		Values:      make(map[string]string),
+		FieldErrors: make(map[string]string),
+		GlassesID:   glassesID,
 	}
 
-	f := glasses.GlassesUpdateForm(form, glassesIDStr)
-	sidebar := h.renderSidebar()
-	updatePage := pages.MainLayoutPage("Update Glasses", "form to update glasses", sidebar, f)
-	return h.CreateLayout(ctx, w, r, "Update Glasses", updatePage).Render(context.Background(), w)
+	// --- Populate the Values map from currentGlasses data ---
+	form.Values["reference"] = currentGlasses.Reference
+	form.Values["brand"] = currentGlasses.Brand
+	form.Values["color"] = currentGlasses.Color
+	form.Values["type"] = currentGlasses.Type
+	form.Values["features"] = currentGlasses.Feature // Ensure Feature is the correct field name
+
+	// Populate prescription values (handle nil pointers!)
+	// Left Eye
+	if currentGlasses.LeftPrescription.Sph != nil {
+		form.Values["left_sph"] = fmt.Sprintf("%.2f", *currentGlasses.LeftPrescription.Sph)
+	} else {
+		form.Values["left_sph"] = "" // Or "0.00" if a default is preferred
+	}
+	if currentGlasses.LeftPrescription.Cyl != nil {
+		form.Values["left_cyl"] = fmt.Sprintf("%.2f", *currentGlasses.LeftPrescription.Cyl)
+	} else {
+		form.Values["left_cyl"] = ""
+	}
+	if currentGlasses.LeftPrescription.Axis != nil {
+		// Assuming Axis is *float64 based on previous fixes, format as integer
+		form.Values["left_axis"] = fmt.Sprintf("%.0f", *currentGlasses.LeftPrescription.Axis)
+		// If Axis is *int type: form.Values["left_axis"] = fmt.Sprintf("%d", *currentGlasses.LeftPrescription.Axis)
+	} else {
+		form.Values["left_axis"] = ""
+	}
+	if currentGlasses.LeftPrescription.Add != nil {
+		form.Values["left_add"] = fmt.Sprintf("%.2f", *currentGlasses.LeftPrescription.Add)
+	} else {
+		form.Values["left_add"] = ""
+	}
+
+	// Right Eye
+	if currentGlasses.RightPrescription.Sph != nil {
+		form.Values["right_sph"] = fmt.Sprintf("%.2f", *currentGlasses.RightPrescription.Sph)
+	} else {
+		form.Values["right_sph"] = ""
+	}
+	if currentGlasses.RightPrescription.Cyl != nil {
+		form.Values["right_cyl"] = fmt.Sprintf("%.2f", *currentGlasses.RightPrescription.Cyl)
+	} else {
+		form.Values["right_cyl"] = ""
+	}
+	if currentGlasses.RightPrescription.Axis != nil {
+		// Assuming Axis is *float64 based on previous fixes, format as integer
+		form.Values["right_axis"] = fmt.Sprintf("%.0f", *currentGlasses.RightPrescription.Axis)
+		// If Axis is *int type: form.Values["right_axis"] = fmt.Sprintf("%d", *currentGlasses.RightPrescription.Axis)
+	} else {
+		form.Values["right_axis"] = ""
+	}
+	if currentGlasses.RightPrescription.Add != nil {
+		form.Values["right_add"] = fmt.Sprintf("%.2f", *currentGlasses.RightPrescription.Add)
+	} else {
+		form.Values["right_add"] = ""
+	}
+
+	formComponent := glasses.GlassesUpdateForm(*currentGlasses, form, glassesIDStr)
+	sidebar := h.renderSidebar() // Assuming this returns a templ.Component
+
+	pageComponent := pages.MainLayoutPage("Update Glasses", "Form to update glasses", sidebar, formComponent)
+
+	return pageComponent.Render(r.Context(), w)
 }
 
 func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
@@ -397,65 +455,165 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 	glassesIDStr := vars["glasses_id"]
 	glassesID, err := uuid.Parse(glassesIDStr)
 	if err != nil {
+		slog.Error("Invalid glasses ID format in URL", "id", glassesIDStr, "err", err)
 		http.Error(w, "Invalid glasses ID", http.StatusBadRequest)
-		return err
+		return fmt.Errorf("parsing glasses ID: %w", err)
 	}
 
-	if err = r.ParseForm(); err != nil {
-		http.Error(w, "Failed to parse form", http.StatusBadRequest)
-		return err
-	}
-
-	g := models.GlassesForm{
-		GlassesID:   glassesID,
-		Reference:   r.FormValue("reference"),
-		Brand:       r.FormValue("brand"),
-		LeftSph:     parseFloat(r.FormValue("left_sph")),
-		LeftCyl:     parseFloat(r.FormValue("left_cyl")),
-		LeftAxis:    parseFloat(r.FormValue("left_axis")),
-		LeftAdd:     parseFloat(r.FormValue("left_add")),
-		RightSph:    parseFloat(r.FormValue("right_sph")),
-		RightCyl:    parseFloat(r.FormValue("right_cyl")),
-		RightAxis:   parseFloat(r.FormValue("right_axis")),
-		RightAdd:    parseFloat(r.FormValue("right_add")),
-		Color:       r.FormValue("color"),
-		Type:        r.FormValue("type"),
-		Feature:     r.FormValue("features"),
-		FieldErrors: map[string]string{},
-	}
-
-	fmt.Println("\n", g.Values)
-
-	ref, err := h.service.GetGlassesReference(context.Background(), glassesID)
+	// 1. Fetch current glasses data (needed for stock check and potentially re-rendering form)
+	currentGlasses, err := h.service.GetGlassesByID(r.Context(), glassesID)
 	if err != nil {
-		http.Error(w, "Failed to retrieve glasses", http.StatusInternalServerError)
-		return err
+		slog.Error("Failed to get glasses by ID for update", "err", err, "glasses_id", glassesIDStr)
+		http.Error(w, "Glasses not found", http.StatusNotFound)
+		return fmt.Errorf("getting glasses by ID: %w", err)
 	}
 
-	fmt.Println("\n", ref, g.Reference)
-
-	if ref == g.Reference {
-		g.FieldErrors["reference"] = "Glasses reference must be unique"
+	// 2. Parse form data
+	if err := r.ParseForm(); err != nil {
+		slog.Error("Failed to parse update form", "err", err, "glasses_id", glassesIDStr)
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return fmt.Errorf("parsing form: %w", err)
 	}
 
-	if len(g.FieldErrors) > 0 {
-		form := glasses.GlassesUpdateForm(g, glassesIDStr).Render(context.Background(), w)
-		return form
+	// 3. Populate the GlassesForm struct AND Validate
+	form := models.GlassesForm{
+		GlassesID: glassesID, // Store the parsed UUID
+		Reference: r.FormValue("reference"),
+		Brand:     r.FormValue("brand"),
+		Color:     r.FormValue("color"),
+		Type:      r.FormValue("type"), // Get submitted type
+		Feature:   r.FormValue("features"),
+		// --- Parse numeric fields robustly ---
+		LeftSph:   parseFloatPointer(r.FormValue("left_sph")), // Use helper for pointers
+		LeftCyl:   parseFloatPointer(r.FormValue("left_cyl")),
+		LeftAxis:  parseFloatPointer(r.FormValue("left_axis")), // Assuming float64 for Axis now
+		LeftAdd:   parseFloatPointer(r.FormValue("left_add")),
+		RightSph:  parseFloatPointer(r.FormValue("right_sph")),
+		RightCyl:  parseFloatPointer(r.FormValue("right_cyl")),
+		RightAxis: parseFloatPointer(r.FormValue("right_axis")), // Assuming float64 for Axis now
+		RightAdd:  parseFloatPointer(r.FormValue("right_add")),
+		// --- End numeric parsing ---
+		Values:      make(map[string]string), // Keep for re-rendering form if needed
+		FieldErrors: make(map[string]string),
 	}
 
-	if err = h.service.UpdateGlasses(context.Background(), g); err != nil {
+	isValidType := false
+	if form.Type == "adult" || form.Type == "children" {
+		isValidType = true
+	}
+	if !isValidType {
+		form.FieldErrors["type"] = "Please select a valid type (Adult or Children)."
+	}
+
+	// Add other validations as needed (e.g., reference check)
+	// ref, err := h.service.GetGlassesReference(context.Background(), glassesID)
+	// if err != nil {
+	// 	http.Error(w, "Failed to retrieve glasses reference", http.StatusInternalServerError)
+	// 	return err
+	// }
+	// if ref != form.Reference { // Check only if reference *changed*
+	//   // Check if the *new* reference already exists for another pair
+	//   exists, errCheck := h.service.CheckReferenceExists(r.Context(), form.Reference, glassesID) // Need a service method like this
+	//   if errCheck != nil {
+	//      http.Error(w, "Failed checking reference uniqueness", http.StatusInternalServerError)
+	//      return errCheck
+	//   }
+	//   if exists {
+	//       form.FieldErrors["reference"] = "This reference is already used by another pair of glasses."
+	//   }
+	// }
+
+	// --- Repopulate form.Values for re-rendering if there are errors ---
+	if len(form.FieldErrors) > 0 {
+		slog.Warn("Validation errors found during update", "errors", form.FieldErrors, "glasses_id", glassesIDStr)
+		// Populate form.Values from the *submitted* (potentially invalid) data
+		form.Values["reference"] = form.Reference
+		form.Values["brand"] = form.Brand
+		form.Values["color"] = form.Color
+		form.Values["type"] = form.Type // Use the submitted type for re-selection
+		form.Values["features"] = form.Feature
+		// Repopulate numeric values (might need nil checks if parseFloatPointer returns nil)
+		if form.LeftSph != nil {
+			form.Values["left_sph"] = fmt.Sprintf("%.2f", *form.LeftSph)
+		} else {
+			form.Values["left_sph"] = ""
+		}
+		if form.LeftCyl != nil {
+			form.Values["left_cyl"] = fmt.Sprintf("%.2f", *form.LeftCyl)
+		} else {
+			form.Values["left_cyl"] = ""
+		}
+		if form.LeftAxis != nil {
+			form.Values["left_axis"] = fmt.Sprintf("%.0f", *form.LeftAxis)
+		} else {
+			form.Values["left_axis"] = ""
+		} // Adjust format if int
+		if form.LeftAdd != nil {
+			form.Values["left_add"] = fmt.Sprintf("%.2f", *form.LeftAdd)
+		} else {
+			form.Values["left_add"] = ""
+		}
+		if form.RightSph != nil {
+			form.Values["right_sph"] = fmt.Sprintf("%.2f", *form.RightSph)
+		} else {
+			form.Values["right_sph"] = ""
+		}
+		if form.RightCyl != nil {
+			form.Values["right_cyl"] = fmt.Sprintf("%.2f", *form.RightCyl)
+		} else {
+			form.Values["right_cyl"] = ""
+		}
+		if form.RightAxis != nil {
+			form.Values["right_axis"] = fmt.Sprintf("%.0f", *form.RightAxis)
+		} else {
+			form.Values["right_axis"] = ""
+		} // Adjust format if int
+		if form.RightAdd != nil {
+			form.Values["right_add"] = fmt.Sprintf("%.2f", *form.RightAdd)
+		} else {
+			form.Values["right_add"] = ""
+		}
+
+		// Re-render the form with errors and previously entered values
+		component := glasses.GlassesUpdateForm(*currentGlasses, form, glassesIDStr) // Pass currentGlasses for restock check
+		w.WriteHeader(http.StatusUnprocessableEntity)                               // Use 422 for validation errors
+		return component.Render(r.Context(), w)
+		// Note: Rendering directly might not work perfectly with HTMX depending on swap targets.
+		// You might need specific HTMX responses for error handling.
+	}
+
+	// --- Proceed if validation passed ---
+	restockFlag := r.FormValue("restock") == "true"
+
+	// Call the service/repository update function
+	if err = h.service.UpdateGlasses(r.Context(), form, restockFlag, currentGlasses.IsInStock); err != nil {
+		slog.Error("Failed to update glasses in repository", "err", err, "glasses_id", glassesIDStr, "restock", restockFlag)
 		http.Error(w, "Failed to update glasses", http.StatusInternalServerError)
 		return err
 	}
 
-	w.Header().Set("HX-Redirect", "/glasses")
+	slog.Info("Successfully processed glasses update", "glasses_id", glassesIDStr, "restock", restockFlag)
 
+	// Redirect or respond
+	w.Header().Set("HX-Redirect", "/glasses")
+	w.WriteHeader(http.StatusOK) // Or StatusNoContent
 	return nil
 }
 
 func parseFloat(value string) float64 {
 	f, _ := strconv.ParseFloat(value, 64)
 	return f
+}
+
+func parseFloatPointer(valueStr string) *float64 {
+	if valueStr == "" {
+		return nil // Handle empty string as nil
+	}
+	f, err := strconv.ParseFloat(valueStr, 64)
+	if err != nil {
+		return nil // Handle parse errors as nil (or log/handle differently)
+	}
+	return &f
 }
 
 // Filtered Side bar views

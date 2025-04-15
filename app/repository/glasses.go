@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -173,22 +174,103 @@ func (r *GlassesRepository) DeleteGlasses(ctx context.Context, glassesID uuid.UU
 	return err
 }
 
-func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesForm) error {
-	query := `
-		UPDATE glasses
-		SET color = $1, brand = $2, right_sph = $3, 
-			left_sph = $4, reference = $5, type =$6,
-		    features = $7, updated_at = NOW()
-		WHERE glasses_id = $8
-	`
-	_, err := r.pgpool.Exec(ctx, query, g.Color, g.Brand,
-		g.RightSph, g.LeftSph, g.Reference, g.Type, g.Feature, g.GlassesID)
+func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesForm, restock bool, currentStockStatus bool) error {
+	// Start a transaction for atomicity
+	tx, err := r.pgpool.Begin(ctx)
 	if err != nil {
-		slog.Error(" updating glasses", "err", err)
-		return errors.New("internal server error")
+		slog.Error("starting transaction for glasses update", "err", err)
+		return errors.New("internal server error: could not start transaction")
 	}
-	slog.Info("Updated glasses", "glasses_id", g.GlassesID)
-	return err
+	// Ensure rollback happens if commit fails or panics occur
+	defer func() {
+		if err != nil { // Rollback if any error occurred during the function
+			slog.Warn("rolling back transaction due to error", "err", err)
+			if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
+				slog.Error("error rolling back transaction", "rollbackErr", rollbackErr)
+			}
+		}
+	}()
+
+	// Scenario 1: Restocking an item that was previously out of stock
+	if restock && !currentStockStatus {
+		slog.Info("Restocking glasses, deleting associated customer and shipping details", "glasses_id", g.GlassesID)
+
+		shippingDeleteQuery := `DELETE FROM shipping_details WHERE glasses_id = $1`
+		cmdTagShipping, errShip := tx.Exec(ctx, shippingDeleteQuery, g.GlassesID)
+		if errShip != nil {
+			err = fmt.Errorf("deleting shipping details: %w", errShip) // Capture error for defer rollback
+			slog.Error("deleting shipping details during restock", "err", err, "glasses_id", g.GlassesID)
+			return errors.New("internal server error: could not delete shipping details")
+		}
+		slog.Debug("Shipping details deletion result", "rows_affected", cmdTagShipping.RowsAffected(), "glasses_id", g.GlassesID)
+
+		customerDeleteQuery := `DELETE FROM customer WHERE glasses_id = $1`
+		cmdTagCustomer, errCust := tx.Exec(ctx, customerDeleteQuery, g.GlassesID)
+		if errCust != nil {
+			err = fmt.Errorf("deleting customer: %w", errCust) // Capture error for defer rollback
+			slog.Error("deleting customer during restock", "err", err, "glasses_id", g.GlassesID)
+			return errors.New("internal server error: could not delete customer")
+		}
+		if cmdTagCustomer.RowsAffected() == 0 {
+			// This might be okay if glasses were out of stock but somehow had no customer link
+			slog.Warn("No customer record found to delete during restock", "glasses_id", g.GlassesID)
+		} else {
+			slog.Info("Customer record deleted during restock", "glasses_id", g.GlassesID)
+		}
+
+		// 3. Update Glasses - Set IsInStock to TRUE and update other fields
+		updateQuery := `
+			UPDATE glasses
+			SET color = $1, brand = $2,
+			    reference = $3, type = $4, features = $5,
+                left_sph = $6, left_cyl = $7, left_axis = $8, left_add = $9,
+                right_sph = $10, right_cyl = $11, right_axis = $12, right_add = $13,
+			    is_in_stock = TRUE, -- Set stock to true
+                updated_at = NOW()
+			WHERE glasses_id = $14` // Parameter count increased
+		_, errExec := tx.Exec(ctx, updateQuery,
+			g.Color, g.Brand, g.Reference, g.Type, g.Feature, // $1 - $5
+			g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd, // $6 - $9
+			g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd, // $10 - $13
+			g.GlassesID) // $14
+		if errExec != nil {
+			err = fmt.Errorf("updating glasses during restock: %w", errExec) // Capture error
+			slog.Error("updating glasses during restock", "err", err, "glasses_id", g.GlassesID)
+			return errors.New("internal server error: could not update glasses")
+		}
+		slog.Info("Glasses updated and restocked", "glasses_id", g.GlassesID)
+
+	} else {
+		// Scenario 2: Standard update (or restock checkbox wasn't checked, or item was already in stock)
+		slog.Info("Performing standard update for glasses", "glasses_id", g.GlassesID, "restock_flag", restock, "current_stock", currentStockStatus)
+		// Original update query (does NOT touch is_in_stock)
+		updateQuery := `
+			UPDATE glasses
+			SET color = $1, brand = $2,
+			    reference = $3, type = $4, features = $5,
+			    left_sph = $6, left_cyl = $7, left_axis = $8, left_add = $9,
+                right_sph = $10, right_cyl = $11, right_axis = $12, right_add = $13,
+			    updated_at = NOW()
+			WHERE glasses_id = $14` // Parameter count increased
+		_, errExec := tx.Exec(ctx, updateQuery,
+			g.Color, g.Brand, g.Reference, g.Type, g.Feature, // $1 - $5
+			g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd, // $6 - $9
+			g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd, // $10 - $13
+			g.GlassesID) // $14
+		if errExec != nil {
+			err = fmt.Errorf("updating glasses: %w", errExec) // Capture error
+			slog.Error("updating glasses", "err", err, "glasses_id", g.GlassesID)
+			return errors.New("internal server error")
+		}
+		slog.Info("Updated glasses (standard)", "glasses_id", g.GlassesID)
+	}
+
+	if err = tx.Commit(ctx); err != nil {
+		slog.Error("committing transaction for glasses update", "err", err, "glasses_id", g.GlassesID)
+		return errors.New("internal server error: could not commit changes")
+	}
+
+	return nil
 }
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.GlassesForm) error {

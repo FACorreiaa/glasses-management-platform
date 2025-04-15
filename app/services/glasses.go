@@ -21,8 +21,8 @@ func (s *Service) DeleteGlasses(ctx context.Context, glassesID uuid.UUID) error 
 	return s.glassesRepo.DeleteGlasses(ctx, glassesID)
 }
 
-func (s *Service) UpdateGlasses(ctx context.Context, g models.GlassesForm) error {
-	return s.glassesRepo.UpdateGlasses(ctx, g)
+func (s *Service) UpdateGlasses(ctx context.Context, g models.GlassesForm, restock bool, currentStockStatus bool) error {
+	return s.glassesRepo.UpdateGlasses(ctx, g, restock, currentStockStatus)
 }
 
 func (s *Service) InsertGlasses(ctx context.Context, g models.GlassesForm) error {

@@ -178,15 +178,15 @@ type GlassesForm struct {
 	Reference string    `json:"reference" schema:"reference"`
 	Brand     string    `json:"brand" schema:"brand"`
 
-	LeftSph  float64 `json:"left_sph" schema:"left_sph"`
-	LeftCyl  float64 `json:"left_cyl" schema:"left_cyl"`
-	LeftAxis float64 `json:"left_axis" schema:"left_axis"`
-	LeftAdd  float64 `json:"left_add" schema:"left_add"`
+	LeftSph  *float64 `json:"left_sph" schema:"left_sph"`
+	LeftCyl  *float64 `json:"left_cyl" schema:"left_cyl"`
+	LeftAxis *float64 `json:"left_axis" schema:"left_axis"`
+	LeftAdd  *float64 `json:"left_add" schema:"left_add"`
 
-	RightSph  float64 `json:"right_sph" schema:"right_sph"`
-	RightCyl  float64 `json:"right_cyl" schema:"right_cyl"`
-	RightAxis float64 `json:"right_axis" schema:"right_axis"`
-	RightAdd  float64 `json:"right_add" schema:"right_add"`
+	RightSph  *float64 `json:"right_sph" schema:"right_sph"`
+	RightCyl  *float64 `json:"right_cyl" schema:"right_cyl"`
+	RightAxis *float64 `json:"right_axis" schema:"right_axis"`
+	RightAdd  *float64 `json:"right_add" schema:"right_add"`
 
 	Color       string `json:"color" schema:"color"`
 	Type        string `json:"type" schema:"type"`
