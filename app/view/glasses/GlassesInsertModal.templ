@@ -47,9 +47,8 @@ templ GlassesInsertModal(form models.GlassesForm) {
 					<div class="relative w-auto pt-5">
 						// Use the form structure from GlassesRegisterForm
 
-						<form method="post" class="w-full space-y-4" hx-post="/glasses/register"
-							hx-target="#insert-modal-content" hx-swap="outerHTML" class="w-full space-y-4"
-							id="insert-modal-content">
+						<form method="post" hx-post="/glasses/register" hx-target="#insert-modal-content"
+							hx-swap="outerHTML" class="w-full space-y-4" id="insert-modal-content" hx-boost="false">
 
 							// Section 1: General Info (Reference, Brand, Color, Type)
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
