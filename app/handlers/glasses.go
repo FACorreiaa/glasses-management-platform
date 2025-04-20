@@ -122,8 +122,8 @@ func (h *Handler) getGlasses(w http.ResponseWriter, r *http.Request) (int, []mod
 	return page, g, nil
 }
 
-func (h *Handler) renderGlassesTable(ctx context.Context, w http.ResponseWriter, r *http.Request) (templ.Component, error) {
-	ctx, span := tracer.Start(r.Context(), "renderGlassesTable")
+func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (templ.Component, error) {
+	_, span := tracer.Start(r.Context(), "renderGlassesTable")
 	defer func() {
 		if span != nil {
 			span.End()
@@ -214,7 +214,7 @@ func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
 	}()
 
 	sidebar := h.renderSidebar()
-	renderTable, err := h.renderGlassesTable(ctx, w, r)
+	renderTable, err := h.renderGlassesTable(w, r)
 	//errorPage := error.ErrorPage() // Example
 
 	if err != nil {
@@ -240,10 +240,11 @@ func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) er
 }
 
 func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
-	var user *models.UserSession
-	userCtx := r.Context().Value(models.CtxKeyAuthUser)
+	ctx := r.Context() // Use request context
 
-	fieldError := make(map[string]string)
+	// 1. Get User (keep your existing logic)
+	var user *models.UserSession
+	userCtx := ctx.Value(models.CtxKeyAuthUser)
 	if userCtx != nil {
 		switch u := userCtx.(type) {
 		case *models.UserSession:
@@ -253,86 +254,114 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
+	// 2. Parse Form
 	if err := r.ParseForm(); err != nil {
-		HandleError(err, "parsing form")
-		return err
+		slog.ErrorContext(ctx, "Failed to parse insert form", "err", err)
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return fmt.Errorf("parsing form: %w", err)
 	}
 
-	leftSph, err := strconv.ParseFloat(r.FormValue("left_sph"), 64)
-	if err != nil {
-		fieldError["left_sph"] = "invalid left eye strength"
-	}
-
-	rightSph, err := strconv.ParseFloat(r.FormValue("left_sph"), 64)
-	if err != nil {
-		fieldError["left_sph"] = "invalid lerightft eye strength"
-	}
-
-	leftCyl, err := strconv.ParseFloat(r.FormValue("left_cyl"), 64)
-	if err != nil {
-		fieldError["left_cyl"] = "invalid left eye cylinder"
-	}
-	rightCyl, err := strconv.ParseFloat(r.FormValue("right_cyl"), 64)
-	if err != nil {
-		fieldError["right_cyl"] = "invalid right eye cylinder"
-	}
-	leftAxis, err := strconv.ParseFloat(r.FormValue("left_axis"), 64)
-	if err != nil {
-		fieldError["left_axis"] = "invalid left eye axis"
-	}
-	rightAxis, err := strconv.ParseFloat(r.FormValue("right_axis"), 64)
-	if err != nil {
-		fieldError["right_axis"] = "invalid right eye axis"
-	}
-	leftAdd, err := strconv.ParseFloat(r.FormValue("left_add"), 64)
-	if err != nil {
-		fieldError["left_add"] = "invalid left eye add"
-	}
-	rightAdd, err := strconv.ParseFloat(r.FormValue("right_add"), 64)
-	if err != nil {
-		fieldError["right_add"] = "invalid right eye add"
-	}
-
-	g := models.GlassesForm{
-		Reference:   r.FormValue("reference"),
-		Brand:       r.FormValue("brand"),
-		LeftSph:     &leftSph,
-		LeftCyl:     &leftCyl,
-		LeftAxis:    &leftAxis,
-		LeftAdd:     &leftAdd,
-		RightSph:    &rightSph,
-		RightCyl:    &rightCyl,
-		RightAxis:   &rightAxis,
-		RightAdd:    &rightAdd,
-		Color:       r.FormValue("color"),
-		Type:        r.FormValue("type"),
-		Feature:     r.FormValue("features"),
-		UserID:      user.ID,
+	// 3. Create the Form Struct FIRST
+	form := models.GlassesForm{
+		Values:      make(map[string]string), // To repopulate form on error
 		FieldErrors: make(map[string]string),
+		UserID:      user.ID, // Assign user ID now
 	}
 
-	if len(g.Reference) == 0 {
-		g.FieldErrors["reference"] = "reference cannot be empty"
+	// 4. Populate Values and Typed fields, Validate as you go
+	form.Reference = r.FormValue("reference")
+	form.Values["reference"] = form.Reference // Keep submitted value
+	if form.Reference == "" {
+		form.FieldErrors["reference"] = "Reference is required."
+	} // Add uniqueness check if needed
+
+	form.Brand = r.FormValue("brand")
+	form.Values["brand"] = form.Brand // Keep submitted value
+
+	form.Color = r.FormValue("color")
+	form.Values["color"] = form.Color // Keep submitted value
+
+	form.Type = r.FormValue("type")
+	form.Values["type"] = form.Type // Keep submitted value
+	if form.Type != "adult" && form.Type != "children" {
+		form.FieldErrors["type"] = "Please select a valid type."
 	}
 
-	if len(g.Type) == 0 {
-		g.FieldErrors["type"] = "type cannot be empty"
+	form.Feature = r.FormValue("features")
+	form.Values["features"] = form.Feature // Keep submitted value
+
+	// Parse numeric fields, add errors directly to form.FieldErrors
+	form.Values["left_sph"] = r.FormValue("left_sph") // Store original string value
+	form.LeftSph = parseFloatPointerAndError(form.Values["left_sph"], "left_sph", "Invalid number format for Left Sphere.", form.FieldErrors)
+
+	form.Values["left_cyl"] = r.FormValue("left_cyl")
+	form.LeftCyl = parseFloatPointerAndError(form.Values["left_cyl"], "left_cyl", "Invalid number format for Left Cylinder.", form.FieldErrors)
+
+	form.Values["left_axis"] = r.FormValue("left_axis")
+	form.LeftAxis = parseFloatPointerAndError(form.Values["left_axis"], "left_axis", "Invalid number format for Left Axis.", form.FieldErrors) // Adapt if Axis is int
+
+	form.Values["left_add"] = r.FormValue("left_add")
+	form.LeftAdd = parseFloatPointerAndError(form.Values["left_add"], "left_add", "Invalid number format for Left Addition.", form.FieldErrors)
+
+	form.Values["right_sph"] = r.FormValue("right_sph")
+	form.RightSph = parseFloatPointerAndError(form.Values["right_sph"], "right_sph", "Invalid number format for Right Sphere.", form.FieldErrors)
+
+	form.Values["right_cyl"] = r.FormValue("right_cyl")
+	form.RightCyl = parseFloatPointerAndError(form.Values["right_cyl"], "right_cyl", "Invalid number format for Right Cylinder.", form.FieldErrors)
+
+	form.Values["right_axis"] = r.FormValue("right_axis")
+	form.RightAxis = parseFloatPointerAndError(form.Values["right_axis"], "right_axis", "Invalid number format for Right Axis.", form.FieldErrors) // Adapt if Axis is int
+
+	form.Values["right_add"] = r.FormValue("right_add")
+	form.RightAdd = parseFloatPointerAndError(form.Values["right_add"], "right_add", "Invalid number format for Right Addition.", form.FieldErrors)
+
+	// 5. Check if any errors occurred during parsing/validation
+	if len(form.FieldErrors) > 0 {
+		slog.WarnContext(ctx, "Validation errors on glasses insert form", "errors", form.FieldErrors)
+
+		// --- Re-render the MODAL component with errors ---
+		// Use status 422 Unprocessable Entity for validation errors
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		// Render the modal component, passing the form with Values and Errors
+		component := glasses.GlassesInsertModal(form)
+		// Render directly to the response writer
+		// HTMX will swap this into the target specified on the form/button
+		return component.Render(ctx, w) // Use request context
 	}
 
-	// TO DO
-
-	if len(g.FieldErrors) > 0 {
-		return err
+	// 6. If validation passed, call the service
+	slog.InfoContext(ctx, "Validation passed, attempting to insert glasses", "reference", form.Reference)
+	err := h.service.InsertGlasses(ctx, form) // Use request context
+	if err != nil {
+		slog.ErrorContext(ctx, "Failed to insert glasses via service", "err", err)
+		// You could potentially parse the error and add to FieldErrors
+		// and re-render the form again, or just return a server error
+		http.Error(w, "Failed to save glasses data.", http.StatusInternalServerError)
+		return err // Return the error from the service call
 	}
 
-	if err = h.service.InsertGlasses(context.Background(), g); err != nil {
-		HandleError(err, "inserting glasses")
-		return err
+	// 7. Success: Tell HTMX to redirect (or close modal and refresh table)
+	slog.InfoContext(ctx, "Successfully inserted glasses", "reference", form.Reference) // Use the form's reference
+	w.Header().Set("HX-Redirect", "/glasses")                                           // Standard redirect
+	// OR, to close modal and refresh table (assuming table has id="glasses-table"):
+	// w.Header().Set("HX-Trigger", `{"closeModal": "true", "refreshTable": "#glasses-table"}`)
+	// Your Alpine modal would need to listen for `closeModal` event
+	// Your table container would need hx-get="/path/to/table/content" hx-trigger="refreshTable from:body"
+
+	w.WriteHeader(http.StatusOK) // Important for HX-Redirect to be processed
+	return nil                   // Indicate success
+}
+
+func parseFloatPointerAndError(valueStr string, fieldName string, errorMsg string, errors map[string]string) *float64 {
+	if valueStr == "" {
+		return nil // Treat empty string as valid null value
 	}
-
-	w.Header().Set("HX-Redirect", "/glasses")
-
-	return nil
+	f, err := strconv.ParseFloat(valueStr, 64)
+	if err != nil {
+		errors[fieldName] = errorMsg
+		return nil
+	}
+	return &f
 }
 
 func (h *Handler) DeleteGlasses(w http.ResponseWriter, r *http.Request) error {
