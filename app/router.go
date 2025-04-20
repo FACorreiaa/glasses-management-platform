@@ -54,17 +54,21 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte) http.Handler {
 	r := mux.NewRouter()
 
 	// Static files
-	r.PathPrefix("/static/").Handler(http.FileServer(http.FS(staticFS)))
-	r.HandleFunc("/favicon.ico", func(w http.ResponseWriter, _ *http.Request) {
-		file, _ := staticFS.ReadFile("static/favicon.ico")
+	// r.PathPrefix("/static/").Handler(http.FileServer(http.FS(staticFS)))
+	// r.HandleFunc("/favicon.ico", func(w http.ResponseWriter, _ *http.Request) {
+	// 	file, _ := staticFS.ReadFile("static/favicon.ico")
 
-		w.Header().Set("Cache-Control", "max-age=3600")
+	// 	w.Header().Set("Cache-Control", "max-age=3600")
 
-		_, err := w.Write(file)
-		if err != nil {
-			return
-		}
-	})
+	// 	_, err := w.Write(file)
+	// 	if err != nil {
+	// 		return
+	// 	}
+	// })
+
+	staticFileServer := http.FileServer(http.FS(staticFS))
+	r.PathPrefix("/static/").Handler(CacheControlMiddleware(staticFileServer))
+	r.HandleFunc("/favicon.ico", FaviconHandler)
 
 	h, middleware := setupBusinessComponents(pool, validate, sessionSecret)
 
