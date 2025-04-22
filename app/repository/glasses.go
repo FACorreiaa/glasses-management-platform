@@ -103,41 +103,48 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
 	dbCtx, dbSpan := tracer.Start(ctx, "db.GetGlasses")
 	defer dbSpan.End()
 
+	// Validate and default sortBy
+	if sortBy != "ASC" && sortBy != "DESC" {
+		sortBy = "ASC" // Default to ASC if sortBy is invalid or empty
+	}
+
 	dbSpan.SetAttributes(
 		semconv.DBSystemKey.String("postgresql"),
 		semconv.DBNameKey.String("glasses"),
-		semconv.DBStatementKey.String("SELECT glasses_id, color, brand, right_sph, left_sph, type, reference, is_in_stock, features, COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at FROM glasses g WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%')) AND ($5::float8 IS NULL OR g.left_sph = $5) AND ($6::float8 IS NULL OR g.right_sph = $6) ORDER BY CASE WHEN $1 = 'Brand' THEN g.brand WHEN $1 = 'Color' THEN g.color WHEN $1 = 'Reference' THEN g.reference WHEN $1 = 'Type' THEN g.type WHEN $1 = 'Features' THEN g.features ELSE g.brand END OFFSET $2 LIMIT $3"),
+		semconv.DBStatementKey.String("SELECT glasses_id, color, brand, right_sph, left_sph, type, reference, is_in_stock, features, COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at FROM glasses g WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%')) AND ($5::float8 IS NULL OR g.left_sph = $5) AND ($6::float8 IS NULL OR g.right_sph = $6) ORDER BY CASE WHEN $1 = 'Brand' THEN g.brand WHEN $1 = 'Color' THEN g.color WHEN $1 = 'Reference' THEN g.reference WHEN $1 = 'Type' THEN g.type WHEN $1 = 'Features' THEN g.features ELSE g.brand END "+sortBy),
 		semconv.DBOperationKey.String("query"),
 	)
-	query := `SELECT glasses_id, color, brand, 
-					 left_sph, left_cyl, left_axis, left_add,
-					 right_sph, right_cyl, right_axis, right_add,
-       				 reference, type, is_in_stock, features, 
-					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
-			 	FROM glasses g
-			 	WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
-			 	AND ($5::float8 IS NULL OR g.left_sph = $5)
-			 	AND ($6::float8 IS NULL OR g.right_sph = $6)
-			 	ORDER BY
+	query := `SELECT glasses_id, color, brand,
+                     left_sph, left_cyl, left_axis, left_add,
+                     right_sph, right_cyl, right_axis, right_add,
+                     reference, type, is_in_stock, features,
+                     COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
+              FROM glasses g
+              WHERE Trim(Upper(g.reference)) ILIKE trim(upper('%' || $4 || '%'))
+              AND ($5::float8 IS NULL OR g.left_sph = $5)
+              AND ($6::float8 IS NULL OR g.right_sph = $6)
+              ORDER BY
 				CASE
-					WHEN $1 = 'Brand' THEN g.brand
-					WHEN $1 = 'Color' THEN g.color
-					WHEN $1 = 'Reference' THEN g.reference
-					WHEN $1 = 'Type' THEN g.type
-					WHEN $1 = 'Features' THEN g.features
+					WHEN UPPER($1) = 'BRAND' THEN g.brand
+					WHEN UPPER($1) = 'COLOR' THEN g.color
+					WHEN UPPER($1) = 'REFERENCE' THEN g.reference
+					WHEN UPPER($1) = 'TYPE' THEN g.type
+					WHEN UPPER($1) = 'FEATURES' THEN g.features
+					-- WHEN UPPER($1) = 'LEFT_SPH' THEN g.left_sph
+					-- WHEN UPPER($1) = 'RIGHT_SPH' THEN g.right_sph
 					ELSE g.brand
 				END ` + sortBy + `
-			    OFFSET $2 LIMIT $3`
+              OFFSET $2 LIMIT $3`
 	offset := (page - 1) * pageSize
-	slog.Info("Glasses fetched", "offset", offset)
+	slog.Info("Glasses fetched", "offset", offset, "sortBy", sortBy)
 	return r.fetchGlasses(dbCtx, query, orderBy, offset, pageSize, reference, leftEye, rightEye)
 }
 
 func (r *GlassesRepository) GetGlassesByID(ctx context.Context, glassesID uuid.UUID) (*models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, 
+	query := `SELECT glasses_id, color, brand,
 					 left_sph, left_cyl, left_axis, left_add,
 					 right_sph, right_cyl, right_axis, right_add,
-       				 reference, type, is_in_stock, features, 
+       				 reference, type, is_in_stock, features,
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses
 				WHERE glasses_id = $1`
@@ -275,9 +282,9 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesF
 
 func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.GlassesForm) error {
 	query := `
-		INSERT INTO glasses (reference, brand, 
+		INSERT INTO glasses (reference, brand,
 							right_sph, right_cyl, right_axis, right_add,
-							left_sph, left_cyl, left_axis, left_add, 
+							left_sph, left_cyl, left_axis, left_add,
 							color, type, features,
 		                     is_in_stock, created_at, updated_at, user_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
@@ -314,10 +321,10 @@ func (r *GlassesRepository) GetSum(ctx context.Context) (int, error) {
 
 func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 	page, pageSize int, orderBy, sortBy, glassesType string) ([]models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, 
+	query := `SELECT glasses_id, color, brand,
 					 left_sph, left_cyl, left_axis, left_add,
 					 right_sph, right_cyl, right_axis, right_add,
-       				 reference, type, is_in_stock, features, 
+       				 reference, type, is_in_stock, features,
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	where type = $5
@@ -336,10 +343,10 @@ func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 
 func (r *GlassesRepository) GetGlassesByStock(ctx context.Context,
 	page, pageSize int, orderBy, sortBy string, isInStock bool) ([]models.Glasses, error) {
-	query := `SELECT glasses_id, color, brand, 
+	query := `SELECT glasses_id, color, brand,
 					 left_sph, left_cyl, left_axis, left_add,
 					 right_sph, right_cyl, right_axis, right_add,
-       				 reference, type, is_in_stock, features, 
+       				 reference, type, is_in_stock, features,
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
                  WHERE is_in_stock = $5

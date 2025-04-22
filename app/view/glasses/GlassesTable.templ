@@ -5,6 +5,7 @@ import (
 	"github.com/FACorreiaa/glasses-management-platform/app/models"
 	"github.com/FACorreiaa/glasses-management-platform/app/view/components"
 	"strconv"
+	"github.com/FACorreiaa/glasses-management-platform/app/static/svg"
 )
 
 templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
@@ -41,7 +42,8 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
 											if col.SortParam != "" {
 												<a
 													class="ml-1 text-gray-400 hover:text-gray-700"
-													href={ templ.URL(fmt.Sprintf("/glasses?page=1&orderBy=%s&sortBy=%s&reference=%s&left_sph=%s&right_sph=%s",
+													href={ templ.URL(fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s&reference=%s&left_sph=%s&right_sph=%s",
+                          														a.Page,
                           														col.SortParam,   // The column to sort by (e.g., "reference")
                           														a.SortParam,     // The *next* sort direction (e.g., "ASC" or "DESC")
                           														a.FilterReference, // Pass current reference filter
@@ -50,7 +52,13 @@ templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
                           													}
 													aria-label={fmt.Sprintf("Sort by %s", col.Title)}
 												>
-													@col.Icon
+													if a.OrderParam == col.SortParam && a.SortParam == "ASC" {
+                                          @svg.ArrowUp()
+                                      } else if a.OrderParam == col.SortParam && a.SortParam == "DESC" {
+                                          @svg.ArrowDownIcon()
+                                      } else {
+                                          @col.Icon
+                                      }
 												</a>
 											}
 										</div>

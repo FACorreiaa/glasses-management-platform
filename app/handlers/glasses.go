@@ -136,40 +136,43 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 
 	var page int
 	var sortAux string
+	var sortIcon templ.Component
 	orderBy := r.FormValue("orderBy")
 	sortBy := r.FormValue("sortBy")
 	brand := r.FormValue("brand")
 	if sortBy == ASC {
 		sortAux = DESC
+		sortIcon = svg.ArrowUp()
 	} else {
 		sortAux = ASC
+		sortIcon = svg.ArrowDownIcon()
 	}
 
 	columnNames := []models.ColumnItems{
 		// General Info
-		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: "reference"},
-		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: "brand"},
-		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: "type"},
-		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: "color"},
+		{Title: "Reference", Icon: sortIcon, SortParam: "reference"},
+		{Title: "Brand", Icon: sortIcon, SortParam: "brand"},
+		{Title: "Type", Icon: sortIcon, SortParam: "type"},
+		{Title: "Color", Icon: sortIcon, SortParam: "color"},
 
 		// Left Eye Prescription
-		{Title: "L Sph", Icon: svg.ArrowOrderIcon(), SortParam: "left_sph"},
-		{Title: "L Cyl", Icon: svg.ArrowOrderIcon(), SortParam: "left_cyl"},
-		{Title: "L Axis", Icon: svg.ArrowOrderIcon(), SortParam: "left_axis"},
-		{Title: "L Add", Icon: svg.ArrowOrderIcon(), SortParam: "left_add"},
+		{Title: "L Sph"},
+		{Title: "L Cyl"},
+		{Title: "L Axis"},
+		{Title: "L Add"},
 
 		// Right Eye Prescription
-		{Title: "R Sph", Icon: svg.ArrowOrderIcon(), SortParam: "right_sph"},
-		{Title: "R Cyl", Icon: svg.ArrowOrderIcon(), SortParam: "right_cyl"},
-		{Title: "R Axis", Icon: svg.ArrowOrderIcon(), SortParam: "right_axis"},
-		{Title: "R Add", Icon: svg.ArrowOrderIcon(), SortParam: "right_add"},
+		{Title: "R Sph"},
+		{Title: "R Cyl"},
+		{Title: "R Axis"},
+		{Title: "R Add"},
 
 		// Status & Details
-		{Title: "Stock", Icon: svg.ArrowOrderIcon(), SortParam: "is_in_stock"}, // Renamed from "Has Stock" for brevity
-		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: "feature"},  // Assuming struct field is 'Feature' or db col is 'feature'
+		{Title: "Stock"}, // Renamed from "Has Stock" for brevity
+		{Title: "Features", Icon: sortIcon, SortParam: "feature"}, // Assuming struct field is 'Feature' or db col is 'feature'
 
 		// Timestamps
-		{Title: "Created", Icon: svg.ArrowOrderIcon(), SortParam: "created_at"}, // Shortened title
+		{Title: "Created"}, // Shortened title
 		// {Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: "updated_at"}, // Often Updated At isn't shown by default unless needed
 	}
 
