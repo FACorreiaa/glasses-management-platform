@@ -130,6 +130,10 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 		}
 	}()
 
+	referenceFilter := r.FormValue("reference")
+	leftSphFilter := r.FormValue("left_sph")
+	rightSphFilter := r.FormValue("right_sph")
+
 	var page int
 	var sortAux string
 	orderBy := r.FormValue("orderBy")
@@ -169,7 +173,12 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 		// {Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: "updated_at"}, // Often Updated At isn't shown by default unless needed
 	}
 
-	page, g, _ := h.getGlasses(w, r)
+	page, g, err := h.getGlasses(w, r)
+
+	if err != nil {
+		message := glasses.GlassesEmptyPage()
+		return message, nil
+	}
 
 	if len(g) == 0 {
 		message := glasses.GlassesEmptyPage()
@@ -188,16 +197,19 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 		return nil, err
 	}
 	data := models.GlassesTable{
-		Column:      columnNames,
-		Glasses:     g,
-		PrevPage:    prevPage,
-		NextPage:    nextPage,
-		Page:        page,
-		LastPage:    lastPage,
-		FilterBrand: brand,
-		OrderParam:  orderBy,
-		SortParam:   sortAux,
-		FieldErrors: map[string]string{},
+		Column:          columnNames,
+		Glasses:         g,
+		PrevPage:        prevPage,
+		NextPage:        nextPage,
+		Page:            page,
+		LastPage:        lastPage,
+		FilterBrand:     brand,
+		OrderParam:      orderBy,
+		SortParam:       sortAux,
+		FieldErrors:     map[string]string{},
+		FilterReference: referenceFilter,
+		FilterLeftSph:   leftSphFilter,
+		FilterRightSph:  rightSphFilter,
 	}
 
 	t := glasses.GlassesTable(data, models.GlassesForm{})

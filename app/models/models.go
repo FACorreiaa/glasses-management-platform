@@ -148,16 +148,19 @@ type ColumnItems struct {
 }
 
 type GlassesTable struct {
-	Column      []ColumnItems
-	Glasses     []Glasses
-	PrevPage    int
-	NextPage    int
-	Page        int
-	LastPage    int
-	FilterBrand string
-	OrderParam  string
-	SortParam   string
-	FieldErrors map[string]string
+	Column          []ColumnItems
+	Glasses         []Glasses
+	PrevPage        int
+	NextPage        int
+	Page            int
+	LastPage        int
+	FilterBrand     string
+	OrderParam      string
+	SortParam       string
+	FieldErrors     map[string]string
+	FilterReference string
+	FilterLeftSph   string
+	FilterRightSph  string
 }
 
 type UsersTable struct {

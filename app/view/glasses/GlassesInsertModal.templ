@@ -47,8 +47,7 @@ templ GlassesInsertModal(form models.GlassesForm) {
 					<div class="relative w-auto pt-5">
 						// Use the form structure from GlassesRegisterForm
 
-						<form method="post" hx-post="/glasses/register" hx-target="#insert-modal-content"
-							hx-swap="outerHTML" class="w-full space-y-4" id="insert-modal-content" hx-boost="false">
+						<form method="post" class="w-full space-y-4" id="insert-modal-content">
 
 							// Section 1: General Info (Reference, Brand, Color, Type)
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -136,7 +135,7 @@ templ GlassesInsertModal(form models.GlassesForm) {
 										<input type="number"
 											class="block w-full px-3 py-2 mt-1 text-sm placeholder-gray-400 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
 											placeholder="0-180" name="left_axis" id="modal-left_axis" min="0" max="180"
-											step="0.05" value={ form.Values["left_axis"] } />
+											step="1" value={ form.Values["left_axis"] } />
 										if form.FieldErrors["left_axis"] != "" {
 										<p class="text-red-500 text-xs mt-1">{ form.FieldErrors["left_axis"] }</p>
 										}
@@ -227,7 +226,13 @@ templ GlassesInsertModal(form models.GlassesForm) {
 								class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-5 border-t border-gray-200">
 								<button @click="modalOpen=false" type="button"
 									class="btn btn-ghost w-full sm:w-auto justify-center">Cancel</button>
-								<button type="submit" class="btn btn-primary w-full sm:w-auto justify-center">Insert
+								<button
+									type="submit"
+                                    hx-post="/glasses/register"
+                                    hx-target="#insert-modal-content"
+                                    hx-swap="outerHTML"
+                                    hx-include="closest form" 
+									class="btn btn-primary w-full sm:w-auto justify-center">Insert
 									Glasses</button>
 
 							</div>
