@@ -99,6 +99,11 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte) http.Handler {
 	auth.HandleFunc("/glasses", handler(h.GlassesPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/glasses/register", handler(h.GlassesRegisterPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/glasses/register", handler(h.InsertGlasses)).Methods(http.MethodPost)
+	
+	// New combined glasses + customer registration
+	auth.HandleFunc("/glasses/customer/register", handler(h.GlassesCustomerRegisterPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/glasses/customer/register", handler(h.InsertGlassesWithCustomer)).Methods(http.MethodPost)
+	
 	auth.HandleFunc("/glasses/{glasses_id}", handler(h.DeleteGlasses)).Methods(http.MethodDelete)
 	auth.HandleFunc("/glasses/type/{type}", handler(h.GlassesTypePage)).Methods(http.MethodGet)
 	auth.HandleFunc("/glasses/{glasses_id}/edit", handler(h.UpdateGlassesPage)).Methods(http.MethodGet)
@@ -109,6 +114,10 @@ func Router(pool *pgxpool.Pool, sessionSecret []byte) http.Handler {
 	auth.HandleFunc("/collaborators/register", handler(h.UserInsertPage)).Methods(http.MethodGet)
 	auth.HandleFunc("/collaborators/register", handler(h.UserRegisterPost)).Methods(http.MethodPost)
 	auth.HandleFunc("/collaborators/register/modal", handler(h.UserRegisterPostModal)).Methods(http.MethodPost)
+	
+	// New form-based user registration
+	auth.HandleFunc("/collaborators/register/form", handler(h.UserInsertFormPage)).Methods(http.MethodGet)
+	auth.HandleFunc("/collaborators/register/form", handler(h.UserRegisterForm)).Methods(http.MethodPost)
 
 	auth.HandleFunc("/collaborators/{user_id}", handler(h.DeleteUser)).Methods(http.MethodDelete)
 	auth.HandleFunc("/collaborators/{user_id}/edit", handler(h.UpdateUserPage)).Methods(http.MethodGet)

@@ -343,3 +343,76 @@ func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) error {
 
 	return nil
 }
+
+func (h *Handler) UserInsertFormPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "UserInsertFormPageHandler")
+	defer span.End()
+
+	form := models.RegisterFormValues{
+		Values:      make(map[string]string),
+		FieldErrors: make(map[string]string),
+	}
+
+	insertForm := admin.UserInsertForm(form)
+	return insertForm.Render(ctx, w)
+}
+
+func (h *Handler) UserRegisterForm(w http.ResponseWriter, r *http.Request) error {
+	ctx := r.Context()
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return fmt.Errorf("parsing form: %w", err)
+	}
+
+	form := models.RegisterFormValues{
+		Username:        r.FormValue("username"),
+		Email:           r.FormValue("email"),
+		Password:        r.FormValue("password"),
+		PasswordConfirm: r.FormValue("password_confirm"),
+		Values:          make(map[string]string),
+		FieldErrors:     make(map[string]string),
+	}
+
+	// Preserve form values for re-rendering on error
+	form.Values["username"] = form.Username
+	form.Values["email"] = form.Email
+	form.Values["password"] = form.Password
+	form.Values["password_confirm"] = form.PasswordConfirm
+
+	// Validation
+	if len(form.Username) < 3 {
+		form.FieldErrors["username"] = UsernameMinCharLength
+	}
+
+	if len(form.Password) < 8 {
+		form.FieldErrors["password"] = "Password must be at least 8 characters long"
+	}
+
+	if form.Password != form.PasswordConfirm {
+		form.FieldErrors["password_confirm"] = PasswordDoNotMatch
+	}
+
+	// Check if email already exists
+	if err := h.service.GetEmail(ctx, form.Email); err == nil {
+		form.FieldErrors["email"] = "Email already exists"
+	}
+
+	// If validation errors, re-render form
+	if len(form.FieldErrors) > 0 {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		component := admin.UserInsertForm(form)
+		return component.Render(ctx, w)
+	}
+
+	// Insert user
+	if _, err := h.service.InsertUser(ctx, form); err != nil {
+		http.Error(w, "Failed to create user account.", http.StatusInternalServerError)
+		return err
+	}
+
+	// Success - redirect to collaborators page
+	w.Header().Set("HX-Redirect", "/settings/collaborators")
+	w.WriteHeader(http.StatusOK)
+	return nil
+}

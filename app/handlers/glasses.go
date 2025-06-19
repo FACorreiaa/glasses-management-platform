@@ -860,3 +860,162 @@ func (h *Handler) GlassesStockPage(w http.ResponseWriter, r *http.Request) error
 	home := pages.MainLayoutPage("Glasses Inventory Management", "Glasses Inventory Management", sidebar, renderTable)
 	return h.CreateLayout(ctx, w, r, "Glasses Inventory Management", home).Render(context.Background(), w)
 }
+
+func (h *Handler) GlassesCustomerRegisterPage(w http.ResponseWriter, r *http.Request) error {
+	ctx, span := tracer.Start(r.Context(), "GlassesCustomerRegisterPageHandler")
+	defer span.End()
+
+	glassesForm := models.GlassesForm{
+		Values:      make(map[string]string),
+		FieldErrors: make(map[string]string),
+	}
+	customerForm := models.CustomerForm{
+		Values:      make(map[string]string),
+		FieldErrors: make(map[string]string),
+	}
+
+	form := glasses.GlassesCustomerInsertForm(glassesForm, customerForm)
+	return form.Render(ctx, w)
+}
+
+func (h *Handler) InsertGlassesWithCustomer(w http.ResponseWriter, r *http.Request) error {
+	ctx := r.Context()
+
+	// Get authenticated user
+	var user *models.UserSession
+	userCtx := ctx.Value(models.CtxKeyAuthUser)
+	if userCtx != nil {
+		switch u := userCtx.(type) {
+		case *models.UserSession:
+			user = u
+		default:
+			http.Error(w, "Authentication required", http.StatusUnauthorized)
+			return fmt.Errorf("invalid user context")
+		}
+	}
+
+	if user == nil {
+		http.Error(w, "Authentication required", http.StatusUnauthorized)
+		return fmt.Errorf("user not authenticated")
+	}
+
+	// Parse form
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return fmt.Errorf("parsing form: %w", err)
+	}
+
+	// Create forms with error tracking
+	glassesForm := models.GlassesForm{
+		Values:      make(map[string]string),
+		FieldErrors: make(map[string]string),
+		UserID:      user.ID,
+	}
+	customerForm := models.CustomerForm{
+		Values:      make(map[string]string),
+		FieldErrors: make(map[string]string),
+	}
+
+	// Populate and validate glasses form
+	glassesForm.Reference = r.FormValue("reference")
+	glassesForm.Values["reference"] = glassesForm.Reference
+	if glassesForm.Reference == "" {
+		glassesForm.FieldErrors["reference"] = "Reference is required."
+	}
+
+	glassesForm.Brand = r.FormValue("brand")
+	glassesForm.Values["brand"] = glassesForm.Brand
+
+	glassesForm.Color = r.FormValue("color")
+	glassesForm.Values["color"] = glassesForm.Color
+
+	glassesForm.Type = r.FormValue("type")
+	glassesForm.Values["type"] = glassesForm.Type
+	if glassesForm.Type != "adult" && glassesForm.Type != "children" {
+		glassesForm.FieldErrors["type"] = "Please select a valid type."
+	}
+
+	glassesForm.Feature = r.FormValue("features")
+	glassesForm.Values["features"] = glassesForm.Feature
+
+	// Parse prescription fields
+	glassesForm.Values["left_sph"] = r.FormValue("left_sph")
+	glassesForm.LeftSph = parseFloatPointerAndError(glassesForm.Values["left_sph"], "left_sph", "Invalid number format for Left Sphere.", glassesForm.FieldErrors)
+
+	glassesForm.Values["left_cyl"] = r.FormValue("left_cyl")
+	glassesForm.LeftCyl = parseFloatPointerAndError(glassesForm.Values["left_cyl"], "left_cyl", "Invalid number format for Left Cylinder.", glassesForm.FieldErrors)
+
+	glassesForm.Values["left_axis"] = r.FormValue("left_axis")
+	glassesForm.LeftAxis = parseFloatPointerAndError(glassesForm.Values["left_axis"], "left_axis", "Invalid number format for Left Axis.", glassesForm.FieldErrors)
+
+	glassesForm.Values["left_add"] = r.FormValue("left_add")
+	glassesForm.LeftAdd = parseFloatPointerAndError(glassesForm.Values["left_add"], "left_add", "Invalid number format for Left Addition.", glassesForm.FieldErrors)
+
+	glassesForm.Values["right_sph"] = r.FormValue("right_sph")
+	glassesForm.RightSph = parseFloatPointerAndError(glassesForm.Values["right_sph"], "right_sph", "Invalid number format for Right Sphere.", glassesForm.FieldErrors)
+
+	glassesForm.Values["right_cyl"] = r.FormValue("right_cyl")
+	glassesForm.RightCyl = parseFloatPointerAndError(glassesForm.Values["right_cyl"], "right_cyl", "Invalid number format for Right Cylinder.", glassesForm.FieldErrors)
+
+	glassesForm.Values["right_axis"] = r.FormValue("right_axis")
+	glassesForm.RightAxis = parseFloatPointerAndError(glassesForm.Values["right_axis"], "right_axis", "Invalid number format for Right Axis.", glassesForm.FieldErrors)
+
+	glassesForm.Values["right_add"] = r.FormValue("right_add")
+	glassesForm.RightAdd = parseFloatPointerAndError(glassesForm.Values["right_add"], "right_add", "Invalid number format for Right Addition.", glassesForm.FieldErrors)
+
+	// Populate and validate customer form
+	customerForm.Name = r.FormValue("customer_name")
+	customerForm.Values["customer_name"] = customerForm.Name
+	if customerForm.Name == "" {
+		customerForm.FieldErrors["customer_name"] = "Customer name is required."
+	}
+
+	customerForm.CardID = r.FormValue("card_id_number")
+	customerForm.Values["card_id_number"] = customerForm.CardID
+	if customerForm.CardID == "" {
+		customerForm.FieldErrors["card_id_number"] = "Card ID number is required."
+	}
+
+	customerForm.Email = r.FormValue("email")
+	customerForm.Values["email"] = customerForm.Email
+
+	customerForm.PhoneNumber = r.FormValue("phone_number")
+	customerForm.Values["phone_number"] = customerForm.PhoneNumber
+
+	customerForm.Address = r.FormValue("address")
+	customerForm.Values["address"] = customerForm.Address
+
+	customerForm.AddressDetails = r.FormValue("address_details")
+	customerForm.Values["address_details"] = customerForm.AddressDetails
+
+	customerForm.City = r.FormValue("city")
+	customerForm.Values["city"] = customerForm.City
+
+	customerForm.Country = r.FormValue("country")
+	customerForm.Values["country"] = customerForm.Country
+
+	customerForm.Continent = r.FormValue("continent")
+	customerForm.Values["continent"] = customerForm.Continent
+
+	customerForm.PostalCode = r.FormValue("postal_code")
+	customerForm.Values["postal_code"] = customerForm.PostalCode
+
+	// Check for validation errors
+	if len(glassesForm.FieldErrors) > 0 || len(customerForm.FieldErrors) > 0 {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		component := glasses.GlassesCustomerInsertForm(glassesForm, customerForm)
+		return component.Render(ctx, w)
+	}
+
+	// Insert glasses with customer using transaction
+	err := h.service.InsertGlassesWithCustomer(ctx, glassesForm, customerForm, user.ID)
+	if err != nil {
+		http.Error(w, "Failed to save glasses and customer data.", http.StatusInternalServerError)
+		return err
+	}
+
+	// Success - redirect to glasses list
+	w.Header().Set("HX-Redirect", "/glasses")
+	w.WriteHeader(http.StatusOK)
+	return nil
+}

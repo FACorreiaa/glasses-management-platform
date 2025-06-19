@@ -404,3 +404,98 @@ func (r *GlassesRepository) GetGlassesReference(ctx context.Context, id uuid.UUI
 	slog.Info("Glasses fetched", "reference", reference)
 	return reference, nil
 }
+
+func (r *GlassesRepository) InsertGlassesWithCustomer(ctx context.Context, glassesForm models.GlassesForm, customerForm models.CustomerForm, userID uuid.UUID) error {
+	tx, err := r.pgpool.Begin(ctx)
+	if err != nil {
+		slog.Error("starting transaction for glasses and customer insert", "err", err)
+		return errors.New("internal server error: could not start transaction")
+	}
+	
+	defer func() {
+		if err != nil {
+			slog.Warn("rolling back transaction due to error", "err", err)
+			if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
+				slog.Error("error rolling back transaction", "rollbackErr", rollbackErr)
+			}
+		}
+	}()
+
+	// 1. Insert glasses
+	glassesQuery := `
+		INSERT INTO glasses (reference, brand,
+							right_sph, right_cyl, right_axis, right_add,
+							left_sph, left_cyl, left_axis, left_add,
+							color, type, features,
+		                     is_in_stock, created_at, updated_at, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+		RETURNING glasses_id
+	`
+	
+	var glassesID uuid.UUID
+	err = tx.QueryRow(ctx, glassesQuery,
+		glassesForm.Reference, glassesForm.Brand,
+		glassesForm.RightSph, glassesForm.RightCyl, glassesForm.RightAxis, glassesForm.RightAdd,
+		glassesForm.LeftSph, glassesForm.LeftCyl, glassesForm.LeftAxis, glassesForm.LeftAdd,
+		glassesForm.Color, glassesForm.Type, glassesForm.Feature,
+		false, // Set to false initially since we're creating a customer for these glasses
+		time.Now(),
+		time.Now(),
+		userID,
+	).Scan(&glassesID)
+
+	if err != nil {
+		slog.Error("inserting glasses", "err", err)
+		return errors.New("internal server error: could not insert glasses")
+	}
+
+	// 2. Insert customer linked to the glasses
+	customerQuery := `
+		INSERT INTO customer (glasses_id, user_id, name, card_id_number, address, address_details, city,
+		                      country, continent, postal_code, phone_number, email, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW(), NOW()) 
+		RETURNING customer_id
+	`
+	
+	var customerID uuid.UUID
+	err = tx.QueryRow(ctx, customerQuery, 
+		glassesID, userID, 
+		customerForm.Name, customerForm.CardID, customerForm.Address, customerForm.AddressDetails, 
+		customerForm.City, customerForm.Country, customerForm.Continent, customerForm.PostalCode, 
+		customerForm.PhoneNumber, customerForm.Email,
+	).Scan(&customerID)
+
+	if err != nil {
+		slog.Error("inserting customer", "err", err)
+		return errors.New("internal server error: could not insert customer")
+	}
+
+	// 3. Insert shipping details to complete the transaction
+	shippingQuery := `
+		INSERT INTO shipping_details (glasses_id, customer_id, shipped_by, shipping_date, created_at, updated_at)
+		VALUES ($1, $2, $3, NOW(), NOW(), NOW())
+		RETURNING shipping_id
+	`
+
+	var shippingID uuid.UUID
+	err = tx.QueryRow(ctx, shippingQuery, glassesID, customerID, userID).Scan(&shippingID)
+	if err != nil {
+		slog.Error("inserting shipping details", "err", err)
+		return errors.New("internal server error: could not insert shipping details")
+	}
+
+	// 4. Commit the transaction
+	if err = tx.Commit(ctx); err != nil {
+		slog.Error("committing transaction for glasses and customer insert", "err", err)
+		return errors.New("internal server error: could not commit changes")
+	}
+
+	slog.Info("Successfully inserted glasses with customer", 
+		"glasses_id", glassesID, 
+		"customer_id", customerID, 
+		"shipping_id", shippingID,
+		"user_id", userID,
+	)
+
+	return nil
+}

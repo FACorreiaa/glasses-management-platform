@@ -73,3 +73,7 @@ func (s *Service) GetSumByStock(isInStock bool) (int, error) {
 func (s *Service) GetGlassesReference(ctx context.Context, id uuid.UUID) (string, error) {
 	return s.glassesRepo.GetGlassesReference(ctx, id)
 }
+
+func (s *Service) InsertGlassesWithCustomer(ctx context.Context, glassesForm models.GlassesForm, customerForm models.CustomerForm, userID uuid.UUID) error {
+	return s.glassesRepo.InsertGlassesWithCustomer(ctx, glassesForm, customerForm, userID)
+}
