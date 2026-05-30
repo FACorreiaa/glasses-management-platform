@@ -14,7 +14,12 @@ create table glasses
   right_cyl       numeric,
   right_axis      numeric,
   right_add       numeric,
-  type               text,
+  type               text CHECK (
+    type IN (
+             'adult',
+             'children'
+      )
+    ),
   is_in_stock        bool                 default true,
   features           text,
   created_at         timestamptz not null default now(),
