@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"log/slog"
 	"net/http"
@@ -29,13 +30,6 @@ func (h *Handler) renderSidebar() []models.SidebarItem {
 	sidebar := []models.SidebarItem{
 		{Path: "/", Label: "Home"},
 		{Path: "/glasses", Label: "Glasses stock"},
-		{
-			Label: "Type",
-			SubItems: []models.SidebarItem{
-				{Path: "/glasses/type/adult", Label: "Adult"},
-				{Path: "/glasses/type/children", Label: "Children"},
-			},
-		},
 		{
 			Label: "Inventory",
 			SubItems: []models.SidebarItem{
@@ -151,9 +145,6 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 	columnNames := []models.ColumnItems{
 		// General Info
 		{Title: "Reference", Icon: sortIcon, SortParam: "reference"},
-		{Title: "Brand", Icon: sortIcon, SortParam: "brand"},
-		{Title: "Type", Icon: sortIcon, SortParam: "type"},
-		{Title: "Color", Icon: sortIcon, SortParam: "color"},
 
 		// Left Eye Prescription
 		{Title: "L Sph"},
@@ -169,11 +160,9 @@ func (h *Handler) renderGlassesTable(w http.ResponseWriter, r *http.Request) (te
 
 		// Status & Details
 		{Title: "Stock"}, // Renamed from "Has Stock" for brevity
-		{Title: "Features", Icon: sortIcon, SortParam: "feature"}, // Assuming struct field is 'Feature' or db col is 'feature'
 
 		// Timestamps
 		{Title: "Created"}, // Shortened title
-		// {Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: "updated_at"}, // Often Updated At isn't shown by default unless needed
 	}
 
 	page, g, err := h.getGlasses(w, r)
@@ -229,19 +218,38 @@ func (h *Handler) GlassesPage(w http.ResponseWriter, r *http.Request) error {
 	}()
 
 	sidebar := h.renderSidebar()
-	renderTable, err := h.renderGlassesTable(w, r)
-	//errorPage := error.ErrorPage() // Example
+	table, err := h.renderGlassesTable(w, r)
 
 	if err != nil {
 		span.RecordError(err)
 		span.SetStatus(codes.Error, err.Error())
 		HandleError(err, "rendering glasses table")
-		// Decide how to handle the error response (e.g., render an error page)
-		// You might want to render an error component instead of just logging
-		//return h.CreateLayout(ctx, w, r, "Error", errorPage).Render(ctx, w) // Render error page
 	}
-	home := pages.MainLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
+
+	// Wrap the table in a container that can be refreshed via HTMX
+	wrappedTable := templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+		_, err := io.WriteString(w, `<div id="glasses-table" hx-get="/glasses/table" hx-trigger="refreshTable from:body" hx-swap="outerHTML">`)
+		if err != nil {
+			return err
+		}
+		err = table.Render(ctx, w)
+		if err != nil {
+			return err
+		}
+		_, err = io.WriteString(w, `</div>`)
+		return err
+	})
+
+	home := pages.MainLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, wrappedTable)
 	return h.CreateLayout(ctx, w, r, "Glasses Management Page", home).Render(context.Background(), w)
+}
+
+func (h *Handler) GlassesTable(w http.ResponseWriter, r *http.Request) error {
+	table, err := h.renderGlassesTable(w, r)
+	if err != nil {
+		return err
+	}
+	return table.Render(r.Context(), w)
 }
 
 func (h *Handler) GlassesRegisterPage(w http.ResponseWriter, r *http.Request) error {
@@ -289,21 +297,6 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 	if form.Reference == "" {
 		form.FieldErrors["reference"] = "Reference is required."
 	} // Add uniqueness check if needed
-
-	form.Brand = r.FormValue("brand")
-	form.Values["brand"] = form.Brand // Keep submitted value
-
-	form.Color = r.FormValue("color")
-	form.Values["color"] = form.Color // Keep submitted value
-
-	form.Type = r.FormValue("type")
-	form.Values["type"] = form.Type // Keep submitted value
-	if form.Type != "adult" && form.Type != "children" {
-		form.FieldErrors["type"] = "Please select a valid type."
-	}
-
-	form.Feature = r.FormValue("features")
-	form.Values["features"] = form.Feature // Keep submitted value
 
 	// Parse numeric fields, add errors directly to form.FieldErrors
 	form.Values["left_sph"] = r.FormValue("left_sph") // Store original string value
@@ -355,16 +348,11 @@ func (h *Handler) InsertGlasses(w http.ResponseWriter, r *http.Request) error {
 		return err // Return the error from the service call
 	}
 
-	// 7. Success: Tell HTMX to redirect (or close modal and refresh table)
-	slog.InfoContext(ctx, "Successfully inserted glasses", "reference", form.Reference) // Use the form's reference
-	w.Header().Set("HX-Redirect", "/glasses")                                           // Standard redirect
-	// OR, to close modal and refresh table (assuming table has id="glasses-table"):
-	// w.Header().Set("HX-Trigger", `{"closeModal": "true", "refreshTable": "#glasses-table"}`)
-	// Your Alpine modal would need to listen for `closeModal` event
-	// Your table container would need hx-get="/path/to/table/content" hx-trigger="refreshTable from:body"
-
-	w.WriteHeader(http.StatusOK) // Important for HX-Redirect to be processed
-	return nil                   // Indicate success
+	// 7. Success: Tell HTMX to refresh table
+	slog.InfoContext(ctx, "Successfully inserted glasses", "reference", form.Reference)
+	w.Header().Set("HX-Trigger", "refreshTable")
+	w.WriteHeader(http.StatusNoContent)
+	return nil
 }
 
 func parseFloatPointerAndError(valueStr string, fieldName string, errorMsg string, errors map[string]string) *float64 {
@@ -394,7 +382,7 @@ func (h *Handler) DeleteGlasses(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	w.Header().Set("HX-Redirect", "/glasses")
+	w.WriteHeader(http.StatusNoContent)
 
 	return nil
 }
@@ -432,10 +420,6 @@ func (h *Handler) UpdateGlassesPage(w http.ResponseWriter, r *http.Request) erro
 
 	// --- Populate the Values map from currentGlasses data ---
 	form.Values["reference"] = currentGlasses.Reference
-	form.Values["brand"] = currentGlasses.Brand
-	form.Values["color"] = currentGlasses.Color
-	form.Values["type"] = currentGlasses.Type
-	form.Values["features"] = currentGlasses.Feature // Ensure Feature is the correct field name
 
 	// Populate prescription values (handle nil pointers!)
 	// Left Eye
@@ -523,10 +507,6 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 	form := models.GlassesForm{
 		GlassesID: glassesID, // Store the parsed UUID
 		Reference: r.FormValue("reference"),
-		Brand:     r.FormValue("brand"),
-		Color:     r.FormValue("color"),
-		Type:      r.FormValue("type"), // Get submitted type
-		Feature:   r.FormValue("features"),
 		// --- Parse numeric fields robustly ---
 		LeftSph:   parseFloatPointer(r.FormValue("left_sph")), // Use helper for pointers
 		LeftCyl:   parseFloatPointer(r.FormValue("left_cyl")),
@@ -539,14 +519,6 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		// --- End numeric parsing ---
 		Values:      make(map[string]string), // Keep for re-rendering form if needed
 		FieldErrors: make(map[string]string),
-	}
-
-	isValidType := false
-	if form.Type == "adult" || form.Type == "children" {
-		isValidType = true
-	}
-	if !isValidType {
-		form.FieldErrors["type"] = "Please select a valid type (Adult or Children)."
 	}
 
 	// Add other validations as needed (e.g., reference check)
@@ -572,10 +544,6 @@ func (h *Handler) UpdateGlasses(w http.ResponseWriter, r *http.Request) error {
 		slog.Warn("Validation errors found during update", "errors", form.FieldErrors, "glasses_id", glassesIDStr)
 		// Populate form.Values from the *submitted* (potentially invalid) data
 		form.Values["reference"] = form.Reference
-		form.Values["brand"] = form.Brand
-		form.Values["color"] = form.Color
-		form.Values["type"] = form.Type // Use the submitted type for re-selection
-		form.Values["features"] = form.Feature
 		// Repopulate numeric values (might need nil checks if parseFloatPointer returns nil)
 		if form.LeftSph != nil {
 			form.Values["left_sph"] = fmt.Sprintf("%.2f", *form.LeftSph)
@@ -660,104 +628,6 @@ func parseFloatPointer(valueStr string) *float64 {
 	return &f
 }
 
-// Filtered Side bar views
-
-func (h *Handler) getGlassesByType(w http.ResponseWriter, r *http.Request) (int, []models.Glasses, error) {
-	pageSize := 10
-	orderBy := r.FormValue("orderBy")
-	sortBy := r.FormValue("sortBy")
-	vars := mux.Vars(r)
-	filter := vars["type"]
-	page, err := strconv.Atoi(r.URL.Query().Get("page"))
-
-	if err != nil {
-		page = 1
-	}
-
-	g, err := h.service.GetGlassesByType(context.Background(), page, pageSize, orderBy, sortBy, filter)
-
-	if err != nil {
-		httperror.ErrNotFound.WriteError(w)
-		return 0, nil, err
-	}
-
-	return page, g, nil
-}
-
-func (h *Handler) renderTypeTable(w http.ResponseWriter, r *http.Request) (templ.Component, error) {
-	var page int
-	var sortAux string
-	orderBy := r.FormValue("orderBy")
-	sortBy := r.FormValue("sortBy")
-	brand := r.FormValue("brand")
-	vars := mux.Vars(r)
-	filter := vars["type"]
-	if sortBy == ASC {
-		sortAux = DESC
-	} else {
-		sortAux = ASC
-	}
-
-	columnNames := []models.ColumnItems{
-		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Left Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Right Eye", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-	}
-
-	page, g, _ := h.getGlassesByType(w, r)
-
-	if len(g) == 0 {
-		message := glasses.GlassesEmptyPage()
-		return message, nil
-	}
-
-	nextPage := page + 1
-	prevPage := page - 1
-	if prevPage <= 1 {
-		prevPage = 1
-	}
-
-	lastPage, err := h.service.GetSumByType(filter)
-	if err != nil {
-		HandleError(err, " fetching tax")
-		return nil, err
-	}
-	data := models.GlassesTable{
-		Column:      columnNames,
-		Glasses:     g,
-		PrevPage:    prevPage,
-		NextPage:    nextPage,
-		Page:        page,
-		LastPage:    lastPage,
-		FilterBrand: brand,
-		OrderParam:  orderBy,
-		SortParam:   sortAux,
-	}
-	t := glasses.GlassesByFilter(data)
-
-	return t, nil
-}
-
-func (h *Handler) GlassesTypePage(w http.ResponseWriter, r *http.Request) error {
-	ctx, span := tracer.Start(r.Context(), "GlassesTypePageHandler")
-	defer span.End()
-
-	sidebar := h.renderSidebar()
-	renderTable, err := h.renderTypeTable(w, r)
-	if err != nil {
-		HandleError(err, " rendering glasses table")
-	}
-	home := pages.MainLayoutPage("Glasses Management Page", "Glasses Management Page", sidebar, renderTable)
-	return h.CreateLayout(ctx, w, r, "Glasses Management Page", home).Render(context.Background(), w)
-}
-
 // Filter by stock
 
 func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, hasStock bool) (templ.Component, error) {
@@ -783,8 +653,6 @@ func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, h
 	}
 
 	columnNames := []models.ColumnItems{
-		{Title: "Brand", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Color", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "L Sph", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "L Cyl", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
@@ -796,11 +664,8 @@ func (h *Handler) renderInventoryTable(w http.ResponseWriter, r *http.Request, h
 		{Title: "R Cyl", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "R Axis", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "R Add", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Type", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Has Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Features", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Stock", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Created At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Updated At", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 	}
 
 	if len(g) == 0 {

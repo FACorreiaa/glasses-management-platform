@@ -44,6 +44,22 @@ type ServerConfig struct {
 	SessionKey      string
 }
 
+func loadEnvFileIfPresent(path string) error {
+	if _, err := os.Stat(path); err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+
+		return err
+	}
+
+	if err := godotenv.Load(path); err != nil {
+		return fmt.Errorf("loading %s: %w", path, err)
+	}
+
+	return nil
+}
+
 func NewConfig() (*Config, error) {
 	database, err := NewDatabaseConfig()
 	if err != nil {
@@ -100,11 +116,8 @@ func NewDatabaseConfig() (*DatabaseConfig, error) {
 	} else {
 		envFile = ".env.development"
 	}
-	err := godotenv.Load(envFile)
-
-	if err != nil {
-		log.Println(err)
-		log.Fatal(" loading .env file")
+	if err := loadEnvFileIfPresent(envFile); err != nil {
+		return nil, err
 	}
 
 	host := os.Getenv("DB_HOST")

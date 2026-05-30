@@ -1,4 +1,5 @@
-#.PHONY: build clean
+.PHONY: fly-deploy
+APP_PORT ?= 8080
 project_name = skyvisor-container
 image_name = a11199/skyvisor-insight
 image_name_dev = skyvisor-insight-dev:latest
@@ -89,7 +90,10 @@ build-tailwind:
 	./tailwindcss -i app/static/css/main.css -o app/static/css/output.css --minify
 
 templ-local:
-	templ generate -watch -proxy=http://localhost:6968
+	templ generate -watch -proxy=http://localhost:$(APP_PORT)
+
+fly-deploy:
+	flyctl deploy --remote-only
 
 build:
 	docker buildx build -t ${image_name} --annotation "index,manifest,tagname=a11199/skyvisor-insight" --push .

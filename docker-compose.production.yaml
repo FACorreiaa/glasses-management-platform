@@ -29,7 +29,7 @@ services:
       target: final
       context: ./
     ports:
-      - "6968:6968"
+      - "8080:8080"
     volumes:
       - ./:/app
     networks:

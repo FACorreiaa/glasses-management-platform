@@ -48,78 +48,83 @@ templ GlassesByFilter(a models.GlassesTable) {
 									<tr class="hover:bg-neutral-100">
 										<td class="px-4 py-4 whitespace-nowrap" hx-boost="true">
 											<a
-												class="text-sm text-neutral-900"
+												class="text-sm font-medium text-blue-600 hover:text-blue-800"
 												hx-trigger="load delay:50ms"
 												href={ templ.URL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)) }
 											>
-												{ glasses.Brand }
+												{ glasses.Reference }
 											</a>
 										</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Color }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Type }</td>
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.LeftPrescription.Sph != nil {
 												{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Sph) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0.00</span>
 											}
 										</td>
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.LeftPrescription.Cyl != nil {
 												{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Cyl) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0.00</span>
 											}
 										</td>
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.LeftPrescription.Axis != nil {
 												{ fmt.Sprintf("%.0f", *glasses.LeftPrescription.Axis) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0</span>
 											}
 										</td>
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.LeftPrescription.Add != nil {
 												{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Add) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0.00</span>
 											}
 										</td>
 
 										// Right Eye Prescription
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.RightPrescription.Sph != nil {
 												{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Sph) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0.00</span>
 											}
 										</td>
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.RightPrescription.Cyl != nil {
 												{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Cyl) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0.00</span>
 											}
 										</td>
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.RightPrescription.Axis != nil {
-												{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Axis) }
+												{ fmt.Sprintf("%.0f", *glasses.RightPrescription.Axis) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0</span>
 											}
 										</td>
-										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center font-mono">
 											if glasses.RightPrescription.Add != nil {
 												{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Add) }
 											} else {
-												<span class="text-gray-400">-</span>
+												<span class="text-gray-400">0.00</span>
 											}
 										</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Reference }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ fmt.Sprintf("%v", glasses.IsInStock) }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.Feature }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.CreatedAt.Format("02-01-2006") }</td>
-										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.UpdatedAt.Format("02-01-2006") }</td>
+										<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+											if glasses.IsInStock {
+												<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+													In Stock
+												</span>
+											} else {
+												<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+													Shipped
+												</span>
+											}
+										</td>
+										<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">{ glasses.CreatedAt.Format("Jan 02, 2006") }</td>
 									</tr>
 								}
 							</tbody>

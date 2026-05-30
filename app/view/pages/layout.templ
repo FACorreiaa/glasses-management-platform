@@ -22,6 +22,7 @@ templ LayoutPage(l models.LayoutTempl) {
 		href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
 		rel="stylesheet" />
 	<script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
 	<script>
 		document.addEventListener('alpine:init', () => {
@@ -34,9 +35,9 @@ templ LayoutPage(l models.LayoutTempl) {
 </head>
 
 <body hx-boost="true" x-data="{theme: 'light'}" :class="theme" lang="en">
-	<div class="flex flex-col h-screen font-lato" id="contents">
+	<div class="flex flex-col h-screen font-lato bg-gray-50 dark:bg-gray-900" id="contents">
 		@components.NavbarComponent(l.Nav, l.User, l.ActiveNav)
-		<div class="h-full overflow-auto">
+		<div class="flex-1 overflow-auto">
 			@l.Content
 		</div>
 		@components.FooterComponent()

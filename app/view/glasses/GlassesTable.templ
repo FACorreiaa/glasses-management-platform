@@ -9,200 +9,182 @@ import (
 )
 
 templ GlassesTable(a models.GlassesTable, form models.GlassesForm) {
-	<div class="flex flex-col items-stretch shadow-lg overflow-hidden bg-white rounded-lg border border-gray-200">
-		<div class="p-4 border-b border-gray-200">
-			@components.InputGroupContainer() {
-				<div class="flex items-center space-x-2 flex-grow mr-2">
-					@components.InputSearch("Filter reference", "/glasses", "reference", "#searchResults")
-					@components.InputSearch("Filter left sph", "/glasses", "left_sph", "#searchResults")
-					@components.InputSearch("Filter right sph", "/glasses", "right_sph", "#searchResults")
-
+	<div class="flex flex-col gap-4">
+		<!-- Page Header & Filters -->
+		<div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+			<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+				<div class="flex-1">
+					@components.InputGroupContainer() {
+						<div class="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
+							@components.InputSearch("Reference", "/glasses", "reference", "#searchResults")
+							@components.InputSearch("L Sph", "/glasses", "left_sph", "#searchResults")
+							@components.InputSearch("R Sph", "/glasses", "right_sph", "#searchResults")
+						</div>
+					}
 				</div>
-				// Add specific filters for prescription if needed, or a more generic search
-				// Example: Simple combined text search
-				// <div class="flex-grow mr-2">
-				//     @components.InputSearch("Filter prescription...", "/glasses", "prescription_query", "#searchResults")
-				// </div>
 				<div class="flex-shrink-0">
 					@GlassesInsertModal(form)
+				</div>
+			</div>
+		</div>
+
+		<!-- Table Container -->
+		<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+			<div class="overflow-x-auto">
+				<table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+					<thead class="bg-gray-50 dark:bg-gray-900/50">
+						<tr>
+							for _, col := range a.Column {
+								<th scope="col" class="px-4 py-3 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest whitespace-nowrap">
+									<div class="flex items-center gap-1">
+										{ col.Title }
+										if col.SortParam != "" {
+											<a
+												class="text-gray-400 hover:text-primary transition-colors"
+												href={ templ.URL(fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s&reference=%s&left_sph=%s&right_sph=%s", a.Page, col.SortParam, a.SortParam, a.FilterReference, a.FilterLeftSph, a.FilterRightSph)) }
+											>
+												if a.OrderParam == col.SortParam && a.SortParam == "ASC" {
+													<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+												} else if a.OrderParam == col.SortParam && a.SortParam == "DESC" {
+													<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+												} else {
+													<svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>
+												}
+											</a>
+										}
+									</div>
+								</th>
+							}
+							<th scope="col" class="relative px-4 py-3">
+								<span class="sr-only">Actions</span>
+							</th>
+						</tr>
+					</thead>
+					<tbody id="searchResults" class="divide-y divide-gray-100 dark:divide-gray-800">
+						for _, glasses := range a.Glasses {
+							<tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors group">
+								<td class="px-4 py-3 whitespace-nowrap">
+									<a
+										href={ templ.URL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)) }
+										class="text-sm font-semibold text-primary hover:underline underline-offset-4"
+									>
+										{ glasses.Reference }
+									</a>
+								</td>
+
+								<!-- Left Eye -->
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.LeftPrescription.Sph != nil {
+										{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Sph) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0.00</span>
+									}
+								</td>
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.LeftPrescription.Cyl != nil {
+										{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Cyl) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0.00</span>
+									}
+								</td>
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.LeftPrescription.Axis != nil {
+										{ fmt.Sprintf("%.0f", *glasses.LeftPrescription.Axis) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0</span>
+									}
+								</td>
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.LeftPrescription.Add != nil {
+										{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Add) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0.00</span>
+									}
+								</td>
+
+								<!-- Right Eye -->
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.RightPrescription.Sph != nil {
+										{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Sph) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0.00</span>
+									}
+								</td>
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.RightPrescription.Cyl != nil {
+										{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Cyl) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0.00</span>
+									}
+								</td>
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.RightPrescription.Axis != nil {
+										{ fmt.Sprintf("%.0f", *glasses.RightPrescription.Axis) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0</span>
+									}
+								</td>
+								<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 text-center font-mono">
+									if glasses.RightPrescription.Add != nil {
+										{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Add) }
+									} else {
+										<span class="text-gray-300 dark:text-gray-600">0.00</span>
+									}
+								</td>
+
+								<td class="px-4 py-3 whitespace-nowrap">
+									if glasses.IsInStock {
+										<div class="flex items-center gap-2">
+											<span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-500/10 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+												In Stock
+											</span>
+											<a
+												href={ templ.SafeURL(fmt.Sprintf("/customer/glasses/%s/send", glasses.GlassesID)) }
+												class="p-1 text-gray-400 hover:text-primary transition-colors"
+												title="Ship to customer"
+											>
+												<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+											</a>
+										</div>
+									} else {
+										<span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-500/10 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10">
+											Shipped
+										</span>
+									}
+								</td>
+								<td class="px-4 py-3 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400">
+									{ glasses.CreatedAt.Format("Jan 02, 2006") }
+								</td>
+
+								<td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+									<div class="flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+										if glasses.IsInStock {
+											@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)))
+											@components.ButtonDeleteComponent(fmt.Sprintf("/glasses/%s", glasses.GlassesID))
+										}
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+			
+			if a.LastPage > 1 {
+				<div class="px-4 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-900/20">
+					@components.PaginatorComponent(
+						"/glasses",
+						fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.PrevPage, a.OrderParam, a.SortParam),
+						strconv.Itoa(a.Page),
+						fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.NextPage, a.OrderParam, a.SortParam),
+						fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.LastPage, a.OrderParam, a.SortParam),
+						strconv.Itoa(a.LastPage),
+						a.OrderParam,
+						a.SortParam)
 				</div>
 			}
 		</div>
 
-		<div class="overflow-x-auto">
-			<div class="inline-block min-w-full align-middle">
-				<div class="overflow-hidden">
-					<table class="min-w-full divide-y divide-gray-200">
-						<thead class="bg-gray-50">
-							<tr>
-								for _, col := range a.Column {
-									<th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-										<div class="flex items-center">
-											{ col.Title }
-											if col.SortParam != "" {
-												<a
-													class="ml-1 text-gray-400 hover:text-gray-700"
-													href={ templ.URL(fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s&reference=%s&left_sph=%s&right_sph=%s",
-                          														a.Page,
-                          														col.SortParam,   // The column to sort by (e.g., "reference")
-                          														a.SortParam,     // The *next* sort direction (e.g., "ASC" or "DESC")
-                          														a.FilterReference, // Pass current reference filter
-                          														a.FilterLeftSph,   // Pass current left_sph filter
-                          														a.FilterRightSph)) // Pass current right_sph filter
-                          													}
-													aria-label={fmt.Sprintf("Sort by %s", col.Title)}
-												>
-													if a.OrderParam == col.SortParam && a.SortParam == "ASC" {
-                                          @svg.ArrowUp()
-                                      } else if a.OrderParam == col.SortParam && a.SortParam == "DESC" {
-                                          @svg.ArrowDownIcon()
-                                      } else {
-                                          @col.Icon
-                                      }
-												</a>
-											}
-										</div>
-									</th>
-								}
-								<th scope="col" class="relative px-4 py-3">
-									<span class="sr-only">Actions</span>
-								</th>
-							</tr>
-						</thead>
-						<tbody id="searchResults" class="bg-white divide-y divide-gray-200">
-							for _, glasses := range a.Glasses {
-								<tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
-									<td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800">
-										<a
-											href={ templ.URL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)) }
-											hx-trigger="load delay:50ms"
-										>
-											{ glasses.Reference }
-										</a>
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{ glasses.Brand }</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{ glasses.Type }</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{ glasses.Color }</td>
-
-									// Left Eye Prescription
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.LeftPrescription.Sph != nil {
-											{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Sph) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.LeftPrescription.Cyl != nil {
-											{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Cyl) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.LeftPrescription.Axis != nil {
-        									{ fmt.Sprintf("%.0f", *glasses.LeftPrescription.Axis) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.LeftPrescription.Add != nil {
-											{ fmt.Sprintf("%+.2f", *glasses.LeftPrescription.Add) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-
-									// Right Eye Prescription
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.RightPrescription.Sph != nil {
-											{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Sph) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.RightPrescription.Cyl != nil {
-											{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Cyl) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.RightPrescription.Axis != nil {
-											{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Axis) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 text-center">
-										if glasses.RightPrescription.Add != nil {
-											{ fmt.Sprintf("%+.2f", *glasses.RightPrescription.Add) }
-										} else {
-											<span class="text-gray-400">-</span>
-										}
-									</td>
-									<td class="px-4 py-4 whitespace-nowrap text-sm text-neutral-500">
-												if glasses.IsInStock == true {
-													<span>Yes</span>
-													<a
-														href={ templ.SafeURL(fmt.Sprintf("/customer/glasses/%s/send", glasses.GlassesID)) }
-														class="btn btn-xs btn-error inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none"
-													>
-														<span>Send</span>
-														<ion-icon name="send-outline"></ion-icon>
-													</a>
-										} else {
-											<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-												Out of Stock
-											</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-										if glasses.IsInStock {
-											<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-												In Stock
-											</span>
-										} else {
-											<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-												Out of Stock
-											</span>
-										}
-									</td>
-									<td class="px-4 py-3 whitespace-normal text-sm text-gray-600 max-w-xs truncate">{ glasses.Feature }</td> // Allow wrapping/truncating for features
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{ glasses.CreatedAt.Format("Jan 02, 2006") }</td>
-
-									<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-										if glasses.IsInStock {
-												@components.ButtonEditComponent(templ.SafeURL(fmt.Sprintf("/glasses/%s/edit", glasses.GlassesID)))
-												@components.ButtonDeleteComponent(fmt.Sprintf("/glasses/%s", glasses.GlassesID))
-											}
-									</td>
-								</tr>
-							}
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-
-		if a.LastPage > 1 {
-			<div class="p-4 border-t border-gray-200">
-				@components.PaginatorComponent(
-					"/glasses", // Base path
-					fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.PrevPage, a.OrderParam, a.SortParam),
-					strconv.Itoa(a.Page),
-					fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.NextPage, a.OrderParam, a.SortParam),
-					fmt.Sprintf("/glasses?page=%d&orderBy=%s&sortBy=%s", a.LastPage, a.OrderParam, a.SortParam),
-					strconv.Itoa(a.LastPage),
-					a.OrderParam,
-					a.SortParam)
-			</div>
-		}
-
-		<div id="detailsSpace" class="mt-4 p-4 border-t border-gray-200">
-			<!-- Details loaded via HTMX will appear here -->
-		</div>
+		<div id="detailsSpace"></div>
 	</div>
 }

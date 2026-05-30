@@ -36,7 +36,7 @@ import (
 var tracer = otel.Tracer("main")
 
 func init() {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(); err != nil && !errors.Is(err, os.ErrNotExist) {
 		log.Fatal(err)
 	}
 }

@@ -2,14 +2,12 @@ version: '3.8'
 
 services:
   postgres:
-    env_file:
-      - .env.development
     container_name: glasses_postgres_dev
     image: postgres:alpine
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgres}
+      POSTGRES_DB: ${DB_NAME:-glasses_management_platform}
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5436:5432"
@@ -51,7 +49,7 @@ services:
 #      target: app
 #      context: ./
 #    ports:
-#      - "6968:6968"
+#      - "8080:8080"
 #      - "5050:5050"
 #    volumes:
 #      - ./:/app

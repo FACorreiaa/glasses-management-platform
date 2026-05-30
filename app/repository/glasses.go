@@ -125,14 +125,8 @@ func (r *GlassesRepository) GetGlasses(ctx context.Context, page, pageSize int,
               AND ($6::float8 IS NULL OR g.right_sph = $6)
               ORDER BY
 				CASE
-					WHEN UPPER($1) = 'BRAND' THEN g.brand
-					WHEN UPPER($1) = 'COLOR' THEN g.color
 					WHEN UPPER($1) = 'REFERENCE' THEN g.reference
-					WHEN UPPER($1) = 'TYPE' THEN g.type
-					WHEN UPPER($1) = 'FEATURES' THEN g.features
-					-- WHEN UPPER($1) = 'LEFT_SPH' THEN g.left_sph
-					-- WHEN UPPER($1) = 'RIGHT_SPH' THEN g.right_sph
-					ELSE g.brand
+					ELSE g.reference
 				END ` + sortBy + `
               OFFSET $2 LIMIT $3`
 	offset := (page - 1) * pageSize
@@ -228,18 +222,17 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesF
 		// 3. Update Glasses - Set IsInStock to TRUE and update other fields
 		updateQuery := `
 			UPDATE glasses
-			SET color = $1, brand = $2,
-			    reference = $3, type = $4, features = $5,
-                left_sph = $6, left_cyl = $7, left_axis = $8, left_add = $9,
-                right_sph = $10, right_cyl = $11, right_axis = $12, right_add = $13,
+			SET reference = $1,
+                left_sph = $2, left_cyl = $3, left_axis = $4, left_add = $5,
+                right_sph = $6, right_cyl = $7, right_axis = $8, right_add = $9,
 			    is_in_stock = TRUE, -- Set stock to true
                 updated_at = NOW()
-			WHERE glasses_id = $14` // Parameter count increased
+			WHERE glasses_id = $10`
 		_, errExec := tx.Exec(ctx, updateQuery,
-			g.Color, g.Brand, g.Reference, g.Type, g.Feature, // $1 - $5
-			g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd, // $6 - $9
-			g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd, // $10 - $13
-			g.GlassesID) // $14
+			g.Reference,                                // $1
+			g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd, // $2 - $5
+			g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd, // $6 - $9
+			g.GlassesID) // $10
 		if errExec != nil {
 			err = fmt.Errorf("updating glasses during restock: %w", errExec) // Capture error
 			slog.Error("updating glasses during restock", "err", err, "glasses_id", g.GlassesID)
@@ -253,17 +246,16 @@ func (r *GlassesRepository) UpdateGlasses(ctx context.Context, g models.GlassesF
 		// Original update query (does NOT touch is_in_stock)
 		updateQuery := `
 			UPDATE glasses
-			SET color = $1, brand = $2,
-			    reference = $3, type = $4, features = $5,
-			    left_sph = $6, left_cyl = $7, left_axis = $8, left_add = $9,
-                right_sph = $10, right_cyl = $11, right_axis = $12, right_add = $13,
+			SET reference = $1,
+			    left_sph = $2, left_cyl = $3, left_axis = $4, left_add = $5,
+                right_sph = $6, right_cyl = $7, right_axis = $8, right_add = $9,
 			    updated_at = NOW()
-			WHERE glasses_id = $14` // Parameter count increased
+			WHERE glasses_id = $10`
 		_, errExec := tx.Exec(ctx, updateQuery,
-			g.Color, g.Brand, g.Reference, g.Type, g.Feature, // $1 - $5
-			g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd, // $6 - $9
-			g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd, // $10 - $13
-			g.GlassesID) // $14
+			g.Reference,                                // $1
+			g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd, // $2 - $5
+			g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd, // $6 - $9
+			g.GlassesID) // $10
 		if errExec != nil {
 			err = fmt.Errorf("updating glasses: %w", errExec) // Capture error
 			slog.Error("updating glasses", "err", err, "glasses_id", g.GlassesID)
@@ -291,10 +283,10 @@ func (r *GlassesRepository) InsertGlasses(ctx context.Context, g models.GlassesF
 		RETURNING glasses_id
 	`
 	err := r.pgpool.QueryRow(ctx, query,
-		g.Reference, g.Brand,
+		g.Reference, "", // Brand
 		g.RightSph, g.RightCyl, g.RightAxis, g.RightAdd,
 		g.LeftSph, g.LeftCyl, g.LeftAxis, g.LeftAdd,
-		g.Color, g.Type, g.Feature,
+		"", "", "", // Color, Type, Feature
 		true,
 		time.Now(),
 		time.Now(),
@@ -328,12 +320,7 @@ func (r *GlassesRepository) GetGlassesByType(ctx context.Context,
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
 			 	where type = $5
-			 	ORDER BY
-			    CASE
-			        WHEN $1 = 'Brand' AND $2 = 'ASC' THEN g.brand
-			        WHEN $1 = 'Brand' AND $2 = 'DESC' THEN g.brand
-			    END,
-			    g.created_at
+			 	ORDER BY g.reference ` + sortBy + `
 			    OFFSET $3 LIMIT $4`
 	offset := (page - 1) * pageSize
 
@@ -350,12 +337,7 @@ func (r *GlassesRepository) GetGlassesByStock(ctx context.Context,
 					 COALESCE(updated_at, '1970-01-01 00:00:00') AS updated_at, created_at
 			 	FROM glasses g
                  WHERE is_in_stock = $5
-                 ORDER BY
-                 CASE
-                     WHEN $1 = 'Brand' AND $2 = 'ASC' THEN g.brand
-                     WHEN $1 = 'Brand' AND $2 = 'DESC' THEN g.brand
-                 END,
-                 g.created_at
+                 ORDER BY g.reference ` + sortBy + `
                  OFFSET $3 LIMIT $4`
 	offset := (page - 1) * pageSize
 

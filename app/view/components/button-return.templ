@@ -3,11 +3,11 @@ package components
 templ ButtonReturnComponent(path templ.SafeURL) {
 	<a
 		href={ path }
-		type="button"
-		action="return"
-		class="w-full btn btn-xs btn-error	inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-hidden mr-2"
+		class="inline-flex items-center justify-center rounded-md bg-white dark:bg-gray-800 px-4 py-2 text-sm font-semibold text-gray-900 dark:text-gray-200 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-[0.98]"
 	>
-		<span>Cancel</span>
-		<ion-icon name="close-outline"></ion-icon>
+		<svg class="mr-2 -ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+		</svg>
+		<span>Return</span>
 	</a>
 }

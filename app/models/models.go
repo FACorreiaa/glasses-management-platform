@@ -179,7 +179,6 @@ type GlassesForm struct {
 	UserID    uuid.UUID `json:"user_id" schema:"user_id"`
 	GlassesID uuid.UUID `json:"glasses_id" schema:"glasses_id"`
 	Reference string    `json:"reference" schema:"reference"`
-	Brand     string    `json:"brand" schema:"brand"`
 
 	LeftSph  *float64 `json:"left_sph" schema:"left_sph"`
 	LeftCyl  *float64 `json:"left_cyl" schema:"left_cyl"`
@@ -191,10 +190,7 @@ type GlassesForm struct {
 	RightAxis *float64 `json:"right_axis" schema:"right_axis"`
 	RightAdd  *float64 `json:"right_add" schema:"right_add"`
 
-	Color       string `json:"color" schema:"color"`
-	Type        string `json:"type" schema:"type"`
 	IsInStock   bool   `json:"is_in_stock" schema:"is_in_stock"`
-	Feature     string `json:"features" schema:"features"`
 	Updated     bool
 	Values      map[string]string
 	FieldErrors map[string]string

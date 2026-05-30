@@ -2,4 +2,4 @@
 
 To do:
 
-- [] Fix Modals
+- [x] Fix Modals

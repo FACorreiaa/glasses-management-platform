@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -97,7 +98,7 @@ func (h *Handler) renderCollaboratorsTable(w http.ResponseWriter, r *http.Reques
 	return t, nil
 }
 
-// UsersPage users page for admin to manage views TODO
+// UsersPage users page for admin to manage views
 func (h *Handler) UsersPage(w http.ResponseWriter, r *http.Request) error {
 	ctx, span := tracer.Start(r.Context(), "UserPageHandler")
 	defer span.End()
@@ -107,9 +108,32 @@ func (h *Handler) UsersPage(w http.ResponseWriter, r *http.Request) error {
 		HandleError(err, "rendering glasses table")
 	}
 	sidebar := h.renderSettingsSidebar()
-	users := pages.MainLayoutPage("List of collaborators", "List of collaborators", sidebar, table)
+
+	// Wrap the table in a container that can be refreshed via HTMX
+	wrappedTable := templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+		_, err := io.WriteString(w, `<div id="collaborators-table" hx-get="/collaborators/table" hx-trigger="refreshTable from:body" hx-swap="outerHTML">`)
+		if err != nil {
+			return err
+		}
+		err = table.Render(ctx, w)
+		if err != nil {
+			return err
+		}
+		_, err = io.WriteString(w, `</div>`)
+		return err
+	})
+
+	users := pages.MainLayoutPage("List of collaborators", "List of collaborators", sidebar, wrappedTable)
 	data := h.CreateLayout(ctx, w, r, "Users", users).Render(context.Background(), w)
 	return data
+}
+
+func (h *Handler) CollaboratorsTable(w http.ResponseWriter, r *http.Request) error {
+	table, err := h.renderCollaboratorsTable(w, r)
+	if err != nil {
+		return err
+	}
+	return table.Render(r.Context(), w)
 }
 
 func (h *Handler) UserInsertPage(w http.ResponseWriter, r *http.Request) error {
@@ -163,13 +187,8 @@ func (h *Handler) UserRegisterPostModal(w http.ResponseWriter, r *http.Request) 
 		return fmt.Errorf("error inserting users: %v", err)
 	}
 
-	actionType := r.FormValue("action")
-
-	if actionType == "back" {
-		w.Header().Set("HX-Redirect", "/settings/collaborators")
-	} else if actionType == SubmitAction {
-		w.Header().Set("HX-Redirect", "/settings/collaborators")
-	}
+	w.Header().Set("HX-Trigger", "refreshTable")
+	w.WriteHeader(http.StatusNoContent)
 
 	return nil
 }
@@ -245,7 +264,7 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	w.Header().Set("HX-Redirect", "/settings/collaborators")
+	w.WriteHeader(http.StatusNoContent)
 
 	return nil
 }
