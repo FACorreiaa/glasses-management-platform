@@ -1,24 +1,30 @@
-FROM node:alpine-slim as assets
+# Stage 1: Build Assets
+FROM node:alpine-slim AS assets
 WORKDIR /app
-COPY package.json package-lock.json postcss.config.cjs fonts.css tailwind.css ./
-RUN mkdir -p app/static/css app/static/fonts
+COPY package.json package-lock.json postcss.config.cjs tailwind.config.mjs ./
+# Copy source files needed for Tailwind
+COPY app/static/css/main.css ./app/static/css/main.css
+COPY app/view ./app/view
 RUN npm install --only=production --ci
-RUN npm run fonts && npm run tailwind-build
+RUN npm run tailwind-build
 
-# Define the "base" stage
-FROM golang:1.26-alpine as base
+# Stage 2: Build Go Binary
+FROM golang:1.24-alpine AS builder
 WORKDIR /app
-COPY go.mod ./
-COPY go.sum ./
+RUN apk add --no-cache git
+COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
+# Overwrite static CSS with the one built in Stage 1
+COPY --from=assets /app/app/static/css/output.css ./app/static/css/output.css
+# Build the binary
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o server .
 
-# Define the final stage
-FROM base as production
+# Final Stage: Runtime
+FROM alpine:latest
 WORKDIR /app
-COPY --from=base /app/app/static/css/output.css ./controller/static/css/
-COPY --from=base /app/app/static/fonts/* ./controller/static/fonts/
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /app/server
-#RUN upx --best --lzma /app/server
+RUN apk add --no-cache ca-certificates tzdata
+# Copy only the binary from the builder
+COPY --from=builder /app/server ./server
 EXPOSE 8080
-ENTRYPOINT ["/app/server"]
+ENTRYPOINT ["./server"]
