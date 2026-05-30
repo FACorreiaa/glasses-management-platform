@@ -30,7 +30,9 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 									templ.KV("text-base-content/60 hover:text-base-content hover:bg-base-content/5", activeNav != item.Label && activeNav != item.Path) }
 							>
 								<span class="flex items-center gap-2">
-									@item.Icon
+									if item.Icon != nil {
+										@item.Icon
+									}
 									{ item.Label }
 								</span>
 								if activeNav == item.Label || activeNav == item.Path {
@@ -89,7 +91,9 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 									templ.KV("text-primary bg-primary/10", activeNav == item.Label || activeNav == item.Path),
 									templ.KV("text-base-content/70 hover:text-base-content hover:bg-base-content/5", activeNav != item.Label && activeNav != item.Path) }
 							>
-								@item.Icon
+								if item.Icon != nil {
+									@item.Icon
+								}
 								{ item.Label }
 							</a>
 						}
