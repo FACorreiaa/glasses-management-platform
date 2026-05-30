@@ -120,6 +120,14 @@ func NewDatabaseConfig() (*DatabaseConfig, error) {
 		return nil, err
 	}
 
+	// Prefer a full connection string when provided (e.g. Fly secret DB_URL).
+	if dbURL := os.Getenv("DB_URL"); dbURL != "" {
+		return &DatabaseConfig{
+			ConnectionURL: dbURL,
+		}, nil
+	}
+
+	// Otherwise build the connection string from discrete vars.
 	host := os.Getenv("DB_HOST")
 	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
