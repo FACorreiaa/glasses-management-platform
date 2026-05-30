@@ -199,8 +199,8 @@ func (h *Handler) renderShippingDetailsTable(w http.ResponseWriter, r *http.Requ
 		{Title: "Card ID", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Email", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Glasses Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Right Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Left Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Right Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Created at:", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Updated at:", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 	}

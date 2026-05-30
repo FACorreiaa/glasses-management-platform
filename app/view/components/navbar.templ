@@ -3,53 +3,58 @@ package components
 import "github.com/FACorreiaa/glasses-management-platform/app/models"
 
 templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav string) {
-	<header class="w-full bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30 shadow-sm">
+	<header class="w-full sticky top-0 z-30 border-b border-base-content/10 bg-base-100/80 backdrop-blur-md supports-[backdrop-filter]:bg-base-100/70">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<nav class="flex justify-between h-16 items-center" x-data="{ mobileMenuOpen: false }">
 				<!-- Logo -->
 				<div class="flex items-center">
 					<a href="/" class="flex items-center gap-3 group">
-						<img src="/static/icons/PAMOZI.png" class="h-8 w-8 sm:h-10 sm:w-10 transition-transform group-hover:scale-105" alt="Pamozi Optical Aid"/>
-						<div class="flex flex-col">
-							<span class="text-lg font-bold tracking-tight text-gray-900 dark:text-white leading-none">Pamozi</span>
-							<span class="text-[10px] uppercase tracking-widest text-primary font-bold">Optical Aid</span>
+						<span class="grid place-items-center h-10 w-10 rounded-xl bg-primary/10 ring-1 ring-primary/15 overflow-hidden transition-transform group-hover:scale-105">
+							<img src="/static/icons/PAMOZI.png" class="h-7 w-7" alt="Pamozi Optical Aid"/>
+						</span>
+						<div class="flex flex-col leading-none">
+							<span class="font-serif text-xl font-medium tracking-tight text-base-content">Pamozi</span>
+							<span class="eyebrow mt-0.5">Optical Aid</span>
 						</div>
 					</a>
 				</div>
 
 				<!-- Desktop Nav -->
-				<div class="hidden md:flex items-center space-x-1 lg:space-x-4">
+				<div class="hidden md:flex items-center gap-1">
 					for _, item := range nav {
 						if !item.IsLogout {
 							<a
 								href={ templ.SafeURL(item.Path) }
-								class={ "px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ",
-									templ.KV("text-primary bg-primary/5", activeNav == item.Label || activeNav == item.Path),
-									templ.KV("text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700", activeNav != item.Label && activeNav != item.Path) }
+								class={ "relative px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ",
+									templ.KV("text-primary", activeNav == item.Label || activeNav == item.Path),
+									templ.KV("text-base-content/60 hover:text-base-content hover:bg-base-content/5", activeNav != item.Label && activeNav != item.Path) }
 							>
 								<span class="flex items-center gap-2">
 									@item.Icon
 									{ item.Label }
 								</span>
+								if activeNav == item.Label || activeNav == item.Path {
+									<span class="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-primary"></span>
+								}
 							</a>
 						}
 					}
 				</div>
 
 				<!-- Right Side -->
-				<div class="flex items-center gap-4">
-					<div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5">
+				<div class="flex items-center gap-3">
+					<div class="grid place-items-center h-9 w-9 rounded-lg text-base-content/70 hover:text-base-content hover:bg-base-content/5 transition-colors">
 						@ThemeSwitcher()
 					</div>
-					
+
 					if user != nil {
-						<div class="hidden md:flex items-center pl-4 border-l border-gray-200 dark:border-gray-700 gap-4">
-							<div class="flex flex-col items-end">
-								<p class="text-xs font-semibold text-gray-900 dark:text-white">{ user.Username }</p>
-								<p class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[120px]">{ user.Email }</p>
+						<div class="hidden md:flex items-center pl-3 border-l border-base-content/10 gap-3">
+							<div class="flex flex-col items-end leading-tight">
+								<p class="text-xs font-semibold text-base-content">{ user.Username }</p>
+								<p class="text-[10px] text-base-content/50 truncate max-w-[120px]">{ user.Email }</p>
 							</div>
 							<form action="/logout" method="post" class="flex">
-								<button type="submit" class="p-2 text-gray-400 hover:text-error transition-colors rounded-lg hover:bg-error/5 group" aria-label="Logout">
+								<button type="submit" class="grid place-items-center h-9 w-9 text-base-content/50 hover:text-error transition-colors rounded-lg hover:bg-error/10 group" aria-label="Logout">
 									<svg class="w-5 h-5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
 									</svg>
@@ -59,7 +64,7 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 					}
 
 					<!-- Mobile toggle -->
-					<button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+					<button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden grid place-items-center h-9 w-9 text-base-content/70 hover:bg-base-content/5 rounded-lg transition-colors">
 						<svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
 						<svg x-show="mobileMenuOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
 					</button>
@@ -71,7 +76,7 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 					x-transition:enter="transition ease-out duration-200"
 					x-transition:enter-start="opacity-0 -translate-y-2"
 					x-transition:enter-end="opacity-100 translate-y-0"
-					class="absolute top-16 left-0 w-full bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 md:hidden shadow-xl"
+					class="absolute top-16 left-0 w-full bg-base-100/95 backdrop-blur-md border-b border-base-content/10 p-4 md:hidden shadow-xl"
 					@click.away="mobileMenuOpen = false"
 					x-cloak
 				>
@@ -81,8 +86,8 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 								href={ templ.SafeURL(item.Path) }
 								@click="mobileMenuOpen = false"
 								class={ "flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium transition-colors ",
-									templ.KV("text-primary bg-primary/5", activeNav == item.Label || activeNav == item.Path),
-									templ.KV("text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700", activeNav != item.Label && activeNav != item.Path) }
+									templ.KV("text-primary bg-primary/10", activeNav == item.Label || activeNav == item.Path),
+									templ.KV("text-base-content/70 hover:text-base-content hover:bg-base-content/5", activeNav != item.Label && activeNav != item.Path) }
 							>
 								@item.Icon
 								{ item.Label }
@@ -90,10 +95,10 @@ templ NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav 
 						}
 					</div>
 					if user != nil {
-						<div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between px-3">
+						<div class="mt-4 pt-4 border-t border-base-content/10 flex items-center justify-between px-3">
 							<div class="flex flex-col">
-								<p class="text-sm font-bold text-gray-900 dark:text-white">{ user.Username }</p>
-								<p class="text-xs text-gray-500 dark:text-gray-400">{ user.Email }</p>
+								<p class="text-sm font-bold text-base-content">{ user.Username }</p>
+								<p class="text-xs text-base-content/50">{ user.Email }</p>
 							</div>
 							<form action="/logout" method="post">
 								<button type="submit" class="flex items-center gap-2 text-sm font-semibold text-error">

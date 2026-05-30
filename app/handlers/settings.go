@@ -373,14 +373,12 @@ func (h *Handler) renderSettingsShippingTable(w http.ResponseWriter, r *http.Req
 	}
 
 	columnNames := []models.ColumnItems{
-		{Title: "Collaborator Name", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Collaborator Email", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Customer Name", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Customer Card ID", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Customer Email", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Glasses Reference", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
-		{Title: "Right Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Left Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
+		{Title: "Right Eye Strength", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Created at:", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 		{Title: "Updated at:", Icon: svg.ArrowOrderIcon(), SortParam: sortAux},
 	}

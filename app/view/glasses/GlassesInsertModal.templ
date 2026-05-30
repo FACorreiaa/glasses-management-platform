@@ -6,7 +6,8 @@ import (
 )
 
 templ GlassesInsertTrigger() {
-	<span class="btn btn-sm btn-primary inline-flex items-center justify-center text-sm font-medium tracking-wide transition-colors duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-focus">
+	<span class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-content shadow-sm transition-all hover:brightness-110 hover:shadow-md active:scale-[0.99]">
+		<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
 		Insert New Glasses
 	</span>
 }
@@ -25,10 +26,10 @@ templ GlassesInsertModal(form models.GlassesForm) {
 			>
 				<!-- Reference Identifier -->
 				<div>
-					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="modal-reference">Reference / SKU</label>
+					<label class="eyebrow" for="modal-reference">Reference / SKU</label>
 					<input
 						type="text"
-						class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+						class="block w-full mt-2 px-3 py-2 text-sm rounded-xl bg-base-200/60 border border-base-content/10 text-base-content placeholder:text-base-content/35 transition-colors focus:bg-base-100 focus:border-primary/40 focus:outline-none"
 						placeholder="E.g. G-1024-B"
 						name="reference"
 						autocomplete="off"
@@ -42,129 +43,39 @@ templ GlassesInsertModal(form models.GlassesForm) {
 				</div>
 
 				<!-- Left Eye Prescription -->
-				<div class="border-t border-gray-200 dark:border-gray-700 pt-5">
-					<h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">Left Eye (L)</h3>
+				<div class="border-t border-base-content/10 pt-5">
+					<h3 class="rule-mark font-serif text-lg mb-3 text-base-content">Left Eye (L)</h3>
 					<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-left_sph">Sph</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0.00"
-								name="left_sph"
-								id="modal-left_sph"
-								step="0.05"
-								value={ form.Values["left_sph"] }
-							/>
-						</div>
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-left_cyl">Cyl</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0.00"
-								name="left_cyl"
-								id="modal-left_cyl"
-								step="0.05"
-								value={ form.Values["left_cyl"] }
-							/>
-						</div>
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-left_axis">Axis</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0"
-								name="left_axis"
-								id="modal-left_axis"
-								min="0"
-								max="180"
-								value={ form.Values["left_axis"] }
-							/>
-						</div>
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-left_add">Add</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0.00"
-								name="left_add"
-								id="modal-left_add"
-								step="0.05"
-								value={ form.Values["left_add"] }
-							/>
-						</div>
+						@rxInput("Sph", "left_sph", "0.00", "0.05", form.Values["left_sph"])
+						@rxInput("Cyl", "left_cyl", "0.00", "0.05", form.Values["left_cyl"])
+						@rxInput("Axis", "left_axis", "0", "1", form.Values["left_axis"])
+						@rxInput("Add", "left_add", "0.00", "0.05", form.Values["left_add"])
 					</div>
 				</div>
 
 				<!-- Right Eye Prescription -->
-				<div class="border-t border-gray-200 dark:border-gray-700 pt-5">
-					<h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">Right Eye (R)</h3>
+				<div class="border-t border-base-content/10 pt-5">
+					<h3 class="rule-mark font-serif text-lg mb-3 text-base-content">Right Eye (R)</h3>
 					<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-right_sph">Sph</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0.00"
-								name="right_sph"
-								id="modal-right_sph"
-								step="0.05"
-								value={ form.Values["right_sph"] }
-							/>
-						</div>
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-right_cyl">Cyl</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0.00"
-								name="right_cyl"
-								id="modal-right_cyl"
-								step="0.05"
-								value={ form.Values["right_cyl"] }
-							/>
-						</div>
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-right_axis">Axis</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0"
-								name="right_axis"
-								id="modal-right_axis"
-								min="0"
-								max="180"
-								value={ form.Values["right_axis"] }
-							/>
-						</div>
-						<div>
-							<label class="block text-xs font-medium text-gray-500 uppercase tracking-wider" for="modal-right_add">Add</label>
-							<input
-								type="number"
-								class="block w-full px-3 py-2 mt-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-								placeholder="0.00"
-								name="right_add"
-								id="modal-right_add"
-								step="0.05"
-								value={ form.Values["right_add"] }
-							/>
-						</div>
+						@rxInput("Sph", "right_sph", "0.00", "0.05", form.Values["right_sph"])
+						@rxInput("Cyl", "right_cyl", "0.00", "0.05", form.Values["right_cyl"])
+						@rxInput("Axis", "right_axis", "0", "1", form.Values["right_axis"])
+						@rxInput("Add", "right_add", "0.00", "0.05", form.Values["right_add"])
 					</div>
 				</div>
 
-				<!-- Section 5: Actions -->
-				<div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-5 border-t border-gray-200 dark:border-gray-700">
+				<!-- Actions -->
+				<div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-5 border-t border-base-content/10">
 					<button
 						@click="modalOpen = false"
 						type="button"
-						class="btn btn-ghost w-full sm:w-auto"
+						class="inline-flex items-center justify-center rounded-xl border border-base-content/15 px-4 py-2 text-sm font-semibold text-base-content/70 transition-colors hover:bg-base-content/5 hover:text-base-content w-full sm:w-auto"
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						class="btn btn-primary w-full sm:w-auto"
+						class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-primary-content shadow-sm transition-all hover:brightness-110 hover:shadow-md active:scale-[0.99] w-full sm:w-auto"
 					>
 						Insert Glasses
 					</button>
@@ -172,4 +83,19 @@ templ GlassesInsertModal(form models.GlassesForm) {
 			</form>
 		</div>
 	}
+}
+
+templ rxInput(label, name, placeholder, step, value string) {
+	<div>
+		<label class="block text-xs font-medium text-base-content/50 uppercase tracking-wider" for={ "modal-" + name }>{ label }</label>
+		<input
+			type="number"
+			class="block w-full mt-1 px-3 py-2 text-sm rounded-xl bg-base-200/60 border border-base-content/10 text-base-content placeholder:text-base-content/35 transition-colors focus:bg-base-100 focus:border-primary/40 focus:outline-none tabular"
+			placeholder={ placeholder }
+			name={ name }
+			id={ "modal-" + name }
+			step={ step }
+			value={ value }
+		/>
+	</div>
 }
