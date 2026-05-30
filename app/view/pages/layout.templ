@@ -13,15 +13,17 @@ templ LayoutPage(l models.LayoutTempl) {
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>{ l.Title } - Glasses Management</title>
+	<meta name="description" content="Pamozi Optical Aid — manage inventory, customers and shipping for donated eyewear in one calm, precise workspace." />
 	<link rel="stylesheet" href="../../static/css/fonts.css" />
 	<link rel="stylesheet" href="../../static/css/output.css" />
-	<link rel="stylesheet" href="../../static/css/ionicons.min.css" />
+	<link rel="stylesheet" href="../../static/css/ionicons.min.css" media="print" onload="this.media='all'" />
+	<noscript><link rel="stylesheet" href="../../static/css/ionicons.min.css" /></noscript>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link
 		href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:ital,wght@0,300..800;1,400..600&display=swap"
 		rel="stylesheet" />
-	<script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js"></script>
+	<script defer src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
 	<script>
@@ -37,9 +39,9 @@ templ LayoutPage(l models.LayoutTempl) {
 <body hx-boost="true" x-data="{theme: 'light'}" :class="theme" lang="en">
 	<div class="flex flex-col h-screen font-sans bg-base-100 text-base-content" id="contents">
 		@components.NavbarComponent(l.Nav, l.User, l.ActiveNav)
-		<div class="flex-1 overflow-auto">
+		<main class="flex-1 overflow-auto">
 			@l.Content
-		</div>
+		</main>
 		@components.FooterComponent()
 	</div>
 </body>

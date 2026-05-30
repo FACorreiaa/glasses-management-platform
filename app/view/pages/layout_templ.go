@@ -47,7 +47,7 @@ func LayoutPage(l models.LayoutTempl) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - Glasses Management</title><link rel=\"stylesheet\" href=\"../../static/css/fonts.css\"><link rel=\"stylesheet\" href=\"../../static/css/output.css\"><link rel=\"stylesheet\" href=\"../../static/css/ionicons.min.css\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:ital,wght@0,300..800;1,400..600&display=swap\" rel=\"stylesheet\"><script src=\"https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js\"></script><script defer src=\"https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js\"></script><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js\"></script><script>\n\t\tdocument.addEventListener('alpine:init', () => {\n\t\t\tconst theme = localStorage.getItem('theme') || 'light';\n\t\t\tdocument.documentElement.setAttribute('data-theme', theme);\n\t\t});\n\t</script><script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js\"></script><script nomodule src=\"https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js\"></script></head><body hx-boost=\"true\" x-data=\"{theme: 'light'}\" :class=\"theme\" lang=\"en\"><div class=\"flex flex-col h-screen font-sans bg-base-100 text-base-content\" id=\"contents\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - Glasses Management</title><meta name=\"description\" content=\"Pamozi Optical Aid — manage inventory, customers and shipping for donated eyewear in one calm, precise workspace.\"><link rel=\"stylesheet\" href=\"../../static/css/fonts.css\"><link rel=\"stylesheet\" href=\"../../static/css/output.css\"><link rel=\"stylesheet\" href=\"../../static/css/ionicons.min.css\" media=\"print\" onload=\"this.media='all'\"><noscript><link rel=\"stylesheet\" href=\"../../static/css/ionicons.min.css\"></noscript><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:ital,wght@0,300..800;1,400..600&display=swap\" rel=\"stylesheet\"><script defer src=\"https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js\"></script><script defer src=\"https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js\"></script><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js\"></script><script>\n\t\tdocument.addEventListener('alpine:init', () => {\n\t\t\tconst theme = localStorage.getItem('theme') || 'light';\n\t\t\tdocument.documentElement.setAttribute('data-theme', theme);\n\t\t});\n\t</script><script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.esm.js\"></script><script nomodule src=\"https://cdn.jsdelivr.net/npm/ionicons@latest/dist/ionicons/ionicons.js\"></script></head><body hx-boost=\"true\" x-data=\"{theme: 'light'}\" :class=\"theme\" lang=\"en\"><div class=\"flex flex-col h-screen font-sans bg-base-100 text-base-content\" id=\"contents\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,7 +55,7 @@ func LayoutPage(l models.LayoutTempl) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"flex-1 overflow-auto\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<main class=\"flex-1 overflow-auto\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -63,7 +63,7 @@ func LayoutPage(l models.LayoutTempl) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

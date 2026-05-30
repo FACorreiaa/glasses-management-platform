@@ -31,7 +31,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<header class=\"w-full sticky top-0 z-30 border-b border-base-content/10 bg-base-100/80 backdrop-blur-md supports-[backdrop-filter]:bg-base-100/70\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><nav class=\"flex justify-between h-16 items-center\" x-data=\"{ mobileMenuOpen: false }\"><!-- Logo --><div class=\"flex items-center\"><a href=\"/\" class=\"flex items-center gap-3 group\"><span class=\"grid place-items-center h-10 w-10 rounded-xl bg-primary/10 ring-1 ring-primary/15 overflow-hidden transition-transform group-hover:scale-105\"><img src=\"/static/icons/PAMOZI.png\" class=\"h-7 w-7\" alt=\"Pamozi Optical Aid\"></span><div class=\"flex flex-col leading-none\"><span class=\"font-serif text-xl font-medium tracking-tight text-base-content\">Pamozi</span> <span class=\"eyebrow mt-0.5\">Optical Aid</span></div></a></div><!-- Desktop Nav --><div class=\"hidden md:flex items-center gap-1\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<header class=\"w-full sticky top-0 z-30 border-b border-base-content/10 bg-base-100/80 backdrop-blur-md supports-[backdrop-filter]:bg-base-100/70\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><nav class=\"flex justify-between h-16 items-center\" x-data=\"{ mobileMenuOpen: false }\"><!-- Logo --><div class=\"flex items-center\"><a href=\"/\" class=\"flex items-center gap-3 group\"><span class=\"grid place-items-center h-10 w-10 rounded-xl bg-primary/10 ring-1 ring-primary/15 overflow-hidden transition-transform group-hover:scale-105\"><img src=\"/static/icons/PAMOZI.png\" class=\"h-7 w-7\" alt=\"\"></span><div class=\"flex flex-col leading-none\"><span class=\"font-serif text-xl font-medium tracking-tight text-base-content\">Pamozi</span> <span class=\"eyebrow mt-0.5\">Optical Aid</span></div></a></div><!-- Desktop Nav --><div class=\"hidden md:flex items-center gap-1\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -39,7 +39,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 			if !item.IsLogout {
 				var templ_7745c5c3_Var2 = []any{"relative px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ",
 					templ.KV("text-primary", activeNav == item.Label || activeNav == item.Path),
-					templ.KV("text-base-content/60 hover:text-base-content hover:bg-base-content/5", activeNav != item.Label && activeNav != item.Path)}
+					templ.KV("text-base-content/72 hover:text-base-content hover:bg-base-content/5", activeNav != item.Label && activeNav != item.Path)}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -131,7 +131,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</p><p class=\"text-[10px] text-base-content/50 truncate max-w-[120px]\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</p><p class=\"text-[10px] text-base-content/65 truncate max-w-[120px]\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -149,7 +149,7 @@ func NavbarComponent(nav []models.NavItem, user *models.UserSession, activeNav s
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<!-- Mobile toggle --><button @click=\"mobileMenuOpen = !mobileMenuOpen\" class=\"md:hidden grid place-items-center h-9 w-9 text-base-content/70 hover:bg-base-content/5 rounded-lg transition-colors\"><svg x-show=\"!mobileMenuOpen\" class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 6h16M4 12h16m-7 6h7\"></path></svg> <svg x-show=\"mobileMenuOpen\" x-cloak class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><!-- Mobile Menu --><div x-show=\"mobileMenuOpen\" x-transition:enter=\"transition ease-out duration-200\" x-transition:enter-start=\"opacity-0 -translate-y-2\" x-transition:enter-end=\"opacity-100 translate-y-0\" class=\"absolute top-16 left-0 w-full bg-base-100/95 backdrop-blur-md border-b border-base-content/10 p-4 md:hidden shadow-xl\" @click.away=\"mobileMenuOpen = false\" x-cloak><div class=\"space-y-1\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<!-- Mobile toggle --><button @click=\"mobileMenuOpen = !mobileMenuOpen\" type=\"button\" aria-label=\"Toggle navigation menu\" :aria-expanded=\"mobileMenuOpen\" class=\"md:hidden grid place-items-center h-9 w-9 text-base-content/70 hover:bg-base-content/5 rounded-lg transition-colors\"><svg x-show=\"!mobileMenuOpen\" class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 6h16M4 12h16m-7 6h7\"></path></svg> <svg x-show=\"mobileMenuOpen\" x-cloak class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><!-- Mobile Menu --><div x-show=\"mobileMenuOpen\" x-transition:enter=\"transition ease-out duration-200\" x-transition:enter-start=\"opacity-0 -translate-y-2\" x-transition:enter-end=\"opacity-100 translate-y-0\" class=\"absolute top-16 left-0 w-full bg-base-100/95 backdrop-blur-md border-b border-base-content/10 p-4 md:hidden shadow-xl\" @click.away=\"mobileMenuOpen = false\" x-cloak><div class=\"space-y-1\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

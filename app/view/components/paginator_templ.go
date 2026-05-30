@@ -64,7 +64,7 @@ func PaginatorComponent(firstPage, prevPage, currentPage, goToNextPage, goToLast
 			return templ_7745c5c3_Err
 		}
 		if currentPage == "1" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<a class=\"btn btn-sm btn-outline btn-primary btn-disabled\" aria-disabled=\"true\"><ion-icon name=\"chevron-back-outline\"></ion-icon></a> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<a class=\"btn btn-sm btn-outline btn-primary btn-disabled\" aria-disabled=\"true\"><ion-icon name=\"chevron-back-outline\" aria-hidden=\"true\"></ion-icon><span class=\"sr-only\">Previous page</span></a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -82,7 +82,7 @@ func PaginatorComponent(firstPage, prevPage, currentPage, goToNextPage, goToLast
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"><ion-icon name=\"chevron-back-outline\"></ion-icon></a> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"><ion-icon name=\"chevron-back-outline\" aria-hidden=\"true\"></ion-icon><span class=\"sr-only\">Previous page</span></a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -118,7 +118,7 @@ func PaginatorComponent(firstPage, prevPage, currentPage, goToNextPage, goToLast
 			return templ_7745c5c3_Err
 		}
 		if currentPage == lastPage {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<a class=\"btn btn-sm btn-outline btn-primary btn-disabled\" aria-disabled=\"true\"><ion-icon name=\"chevron-forward-outline\"></ion-icon></a>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<a class=\"btn btn-sm btn-outline btn-primary btn-disabled\" aria-disabled=\"true\"><ion-icon name=\"chevron-forward-outline\" aria-hidden=\"true\"></ion-icon><span class=\"sr-only\">Next page</span></a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -136,7 +136,7 @@ func PaginatorComponent(firstPage, prevPage, currentPage, goToNextPage, goToLast
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\"><ion-icon name=\"chevron-forward-outline\"></ion-icon></a>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\"><ion-icon name=\"chevron-forward-outline\" aria-hidden=\"true\"></ion-icon><span class=\"sr-only\">Next page</span></a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

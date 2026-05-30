@@ -37,20 +37,20 @@ func Modal(title string, trigger templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><template x-teleport=\"body\"><div x-show=\"modalOpen\" class=\"fixed inset-0 z-99 flex items-center justify-center w-screen h-screen\" x-cloak><!-- Backdrop --><div x-show=\"modalOpen\" x-transition:enter=\"ease-out duration-300\" x-transition:enter-start=\"opacity-0\" x-transition:enter-end=\"opacity-100\" x-transition:leave=\"ease-in duration-300\" x-transition:leave-start=\"opacity-100\" x-transition:leave-end=\"opacity-0\" @click=\"modalOpen = false\" class=\"absolute inset-0 w-full h-full bg-gray-900/50 backdrop-blur-sm\"></div><!-- Modal Content --><div x-show=\"modalOpen\" x-trap.inert.noscroll=\"modalOpen\" x-transition:enter=\"ease-out duration-300\" x-transition:enter-start=\"opacity-0 scale-95\" x-transition:enter-end=\"opacity-100 scale-100\" x-transition:leave=\"ease-in duration-200\" x-transition:leave-start=\"opacity-100 scale-100\" x-transition:leave-end=\"opacity-0 scale-95\" class=\"relative w-full max-w-lg p-6 bg-white shadow-xl rounded-xl dark:bg-gray-800 sm:max-w-xl mx-4 max-h-[90vh] flex flex-col\"><!-- Header --><div class=\"flex items-center justify-between mb-4\"><h2 class=\"text-2xl font-bold text-gray-900 dark:text-white\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><template x-teleport=\"body\"><div x-show=\"modalOpen\" class=\"fixed inset-0 z-99 flex items-center justify-center w-screen h-screen\" x-cloak><!-- Backdrop --><div x-show=\"modalOpen\" x-transition:enter=\"ease-out duration-300\" x-transition:enter-start=\"opacity-0\" x-transition:enter-end=\"opacity-100\" x-transition:leave=\"ease-in duration-300\" x-transition:leave-start=\"opacity-100\" x-transition:leave-end=\"opacity-0\" @click=\"modalOpen = false\" class=\"absolute inset-0 w-full h-full bg-gray-900/50 backdrop-blur-sm\"></div><!-- Modal Content --><div x-show=\"modalOpen\" x-trap.inert.noscroll=\"modalOpen\" x-transition:enter=\"ease-out duration-300\" x-transition:enter-start=\"opacity-0 scale-95\" x-transition:enter-end=\"opacity-100 scale-100\" x-transition:leave=\"ease-in duration-200\" x-transition:leave-start=\"opacity-100 scale-100\" x-transition:leave-end=\"opacity-0 scale-95\" class=\"relative w-full max-w-lg p-6 bg-base-100 text-base-content shadow-xl rounded-xl ring-1 ring-base-content/10 sm:max-w-xl mx-4 max-h-[90vh] flex flex-col\"><!-- Header --><div class=\"flex items-center justify-between mb-4\"><h2 class=\"font-serif text-2xl text-base-content\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/modal.templ`, Line: 49, Col: 74}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/view/components/modal.templ`, Line: 49, Col: 63}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</h2><button @click=\"modalOpen = false\" class=\"text-gray-400 hover:text-gray-500 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700\" aria-label=\"Close modal\"><svg class=\"w-6 h-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><!-- Body --><div class=\"overflow-y-auto pr-2\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</h2><button @click=\"modalOpen = false\" type=\"button\" class=\"text-base-content/60 hover:text-base-content transition-colors p-1 rounded-full hover:bg-base-content/10\" aria-label=\"Close modal\"><svg class=\"w-6 h-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><!-- Body --><div class=\"overflow-y-auto pr-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

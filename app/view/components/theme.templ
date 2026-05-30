@@ -1,17 +1,22 @@
 package components
 
 templ ThemeSwitcher() {
-	<div
+	<button
+		type="button"
+		aria-label="Toggle dark mode"
 		x-data="{ theme: localStorage.getItem('theme') || 'light' }"
 		x-init="$watch('theme', val => { document.documentElement.setAttribute('data-theme', val); localStorage.setItem('theme', val); })"
+		@click="theme = (theme === 'dark' ? 'light' : 'dark')"
+		class="grid place-items-center cursor-pointer"
+		:aria-pressed="theme === 'dark'"
 	>
-		<div x-show="theme === 'dark'" class="cursor-pointer" @click="theme = 'light'">
+		<span x-show="theme === 'dark'" aria-hidden="true">
 			@LightIcon()
-		</div>
-		<div x-show="theme === 'light'" class="cursor-pointer" @click="theme = 'dark'">
+		</span>
+		<span x-show="theme === 'light'" aria-hidden="true">
 			@DarkIcon()
-		</div>
-	</div>
+		</span>
+	</button>
 }
 
 templ DarkIcon() {

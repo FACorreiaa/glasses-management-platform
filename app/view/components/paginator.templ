@@ -22,28 +22,28 @@ templ PaginatorComponent(firstPage, prevPage, currentPage, goToNextPage, goToLas
 				<!-- Previous Page Button -->
 				if currentPage == "1" {
 					<a class="btn btn-sm btn-outline btn-primary btn-disabled" aria-disabled="true">
-						<ion-icon name="chevron-back-outline"></ion-icon>
+						<ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon><span class="sr-only">Previous page</span>
 					</a>
 				} else {
 					<a
 						class="btn btn-sm btn-outline btn-primary"
 						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", prevPage, orderBy, sortBy)) }
 					>
-						<ion-icon name="chevron-back-outline"></ion-icon>
+						<ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon><span class="sr-only">Previous page</span>
 					</a>
 				}
 				<span class="btn btn-sm btn-disabled">{ currentPage } / { lastPage }</span>
 				<!-- Next Page Button -->
 				if currentPage == lastPage {
 					<a class="btn btn-sm btn-outline btn-primary btn-disabled" aria-disabled="true">
-						<ion-icon name="chevron-forward-outline"></ion-icon>
+						<ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon><span class="sr-only">Next page</span>
 					</a>
 				} else {
 					<a
 						class="btn btn-sm btn-outline btn-primary"
 						href={ templ.URL(fmt.Sprintf("%s&orderBy=%s&sortBy=%s", goToNextPage, orderBy, sortBy)) }
 					>
-						<ion-icon name="chevron-forward-outline"></ion-icon>
+						<ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon><span class="sr-only">Next page</span>
 					</a>
 				}
 				<!-- Last Page Button -->

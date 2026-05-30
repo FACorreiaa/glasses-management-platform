@@ -42,17 +42,18 @@ templ Modal(title string, trigger templ.Component) {
 					x-transition:leave="ease-in duration-200"
 					x-transition:leave-start="opacity-100 scale-100"
 					x-transition:leave-end="opacity-0 scale-95"
-					class="relative w-full max-w-lg p-6 bg-white shadow-xl rounded-xl dark:bg-gray-800 sm:max-w-xl mx-4 max-h-[90vh] flex flex-col"
+					class="relative w-full max-w-lg p-6 bg-base-100 text-base-content shadow-xl rounded-xl ring-1 ring-base-content/10 sm:max-w-xl mx-4 max-h-[90vh] flex flex-col"
 				>
 					<!-- Header -->
 					<div class="flex items-center justify-between mb-4">
-						<h2 class="text-2xl font-bold text-gray-900 dark:text-white">{ title }</h2>
+						<h2 class="font-serif text-2xl text-base-content">{ title }</h2>
 						<button
 							@click="modalOpen = false"
-							class="text-gray-400 hover:text-gray-500 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+							type="button"
+							class="text-base-content/60 hover:text-base-content transition-colors p-1 rounded-full hover:bg-base-content/10"
 							aria-label="Close modal"
 						>
-							<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
 							</svg>
 						</button>

@@ -17,11 +17,11 @@
   color-scheme: light;
 
   --color-base-100: oklch(98.6% 0.006 95);   /* ivory canvas        */
-  --color-base-200: oklch(96.2% 0.008 92);   /* raised paper        */
-  --color-base-300: oklch(92.4% 0.010 90);   /* hairlines / wells   */
-  --color-base-content: oklch(24% 0.012 70); /* warm ink            */
+  --color-base-200: oklch(95.8% 0.008 92);   /* raised paper        */
+  --color-base-300: oklch(90.5% 0.011 90);   /* hairlines / wells   */
+  --color-base-content: oklch(19% 0.014 60); /* deep warm ink       */
 
-  --color-primary: oklch(46% 0.072 165);             /* deep spruce */
+  --color-primary: oklch(43% 0.076 165);             /* deep spruce */
   --color-primary-content: oklch(98.6% 0.008 95);
   --color-secondary: oklch(52% 0.025 70);            /* stone taupe */
   --color-secondary-content: oklch(98% 0.008 95);
@@ -55,8 +55,8 @@
 
   --color-base-100: oklch(20% 0.012 165);
   --color-base-200: oklch(24% 0.013 165);
-  --color-base-300: oklch(29% 0.014 165);
-  --color-base-content: oklch(92% 0.012 92);
+  --color-base-300: oklch(30% 0.015 165);
+  --color-base-content: oklch(95% 0.012 92);
 
   --color-primary: oklch(72% 0.092 165);             /* lifted spruce */
   --color-primary-content: oklch(18% 0.02 165);
@@ -116,17 +116,17 @@
 
 :root {
   --background: 48 33% 97%;
-  --foreground: 30 10% 16%;
+  --foreground: 30 12% 12%;
   --card: 45 30% 99%;
-  --card-foreground: 30 10% 16%;
+  --card-foreground: 30 12% 12%;
   --popover: 45 30% 99%;
-  --popover-foreground: 30 10% 16%;
-  --primary: 165 26% 30%;
+  --popover-foreground: 30 12% 12%;
+  --primary: 165 28% 27%;
   --primary-foreground: 48 33% 97%;
   --secondary: 42 18% 93%;
-  --secondary-foreground: 30 10% 20%;
+  --secondary-foreground: 30 10% 18%;
   --muted: 44 16% 93%;
-  --muted-foreground: 35 7% 42%;
+  --muted-foreground: 35 9% 34%;
   --accent: 40 55% 62%;
   --accent-foreground: 30 18% 18%;
   --destructive: 12 65% 48%;

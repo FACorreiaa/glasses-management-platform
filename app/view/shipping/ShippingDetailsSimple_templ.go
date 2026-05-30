@@ -83,7 +83,7 @@ func ShippingDetailsSimple(a models.ShippingDetailsTable, form models.ShippingDe
 			return templ_7745c5c3_Err
 		}
 		for _, col := range a.Column {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<th class=\"px-4 py-3 text-left text-[10px] font-bold text-base-content/45 uppercase tracking-widest whitespace-nowrap\"><div class=\"flex items-center gap-1\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<th class=\"px-4 py-3 text-left text-[10px] font-bold text-base-content/65 uppercase tracking-widest whitespace-nowrap\"><div class=\"flex items-center gap-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -96,7 +96,7 @@ func ShippingDetailsSimple(a models.ShippingDetailsTable, form models.ShippingDe
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, " <a class=\"text-base-content/30 hover:text-primary transition-colors\" href=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, " <a class=\"text-base-content/50 hover:text-primary transition-colors\" href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -205,7 +205,7 @@ func ShippingDetailsSimple(a models.ShippingDetailsTable, form models.ShippingDe
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</td><td class=\"px-4 py-3 whitespace-nowrap text-xs text-base-content/45 tabular\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</td><td class=\"px-4 py-3 whitespace-nowrap text-xs text-base-content/65 tabular\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -218,7 +218,7 @@ func ShippingDetailsSimple(a models.ShippingDetailsTable, form models.ShippingDe
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</td><td class=\"px-4 py-3 whitespace-nowrap text-xs text-base-content/45 tabular\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</td><td class=\"px-4 py-3 whitespace-nowrap text-xs text-base-content/65 tabular\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

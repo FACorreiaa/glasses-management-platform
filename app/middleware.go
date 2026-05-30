@@ -3,6 +3,7 @@ package app // Or a middleware package
 import (
 	"log/slog"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -18,7 +19,7 @@ func CacheControlMiddleware(next http.Handler) http.Handler {
 			// don't change without content changing (or use versioning/fingerprinting).
 			// Since assets are embedded, this is generally safe.
 			cacheDuration := time.Hour * 24 * 365 // One year
-			w.Header().Set("Cache-Control", "public, max-age="+string(int(cacheDuration.Seconds()))+", immutable")
+			w.Header().Set("Cache-Control", "public, max-age="+strconv.Itoa(int(cacheDuration.Seconds()))+", immutable")
 
 			// You could also set Expires header for older proxies/clients, though less common now
 			// w.Header().Set("Expires", time.Now().Add(cacheDuration).Format(http.TimeFormat))
