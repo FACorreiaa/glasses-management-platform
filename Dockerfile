@@ -21,7 +21,7 @@ COPY --from=assets /app/app/static/css/output.css ./app/static/css/output.css
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o server .
 
 # Final Stage: Runtime
-FROM alpine:latest
+FROM alpine:latest AS production
 WORKDIR /app
 RUN apk add --no-cache ca-certificates tzdata
 # Copy only the binary from the builder
